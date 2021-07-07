@@ -24,46 +24,48 @@ class ReceiptController extends Controller
             //dd($url);
             $data = [
                 'function'=> 'getReceipt',
-                'billNo' => $request->billNo
+                'billNo' => $request->ReceiptBillNo
             ];
 
-            //dd($data);
+            // dd($data);
             $this->data['receipt'] = json_decode($this->food_hygiene_alex_to_curl($url, $data));
 
-            //dd($this->data);
+            // dd($this->data);
 
 
 
             if ($this->data['receipt']->status ===200) {
               $url = config('global.biller_url'). 'users/authenticate';
-
-              // dd($url);
-
               $data = [
-                  "email" => "akiburei@gmail.com",
-                  "password" => "123456789"
-
+                "email" => "biller@narok.prod",
+                "password" => "biller@2021!"
               ];
-
-
+              
               $token = json_decode($this->to_curl($url,$data))->data->auth_token;
 
               $url = config('global.biller_url'). 'invoice/receipt/count';
-
+              //  dd($url);
 
               $data = [
                   'receiptNo' => $this->data['receipt']->data[0]->receiptInfo->receiptNo,
+                  'subSystemUserName' => "biller@narok.prod",
+                  'subSystemUserId' => "6537",
                   'token' => $token
               ];
 
               $counted = json_decode($this->bill_curl($url,$data));
 
+              // dd($counted);
+
               $receipt = $this->data['receipt']->data[0];
 
-                // return view('receipts.demo-receipt')->with($this->data->receipt->data[0]);
-                return view(  'receipts.receipt-demo', ['receipt'=> $receipt]);
-            }else{
-                return Redirect::back()->withErrors($this->data['receipt']->message);
+              return response()->json($counted);
+
+
+            //     // return view('receipts.demo-receipt')->with($this->data->receipt->data[0]);
+            //     return view(  'receipts.receipt-demo', ['receipt'=> $receipt]);
+            // }else{
+            //     return Redirect::back()->withErrors($this->data['receipt']->message);
             }
 
     }
@@ -186,8 +188,8 @@ class ReceiptController extends Controller
         // dd($url);
 
         $data = [
-            "email" => "akiburei@gmail.com",
-            "password" => "123456789"
+            "email" => "biller@narok.prod",
+            "password" => "biller@2021!"
 
         ];
 
@@ -219,8 +221,8 @@ class ReceiptController extends Controller
         // dd($url);
 
         $data = [
-            "email" => "akiburei@gmail.com",
-            "password" => "123456789"
+            "email" => "biller@narok.prod",
+            "password" => "biller@2021!"
 
         ];
 
@@ -244,16 +246,17 @@ class ReceiptController extends Controller
 
         $url = config('global.biller_url'). 'invoice/receipt/count';
 
-
         $data = [
-            'receiptNo' => $sent->data[0]->receiptInfo->receiptNo,
-            'token' => $token
-        ];
+          'receiptNo' => $sent->data[0]->receiptInfo->receiptNo,
+          'subSystemUserName' => "biller@narok.prod",
+          'subSystemUserId' => "6537",
+          'token' => $token
+      ];
 
         $counted = json_decode($this->bill_curl($url,$data));
 
 
-        return view('receipts.receipt-demo', ['receipt'=> $sent->data[0]]);
+        return view('documents.receipt', ['receipt'=> $sent->data[0]]);
     }
 
     // public function getReceipt($id)
@@ -715,7 +718,6 @@ class ReceiptController extends Controller
 
     }
 
-
     function to_curl($url, $data){
 
         $headers = array
@@ -775,7 +777,6 @@ class ReceiptController extends Controller
         curl_close($ch);
     }
 
-
     public function receipt_curl($url, $data){
         $curl = curl_init();
 
@@ -807,7 +808,6 @@ class ReceiptController extends Controller
         }
     }
 
-
     public function bp_receipt_curl($url, $data){
         $curl = curl_init();
 
@@ -838,6 +838,7 @@ class ReceiptController extends Controller
           return $response;
         }
     }
+
     function food_hygiene_alex_to_curl($url, $data){
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);

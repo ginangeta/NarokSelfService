@@ -72,7 +72,7 @@ class ParkingController extends Controller
         if(!is_null($request->zone_code))
         {
             $data = [
-                'vehicle_category_id' =>$request->vehicle_category_code,
+                'vehicle_category_id' =>$request->daily_vehicle_category_code,
                 'number_plate' => $request->registration_number,
                 'duration_id' => $request->duration_code,
                 'zone_id' => $request->zone_code
@@ -81,14 +81,14 @@ class ParkingController extends Controller
         else
         {
             $data = [
-                'vehicle_category_id' =>$request->vehicle_category_code,
+                'vehicle_category_id' =>$request->seasonal_vehicle_category_code,
                 'number_plate' => $request->registration_number,
                 'duration_id' => $request->duration_code
             ];
         }
 
 
-        //dd($data);
+        // dd($data);
         $charges_info = json_decode($this->to_curl($url, $data));
 
 
@@ -155,15 +155,17 @@ class ParkingController extends Controller
     public function initiateOnstreetPayment(Request $request)
     {
 
+        // dd($request->all());
+
     	$url = $this->url. 'Onstreet/InitiateOnstreetPayment';
 
         $data = [
             'phone_number' => $request->phone_number,
-            'vehicle_category_id' => $request->vehicle_category_code,
+            'vehicle_category_id' => $request->daily_vehicle_category_code,
             'zone_id' => $request->zone_code,
             'number_plate' => $request->registration_number,
         ];
-         //dd($data);
+        //  dd($data);
     	$payment = json_decode($this->to_curl($url,$data));
 
         return response()->json($payment);

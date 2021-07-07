@@ -3,8 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BillsController;
 use App\Http\Controllers\ParkingController;
 use App\Http\Controllers\ReceiptController;
+use App\Http\Controllers\SeasonalController;
 use App\Http\Controllers\ParkingPenaltiesController;
 
 /*
@@ -72,10 +74,32 @@ Route::group(['middleware' => ['active']], function () {
     Route::post('get-parking-charges', [ParkingController::class, 'getParkingCharges'])->name('get-parking-charges');
     Route::post('initiate-onstreet-parking-payment', [ParkingController::class, 'initiateOnstreetPayment'])->name('initiate-onstreet-parking-payment');
     Route::post('initiate-offstreet-parking-payment', [ParkingController::class, 'initiateOffstreetPayment'])->name('initiate-onstreet-parking-payment');
+
+    //Seasonal Parking
+    
+    //New Seasonal Parking APIS and endpoints
+    Route::get('seasonal-parking', [SeasonalController::class, 'index'])->name('seasonal-parking');
+    Route::post('add-seasonal-vehicle', [SeasonalController::class, 'addVehicle'])->name('add-seasonal-vehicle');
+    Route::post('remove-seasonal-vehicle', [SeasonalController::class, 'removeEntry'])->name('remove-seasonal-vehicle');
+    Route::post('initiate-seasonal-payment', [SeasonalController::class, 'initiatePayment'])->name('initiate-seasonal-payment');
+    Route::get('get-seasonal-parking-receipt/{id}', [SeasonalController::class, 'getReceipt'])->name('get-seasonal-parking-receipt');
+    Route::get('view-seasonal-parking-receipt/{id}', [SeasonalController::class, 'viewReceipt'])->name('view-seasonal-parking-receipt');
+
+    //Seasonal parking stickers
+    Route::get('seasonal-stickers/{id}', [SeasonalController::class, 'getStickers'])->name('stickers');
+    Route::get('view-seasonal-stickers', [SeasonalController::class, 'viewStickers'])->name('view-seasonal-stickers');
+    Route::post('print-stickers', [SeasonalController::class, 'printStickers'])->name('print-stickers');
+
+        
+    //Parking penalties
+    Route::get('parking-penalties', [ParkingPenaltiesController::class ,'parkingPenalties'])->name('parking-penalties');
+    Route::post('get-parking-penalties', [ParkingPenaltiesController::class ,'getParkingPenalties'])->name('get-parking-penalties');
+    Route::post('initiate-penalty-payment', [ParkingPenaltiesController::class ,'initiateParkingPayment'])->name('initiate-penalty-payment');
+
     //PARKING
 
 
-    //RECEIPTS
+    //DOCUMENTS
     //Receipt routes
     Route::post('generate-receipt', [ReceiptController::class, 'generateReceipt'])->name('generate-receipt');
     Route::get('get-receipt/{id}', [ReceiptController::class, 'getReceipt'])->name('get-receipt');
@@ -85,5 +109,17 @@ Route::group(['middleware' => ['active']], function () {
     Route::post('get-receipt-details', [ReceiptController::class, 'getReceiptDetails'])->name('get-receipt-details');
     Route::get('save-receipts/{bill_number}/{user_id}', [ReceiptController::class, 'saveReceipts'])->name('save-receipts');
 
-    //RECEIPTS
+    // Bill Routes
+    //Create a bill
+    Route::get('create-bill', [BillsController::class, 'createBill'])->name('create-bill');
+    Route::post('generate-bill', [BillsController::class, 'generateBill'])->name('generate-bill');
+
+    //Pay a bill
+    Route::post('get-bill-details', [BillsController::class, 'getBillDetails'])->name('get-bill-details');
+    Route::get('pay-bill', [BillsController::class, 'payBill'])->name('pay-bill');
+    Route::post('initiate-bill-payment', [BillsController::class, 'initiateBillPayment'])->name('initiate-bill-payment');
+    Route::get('get-bill-receipt/{id}', [BillsController::class, 'getBillReceipt'])->name('get-bill-receipt');
+    Route::get('view-bill-receipt/{id}', [BillsController::class, 'viewBillReceipt'])->name('view-bill-receipt');
+    Route::get('print-bill/{bill_number}', [BillsController::class, 'printBill'])->name('print-bill');
+    //DOCUMENTS
 });

@@ -28,7 +28,7 @@
                             </ul>
                         </nav>
                     </div>
-                    <div class="col-xl-2 col-md-8 d-flex justify-content-end">
+                    <div class="col-xl-2 col-md-8 col-sm-12 d-flex justify-content-end">
                         <div class="wrap_icon inner-table-block">
                             @if (is_null(Session::get('resource')))
                                 <a href="{{ route('signin') }}" class="btn">Login</a>
@@ -80,30 +80,58 @@
                         </div>
                         <a href="#" class="offcanvas-bars"><i class="far fa-print"></i></a>
                         <div class="offcanvas">
-                            <a href="#" class="offcanvas-times"><i class="far fa-times"></i></a>
-                            <a href="index-2.html" class="offcanvas-logo"><img src="img/offcanvas-logo.png" alt=""></a>
-                            <p>Minimal & Crative Portfolio/CV/Biodata Solution in One Platform.</p>
-                            <div class="social-icons">
-                                <a href="#"><i class="fab fa-facebook-f"></i></a>
-                                <a href="#"><i class="fab fa-twitter"></i></a>
-                                <a href="#"><i class="fab fa-behance"></i></a>
-                                <a href="#"><i class="fab fa-linkedin"></i></a>
-                                <a href="#"><i class="fab fa-youtube"></i></a>
-                            </div>
-                            <div class="single-offcanvas-contact">
-                                <span>Sent Mail</span>
-                                <a href="mailto:">me@example.com</a>
-                                <a href="mailto:">someone@example.com</a>
-                            </div>
-                            <div class="single-offcanvas-contact">
-                                <span>make call</span>
-                                <a href="tel:+">+786 75723 58362</a>
-                                <a href="tel:+">+786 75723 68271</a>
-                            </div>
-                            <div class="single-offcanvas-contact">
-                                <span>get in touch</span>
-                                <a href="#">16/A, Hamburger City New York, US</a>
-                            </div>
+                            <aside id="receipt-service-option">
+                                <div class="aside-header">
+                                    <div class="header-side">
+                                        <h4>Print a receipt</h4>
+                                        <i class="mdi mdi-close close-aside"></i>
+                                    </div>
+                                    <p class="mb-0">Make sure all inputs are correct. Bill number should have an hypen</p>
+                                    <p class="mt-2">
+                                        Example : BP2104-06*****
+                                    </p>
+                                </div>
+
+                                <!-- the sub menu streams -->
+                                <ul class="m-0 p-0">
+                                    <!-- the inputs -->
+                                    <div class="the-aside-inputs">
+                                        {{-- <form class="transaction-info" action="{{ route('get-receipt-details') }}"
+                                            method="post" target="_blank"> --}}
+
+                                        <div class="form-group">
+                                            <label>Transaction Type</label>
+                                            <select class="selectpicker show-tick  w-100 form-control no-btn" id="sel1"
+                                                name="type" title="Select transaction type" data-live-search="true"
+                                                required>
+                                                <option value="parking">Parking</option>
+                                                <option value="sbp">Trade License</option>
+                                                <option value="land" class="">Land rates</option>
+                                                <option value="rents" class="">House or market rents</option>
+                                                <option value="health" class="">Food handlers</option>
+                                                <option value="bills" class="">County bills</option>
+                                                <option></option>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Bill Number</label>
+                                            <input type="text" id="ReceiptBillNo" placeholder="Enter Bill Number"
+                                                class="form-control w-100">
+                                        </div>
+
+                                        <div class="">
+                                            <button class="btn-process-submit btn-block btn-receipt-find">Print
+                                                Receipt</button>
+                                        </div>
+
+                                        <div class="bg-error bg-receipt-error d-none">
+                                            <p class="mb-0 mt-0">Receipt Not Found.</p>
+                                        </div>
+                                        {{-- </form> --}}
+                                    </div>
+                                </ul>
+                            </aside>
                         </div>
                         <div class="offcanvas-overlay"></div>
                     </div>
@@ -130,7 +158,11 @@
                                     <p>Make payments easily and quickly. Create an account and get to enjoy paying for
                                         your services online.</p>
                                     <div class="slider-btn">
-                                        <a href="#about" class="btn">Create account</a>
+                                        @if (is_null(Session::get('resource')))
+                                            <a href="{{ route('signup') }}" class="btn">Create account</a>
+                                        @else
+                                            <a href="#about" class="btn d-none">Create account</a>
+                                        @endif
                                         <a class="popup-video all-service-option">
                                             <i class="ti-layout-grid2"></i> County services</a>
                                     </div>
@@ -196,7 +228,7 @@
             <section class="bg-primary">
                 <div class="revenue-services container bg-primary">
                     <div class="row">
-                        <div class="col-xl-4 col-md-5">
+                        <div class="col-xl-4 col-md-5 col-sm-12">
                             <div class="services-text">
                                 <h4>Narok County Services</h4>
                                 <p>Select a service, enter your correct details, confirm and pay easily.</p>
@@ -204,7 +236,7 @@
                         </div>
 
                         <!-- the services -->
-                        <div class="col-xl-8 col-md-7 the-services-container">
+                        <div class="col-xl-8 col-md-7 col-sm-12 the-services-container">
                             <div class="h-100 d-flex">
 
                                 <!-- revenue main service 1 -->
@@ -364,7 +396,7 @@
                     </div>
                 </li>
 
-                <li>
+                <li class="d-none">
                     <div>
                         <img src="img/icons/parking/seasonal.svg" class="img">
                     </div>
@@ -490,7 +522,7 @@
     </div>
 
     <!-- parking services sub revenue streams -->
-    <div class="aside-container sub-streams parking-subs ">
+    <div class="aside-container sub-streams parking-subs">
         <aside class="right-neg-100" id="daily_parking">
             <div class="aside-header">
                 <div class="header-side-sub">
@@ -521,7 +553,7 @@
                     <div class="form-group">
                         <label>Vehicle type</label>
                         <select class="selectpicker show-tick  w-100 form-control no-btn" id="car_type"
-                            title="Select a service" data-live-search="true" name="vehicle_category_code" required>
+                            title="Select a service" data-live-search="true" name="daily_vehicle_category_code" required>
                         </select>
                     </div>
 
@@ -567,52 +599,84 @@
                     <h4>Seasonal Parking</h4>
                 </div>
             </div>
-            <hr>
+            <hr class="mb-0">
+            <div class="slider">
+                <div class="line"></div>
+                <div class="subline inc"></div>
+                <div class="subline dec"></div>
+            </div>
 
             <!-- the inputs -->
-            <div class="the-aside-inputs">
-                <div class="form-group">
-                    <label>Parking Duration</label>
-                    <select class="selectpicker show-tick  w-100 form-control no-btn" title="Select a parking duration"
-                        data-live-search="true">
-                        <option>Duration 1</option>
-                        <option>Duration 2</option>
-                        <option>Duartion 3</option>
-                    </select>
+            <form class="transaction-form">
+                <div class="alert alert-danger d-none" id="seasonal_parking_errors">
                 </div>
+                @csrf
+                <div class="the-aside-inputs mt-2">
+                    <div class="form-group">
+                        <label>Parking Duration</label>
+                        <select class="selectpicker show-tick  w-100 form-control no-btn" id="seasonal_parking_duration"
+                            title="Select a parking duration" data-live-search="true" name="seasonal_duration_code"
+                            required>
+                        </select>
+                    </div>
 
-                <div class="form-group">
-                    <label>Vehicle type</label>
-                    <select class="selectpicker show-tick  w-100 form-control no-btn" title="Select a service"
-                        data-live-search="true">
-                        <option>Type 1</option>
-                        <option>Type 2</option>
-                        <option>Type 3</option>
-                    </select>
-                </div>
+                    <div class="form-group">
+                        <label>Vehicle types</label>
+                        <select class="selectpicker show-tick  w-100 form-control no-btn" id="seasonal_vehicle_type"
+                            title="Select vehicle type" data-live-search="true" name="seasonal_vehicle_category_code"
+                            required>
+                        </select>
+                    </div>
 
-                <div class="form-group">
-                    <label>Number plate</label>
-                    <input type="text" placeholder="Enter Number plate" id="numberPlate" class="form-control w-100">
-                </div>
+                    <div class="form-group">
+                        <label>Number plate</label>
+                        <input type="text" placeholder="Enter Number plate" class="form-control w-100"
+                            id="seasonal_registration_no" name="seasonal_registration_no"
+                            value="{{ old('seasonal_registration_no') }}">
+                    </div>
 
-                <button class="btn-add btn-seasonal-add-car">Add Vehicle</button>
+                    <div class="bg-red-light mx-0 computed-charges d-none" id="seasonal-price">
+                        <img src="/img/icons/parking/dollar.svg">
+                        <div class="">
+                            <p>Parking Charges</p>
+                            <h5>KES <span id="seasonal-pay-price"></span></h5>
+                        </div>
+                    </div>
 
-                <div>
-                    <div class="col-12 p-0 cars-container mt-3">
-                        <span class="font-12 cars-add">
-                            <span class="number-plate" id="">KAB 125X</span>
-                            <i class="remove-car font-14 ti-close ml-2" title="Remove Car"></i>
-                        </span>
+                    <div class="bg-red-light mx-0 computed-charges d-none" id="seasonal-rates">
+                        <img src="/img/icons/parking/dollar.svg">
+                        <div class="">
+                            <p>Parking Rates</p>
+                            <h5>KES <span id="seasonal-pay-rates">Rates for that vehicle are not set</span></h5>
+                        </div>
+                    </div>
+
+                    <button id="add_vehicle" type="button" class="btn-add btn-block btn-seasonal-add-car">Add
+                        Vehicle</button>
+
+                    <p id="p-code" class="d-none"></p>
+                    <br>
+
+                    <div>
+                        <div class="col-12 p-0 cars-container mt-0">
+                        </div>
                     </div>
                 </div>
-            </div>
+            </form>
 
 
             <div class="aside-footer-to-confirm right-neg-100">
                 <div class="seasonal-parking-confirm">
-                    <button class="btn-process btn-confirm-seasonal-details">Continue to confirmation<i
-                            class="ti-arrow-right ml-2"></i></button>
+                    <div class="d-flex flex-column align-items-end">
+                        <div class="lds-ellipsis d-none">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div>
+                        <button class="btn-process btn-confirm-seasonal-details">Continue to confirmation<i
+                                class="ti-arrow-right ml-2"></i></button>
+                    </div>
                 </div>
             </div>
         </aside>
@@ -627,23 +691,35 @@
             <hr>
 
             <!-- the inputs -->
-            <div class="the-aside-inputs">
-
-                <div class="form-group">
-                    <label>Number plate</label>
-                    <input type="text" placeholder="Enter Number plate" id="numberPlate" class="form-control w-100">
+            <form class="transaction-form">
+                <div class="alert alert-danger d-none" id="offstreet_parking_errors">
                 </div>
+                @csrf
+                <div class="the-aside-inputs">
+                    <div class="form-group">
+                        <label>Number plate</label>
+                        <input type="text" placeholder="Enter Number plate" name="offstreet_registration_number"
+                            value="{{ old('offstreet_registration_number') }}" class="form-control w-100">
+                    </div>
 
-                <div class="offstreet-parking-confirm">
-                    <button class="btn-process btn-block btn-offstreet-confirm">Check Details</button>
+                    <div class="offstreet-parking-confirm">
+                        <div class="d-flex flex-column align-items-end">
+                            <div class="lds-ellipsis d-none">
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                            </div>
+                            <button class="btn-process btn-block btn-offstreet-confirm">Check Details</button>
+                        </div>
+                    </div>
+
+                    <div class="bg-error offstreet-error d-none">
+                        <p class="mb-0">Vehicle has not checked in the zone.</p>
+                    </div>
+
                 </div>
-
-                <div class="bg-error d-none">
-                    <p class="mb-0">Vehicle has not checked in the zone.</p>
-                </div>
-
-            </div>
-
+            </form>
         </aside>
 
         <aside class="right-neg-100" id="penalties_parking">
@@ -656,23 +732,35 @@
 
             <hr>
             <!-- the inputs -->
-            <div class="the-aside-inputs">
-
-                <div class="form-group">
-                    <label>Number plate</label>
-                    <input type="text" placeholder="Enter Number plate" id="numberPlate" class="form-control w-100">
+            <form class="transaction-form">
+                <div class="alert alert-danger d-none" id="penalty_parking_errors">
                 </div>
+                @csrf
+                <div class="the-aside-inputs">
+                    <div class="form-group">
+                        <label>Number plate</label>
+                        <input type="text" placeholder="Enter Number plate" name="penalty_registration_number"
+                            value="{{ old('penalty_registration_number') }}" class="form-control w-100">
+                    </div>
 
-                <div class="penalty-parking-confirm">
-                    <button class="btn-process btn-block btn-penaltie-confirm">Get Vehicle Penalties</button>
+                    <div class="penalty-parking-confirm">
+                        <div class="d-flex flex-column align-items-end">
+                            <div class="lds-ellipsis d-none">
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                            </div>
+                            <button class="btn-process btn-block btn-penalties-confirm">Get Vehicle Penalties</button>
+                        </div>
+                    </div>
+
+                    <div class="bg-error penalties-error d-none">
+                        <p class="mb-0">Vehicle has no penalties.</p>
+                    </div>
+
                 </div>
-
-                <div class="bg-error d-none">
-                    <p class="mb-0">Vehicle has not checked in the zone.</p>
-                </div>
-
-            </div>
-
+            </form>
         </aside>
     </div>
 
@@ -700,7 +788,7 @@
                         </div>
                         <div class="d-flex justify-content-between">
                             <span class="m-0">Plate Number</span>
-                            <strong class="seasonal-plates">KBG 125P</strong>
+                            <strong class="">KBG 125P</strong>
                         </div>
                         <hr class="dashed">
                         <div class="d-flex justify-content-between">
@@ -837,7 +925,7 @@
                     <div>
                         <p id="errors" class="alert alert-danger d-none"></p>
                     </div>
-                    <div class="col-sm-12 pl-0 d-none" id="print-receipt">
+                    <div class="col-sm-12 pl-0 d-none" id="print-daily-receipt">
                         <p><b>You can now proceed to print your receipt</b></p>
                         <a href="" target="_blank" id="receipt-link"
                             class="btn btn-secondary text-white font-14 w-100  center mx-0 ">
@@ -891,38 +979,29 @@
                     <p class="">Below are the transaction details you provided plus the computed prices for your
                         transaction.</p>
                     <div class="mt-3">
-                        <div class="d-flex justify-content-between">
-                            <span class="m-0">Duration</span>
-                            <strong>3 Months</strong>
-                        </div>
-                        <div class="d-flex justify-content-between">
-                            <span class="m-0">Expiry date</span>
-                            <strong>21 Aug 2021</strong>
-                        </div>
                         <div class="d-flex flex-column">
-                            <span class="m-0">Vehicles (4)</span>
-                            <p class="seasonal-parking"><strong>KBG 125P</strong>(Personal), <strong>KAS
-                                    587P</strong>(Lorry), <strong>KBG
-                                    125P</strong>(Personal), <strong>KBG 125P</strong>(Bus 52 Seater)</p>
+                            <span class="m-0" id="seasonal_vehicle_count">Vehicles (4)</span>
+                        </div>
+                        <div class="seasonal-parking-container">
                         </div>
                         <hr class="dashed">
                         <div class="d-flex justify-content-between">
                             <span class="m-0">Parking Penalties</span>
-                            <strong>KES 0.00</strong>
+                            <strong id="seasonal_penalties"></strong>
                         </div>
                         <div class="d-flex justify-content-between">
                             <span class="m-0">Parking Charges</span>
-                            <strong>KES 50.00</strong>
+                            <strong id="seasonal_charges"></strong>
                         </div>
                         <div class="d-flex justify-content-between">
                             <span class="m-0">Amount Paid</span>
-                            <strong>KES 0.00</strong>
+                            <strong id="seasonal_paid"></strong>
                         </div>
 
                         <hr>
                         <div class="d-flex justify-content-between">
                             <strong class="bill-total">TOTAL</strong>
-                            <strong>KES 0.00</strong>
+                            <strong id="seasonal_total"></strong>
                         </div>
                     </div>
 
@@ -933,21 +1012,53 @@
                         <button class="btn-process btn-success btn-pay-now w-100">PAY NOW</button>
                     </div>
                     <div class="col-2 pl-0">
-                        <button class="btn-process-outline btn-outline-info w-100"><span class="ti-printer"></span></button>
+                        <button class="btn-process-outline btn-outline-info w-100 btn-print-seasonal-bill"><span
+                                class="ti-printer"></span></button>
                     </div>
                 </div>
             </div>
 
-            <div class="aside-footer-confirm right-neg-100 d-none">
-                <div class="form-group mt-2">
-                    <label>Mpesa No.</label>
-                    <input type="text" placeholder="Enter Mpesa Number" class="form-control w-100">
-                </div>
+            <div class="aside-footer-confirm ml-2 right-neg-100 d-none">
+                <form>
+                    <div>
+                        <p id="seasonal-footer-errors" class="alert alert-danger d-none"></p>
+                    </div>
+                    <div class="col-sm-12 pl-0 d-none" id="print-seasonal-receipt">
+                        <p><b>You can now proceed to print your receipt</b></p>
+                        <a href="" target="_blank" id="receipt-link"
+                            class="btn btn-secondary text-white font-14 w-100  center mx-0 ">
+                            <div class="btn-txt animated print-receipt">
+                                <span class="btn-text text-uppercase font-12 ">Print receipt</span>
 
-                <div class="form-group">
-                    <button class="btn-process" data-toggle="modal" data-target="#payment-cancelled-modal">PAY KES
-                        50.00<i class="ti-arrow-right ml-2"></i></button>
-                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="form-group mt-2">
+                        <label>Mpesa No.</label>
+                        @if (Session::has('resource'))
+                            <input type="text" class="form-control w-100" id="seasonal-phone-number" name="phone"
+                                value="{{ Session::get('resource')['phone_number'] }}">
+                        @else
+                            <input type="text" class="form-control w-100" id="seasonal-phone-number" name="phone"
+                                placeholder="Enter your phone number" value="{{ old('phone') }}">
+                        @endif
+                    </div>
+                    <input type="hidden" name="amount" id="seasonal_parking_amount">
+                    <div class="form-group">
+                        <button type="button" class="btn-process" id="seasonal_parking_pay">
+                            <div class="btn-txt animated">
+                                <span class="btn-text text-uppercase font-12"></span>
+                                <i class="ti-arrow-right ml-2"></i>
+                            </div>
+                            <div class="btn-ellipsis d-none">
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                            </div>
+                        </button>
+                    </div>
+                </form>
             </div>
         </aside>
 
@@ -967,35 +1078,27 @@
                         transaction.</p>
                     <div class="mt-3">
                         <div class="d-flex justify-content-between">
-                            <span class="m-0">Zone</span>
-                            <strong>Sunken</strong>
-                        </div>
-                        <div class="d-flex justify-content-between">
-                            <span class="m-0">Car Type</span>
-                            <strong>Private Car</strong>
-                        </div>
-                        <div class="d-flex justify-content-between">
                             <span class="m-0">Plate Number</span>
-                            <strong class="seasonal-plates">KBG 125P</strong>
+                            <strong id="offstreet-plates"></strong>
                         </div>
                         <hr class="dashed">
                         <div class="d-flex justify-content-between">
                             <span class="m-0">Parking Penalties</span>
-                            <strong>KES 0.00</strong>
+                            <strong id="">KES 0.00</strong>
                         </div>
                         <div class="d-flex justify-content-between">
                             <span class="m-0">Parking Charges</span>
-                            <strong>KES 50.00</strong>
+                            <strong id="offstreet-charges"></strong>
                         </div>
                         <div class="d-flex justify-content-between">
                             <span class="m-0">Amount Paid</span>
-                            <strong>KES 0.00</strong>
+                            <strong id="offstreet-paid"></strong>
                         </div>
 
                         <hr>
                         <div class="d-flex justify-content-between">
                             <strong class="bill-total">TOTAL</strong>
-                            <strong>KES 0.00</strong>
+                            <strong id="offstreet-total">KES 0.00</strong>
                         </div>
                     </div>
 
@@ -1003,6 +1106,46 @@
             </div>
 
             <div class="aside-footer-confirm right-neg-100">
+                <form>
+                    <div>
+                        <p id="penalties-footer-errors" class="alert alert-danger d-none"></p>
+                    </div>
+                    <div class="col-sm-12 pl-0 d-none" id="print-penalties-receipt">
+                        <p><b>You can now proceed to print your receipt</b></p>
+                        <a href="" target="_blank" id="receipt-link"
+                            class="btn btn-secondary text-white font-14 w-100  center mx-0 ">
+                            <div class="btn-txt animated print-receipt">
+                                <span class="btn-text text-uppercase font-12 ">Print receipt</span>
+
+                            </div>
+                        </a>
+                    </div>
+                    <div class="form-group mt-2">
+                        <label>Mpesa No.</label>
+                        @if (Session::has('resource'))
+                            <input type="text" class="form-control w-100" id="offstreet-phone-number" name="phone"
+                                value="{{ Session::get('resource')['phone_number'] }}">
+                        @else
+                            <input type="text" class="form-control w-100" id="offstreet-phone-number" name="phone"
+                                placeholder="Enter your phone number" value="{{ old('phone') }}">
+                        @endif
+                    </div>
+                    <input type="hidden" name="amount" id="offstreet_parking_amount">
+                    <div class="form-group">
+                        <button type="button" class="btn-process" id="offstreet_parking_pay">
+                            <div class="btn-txt animated">
+                                <span class="btn-text text-uppercase font-12"></span>
+                                <i class="ti-arrow-right ml-2"></i>
+                            </div>
+                            <div class="btn-ellipsis d-none">
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                            </div>
+                        </button>
+                    </div>
+                </form>
                 <div class="form-group mt-2">
                     <label>Mpesa No.</label>
                     <input type="text" placeholder="Enter Mpesa Number" class="form-control w-100">
@@ -1022,6 +1165,7 @@
                 </div>
             </div>
             <hr>
+
             <!-- the inputs -->
             <div class="the-aside-inputs">
                 <div class="transactions-details-container bg-confirm">
@@ -1035,40 +1179,63 @@
                         </div>
                         <div class="d-flex justify-content-between">
                             <span class="m-0">Plate Number</span>
-                            <strong class="seasonal-plates">KBG 125P</strong>
+                            <strong id="penalty-plates"></strong>
                         </div>
                         <hr class="dashed">
                         <div class="d-flex justify-content-between">
                             <span class="m-0">Parking Penalties</span>
-                            <strong>KES 2000.00</strong>
                         </div>
-                        <div class="d-flex justify-content-between">
-                            <span class="m-0">Parking Charges</span>
-                            <strong>KES 50.00</strong>
-                        </div>
-                        <div class="d-flex justify-content-between">
-                            <span class="m-0">Amount Paid</span>
-                            <strong>KES 0.00</strong>
-                        </div>
-
+                        <div class="penalties-parking-container"></div>
                         <hr>
                         <div class="d-flex justify-content-between">
                             <strong class="bill-total">TOTAL</strong>
-                            <strong>KES 2050.00</strong>
+                            <strong id="penalty-total"></strong>
                         </div>
                     </div>
 
                 </div>
             </div>
             <div class="aside-footer-confirm right-neg-100">
-                <div class="form-group mt-2">
-                    <label>Mpesa No.</label>
-                    <input type="text" placeholder="Enter Mpesa Number" class="form-control w-100">
-                </div>
-                <div class="form-group">
-                    <button class="btn-process" data-toggle="modal" data-target="#payment-modal">PAY KES 50.00<i
-                            class="ti-arrow-right ml-2"></i></button>
-                </div>
+                <form>
+                    <div>
+                        <p id="penalties-footer-errors" class="alert alert-danger d-none"></p>
+                    </div>
+                    <div class="col-sm-12 pl-0 d-none" id="print-penalties-receipt">
+                        <p><b>You can now proceed to print your receipt</b></p>
+                        <a href="" target="_blank" id="receipt-link"
+                            class="btn btn-secondary text-white font-14 w-100  center mx-0 ">
+                            <div class="btn-txt animated print-receipt">
+                                <span class="btn-text text-uppercase font-12 ">Print receipt</span>
+
+                            </div>
+                        </a>
+                    </div>
+                    <div class="form-group mt-2">
+                        <label>Mpesa No.</label>
+                        @if (Session::has('resource'))
+                            <input type="text" class="form-control w-100" id="penalties-phone-number" name="phone"
+                                value="{{ Session::get('resource')['phone_number'] }}">
+                        @else
+                            <input type="text" class="form-control w-100" id="penalties-phone-number" name="phone"
+                                placeholder="Enter your phone number" value="{{ old('phone') }}">
+                        @endif
+                    </div>
+                    <input type="hidden" name="amount" id="penalties_parking_amount">
+                    <div class="form-group">
+                        <button type="button" class="btn-process" id="penalties_parking_pay">
+                            <div class="btn-txt animated">
+                                <span class="btn-text text-uppercase font-12"></span>
+                                <i class="ti-arrow-right ml-2"></i>
+                            </div>
+                            <div class="btn-ellipsis d-none">
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                            </div>
+                        </button>
+                    </div>
+                </form>
             </div>
         </aside>
 
@@ -1086,12 +1253,12 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <h4 class="modal-title text-capitalize" id="payment-modal">
+                    <h4 class="modal-title text-capitalize" id="payment-modal-header">
                         Daily Parking Payment
                     </h4>
-                    <p><span class="modal-title">Daily parking</span> for <strong class="payment-plate"></strong>
-                        at <strong class="payment-zone">CBD parking
-                            zone</strong></p>
+                    <p><span class="modal-title-sub">Daily parking</span> for <strong class="payment-plate"></strong>
+                        <strong class="payment-zone"></strong>
+                    </p>
                     <br>
 
                     <p class="mb-3">A payment request of <strong class="payment-amount"></strong> will be sent to
@@ -1104,7 +1271,7 @@
                     </p>
 
                     <p>
-                        Once the payment request is sent to your phone, you will have <strong>30 seconds</strong> to
+                        Once the payment request is sent to your phone, you will have <strong>50 seconds</strong> to
                         complete the payment by entering your <strong>Mpesa pin</strong> on your phone.
                     </p>
                     <p><strong>Click Pay</strong> below when ready to continue.</p>
@@ -1200,6 +1367,48 @@
                         </div>
                         <div class="col-2 pl-0">
                             <button class="btn-process-outline btn-outline-info w-100" data-dismiss="modal">close</button>
+                        </div>
+                    </div>
+
+                    <p class="mt-3">Narok County Government Parking</p>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- payment received modal -->
+    <div class="modal fade" id="remove-vehicle-modal" data-backdrop="static" data-keyboard="false" tabindex="-1"
+        role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body payment-modal">
+                    <h4 class="modal-title text-capitalize" id="exampleModalLongTitle">
+                        remove car
+                    </h4>
+                    <hr>
+
+                    <img src="{{ asset('img/icons/warning.svg') }}" class="received-img"
+                        style="height: 130px; margin-bottom: 2rem;">
+                    <h5>
+                        <p id="record-name" class=""></p>
+                    </h5>
+                    <p class="d-none" id="p-code">
+                    <p>
+                        Are you sure you want to delete this car from the list of vehicles payable by this
+                        transaction?
+                    </p>
+
+                    <div class="row mt-5">
+                        <div class="col-10">
+                            <button id="remove-entry"
+                                class="btn-process-outline-black btn-success btn-pay-now btn-retry w-100">
+                                <span class="ti-trash mr-2"></span> Remove from list
+                            </button>
+                        </div>
+                        <div class="col-2 pl-0">
+                            <button class="btn-process-outline btn-outline-info w-100" data-dismiss="modal">Cancel</button>
                         </div>
                     </div>
 
@@ -1477,7 +1686,61 @@
 @endsection
 
 @section('scripts')
+    <script type="text/javascript">
+        $('.btn-receipt-find').on('click', function(e) {
+            e.preventDefault();
+
+            var ReceiptBillNo = $('#ReceiptBillNo').val();
+            var ReceiptTransType = $('#sel1').val();
+
+            console.log('ReceiptTransType: ' + ReceiptTransType);
+            console.log('ReceiptBillNo: ' + ReceiptBillNo);
+
+            $.ajax({
+                url: "<?php echo url('get-receipt-details'); ?>",
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: {
+                    ReceiptBillNo: ReceiptBillNo,
+                    ReceiptTransType: ReceiptTransType,
+                },
+
+                success: function(data) {
+                    var billNo = data.data.billNo;
+                    console.log(billNo);
+                    if (data.status === 200) {
+                        let url =
+                            "print-receipt/:BillNo";
+                        url = url.replace(':BillNo', billNo);
+                        var win = window.open(url, '_blank');
+                        if (win) {
+                            //Browser has allowed it to be opened
+                            win.focus();
+                        } else {
+                            //Browser has blocked it
+                            alert('Please allow popups for this website');
+                        }
+
+                    } else {
+                        $('.bg-receipt-error').removeClass('d-none');
+                    }
+                }
+            });
+
+
+        });
+
+        $('#ReceiptBillNo').on("change paste keyup", function() {
+            $('.bg-receipt-error').addClass('d-none');
+        });
+    </script>
+
+
     {{-- Daily Parking --}}
     @include('scripts.parking')
     {{-- Daily Parking --}}
+
+
 @endsection

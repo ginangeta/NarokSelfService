@@ -163,7 +163,7 @@
 
     $('body').on('click', '.btn-modal-pay', function () {
         closeOnEscape: false;
-        $('#payment-modal .modal-header button').addClass('d-none');
+        // $('#payment-modal .modal-header button').addClass('d-none');
         setTimeout(function () {
 
         }, 5000);
@@ -183,23 +183,6 @@
             $(".timer-loader strong").text(timeleft + " S");
             timeleft -= 1;
         }, 1000);
-    });
-
-    $('body').on('click', '.btn-seasonal-add-car', function () {
-        var plate = $('#numberPlate').val();
-        var container = $('.cars-container');
-        if (plate == null || plate == "") {} else {
-            container.append(`<span class="font-12 cars-add">
-                         <span class="number-plate" id="">` + plate + `</span>
-                        <i class="remove-car font-14 ti-close ml-2" title="Remove Car"></i>
-                        </span>`);
-            $('#numberPlate').val('');
-        }
-
-    });
-
-    $('body').on('click', '.remove-car', function () {
-        $(this).parent().remove();
     });
 
     /*___________________________________

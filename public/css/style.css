@@ -353,6 +353,23 @@ nav ul li.active a::before {
   margin-left: 1rem;
 }
 
+.btn-process-submit {
+  background-color: #d8091a;
+  border-width: 2px;
+  color: white;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1;
+  text-transform: uppercase;
+  padding: 16px 38px;
+  border: none;
+  font-weight: normal;
+  border-radius: 3px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .btn-process-outline {
   color: #d8091a;
   border-width: 2px;
@@ -1828,7 +1845,7 @@ aside {
 
 .the-aside-inputs {
   padding-left: 30px;
-  padding-top: 20px;
+  /* padding-top: 20px; */
   padding-right: 30px;
 }
 
@@ -2085,9 +2102,12 @@ aside {
 }
 
 .aside-footer {
-  padding: 30px;
+  padding-top: 30px;
+  padding-right: 30px;
+  padding-left: 30px;
+  padding-bottom: 30px;
   position: absolute;
-  width: 400px;
+  width: 380px;
   bottom: 0px;
   z-index: 20;
   right: 0px;
@@ -2095,9 +2115,12 @@ aside {
 }
 
 .aside-footer-confirm {
-  padding: 30px;
+  padding-top: 30px;
+  padding-right: 30px;
+  padding-left: 30px;
+  padding-bottom: 30px;
   position: absolute;
-  width: 400px;
+  width: 380px;
   bottom: 0px;
   z-index: 0px;
   right: 0px;
@@ -2109,9 +2132,12 @@ aside {
 }
 
 .aside-footer-to-confirm {
-  padding: 30px;
+  padding-top: 30px;
+  padding-right: 30px;
+  padding-left: 30px;
+  padding-bottom: 30px;
   position: absolute;
-  width: 400px;
+  width: 380px;
   bottom: 0px;
   z-index: 0;
   right: 0px;
@@ -3108,7 +3134,8 @@ body {
 
 .btn-ellipsis div {
   position: absolute;
-  /* top: 33px; */  width: 13px;
+  /* top: 33px; */
+  width: 13px;
   height: 13px;
   border-radius: 50%;
   background: #fff;
@@ -3166,3 +3193,17 @@ body {
 }
 
 /* Button Loader */
+
+
+/*Media Queries*/
+@media only screen and (max-width: 768px) {
+  .bg-confirm strong {
+    font-size: 12px !important;
+  }
+
+  .bg-confirm span {
+    font-size: 12px !important;
+  }
+}
+
+/*Media Queries*/
