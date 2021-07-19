@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SBPController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BillsController;
@@ -97,6 +98,45 @@ Route::group(['middleware' => ['active']], function () {
     Route::post('initiate-penalty-payment', [ParkingPenaltiesController::class ,'initiateParkingPayment'])->name('initiate-penalty-payment');
 
     //PARKING
+
+    //TRADE
+    //SBP
+    Route::get('renew-business-permit', [SBPController::class,'renewBusinessPermit'])->name('renew-business-permit');
+    Route::post('renew-permit', [SBPController::class,'renewPermit'])->name('renew-permit');
+    Route::post('get-business-details', [SBPController::class,'getBusinessDetails'])->name('get-business-details');
+    Route::get('print-permit', [SBPController::class,'printPermit'])->name('print-permit');
+    Route::post('get-sbp', [SBPController::class,'getSBP'])->name('get-sbp');
+    Route::get('business-permit', [SBPController::class,'businessPermit'])->name('business-permit');
+    Route::get('register-business', [SBPController::class,'registerBusinessForm'])->name('register-business');
+    Route::post('get-wards', [SBPController::class,'getWards'])->name('get-wards');
+    Route::post('print-receipt', [SBPController::class,'printReceipt'])->name('print-receipt');
+
+    //RevenueSure Register Trade
+    // Route::post('apply-new-permit', [SBPController::class,'registerBusiness'])->name('apply-new-permit');
+    Route::post('register-trade-license', [SBPController::class,'registerTradeLicense'])->name('register-trade-license');
+    Route::post('get-receipt-details', [ReceiptController::class, 'getReceiptDetails'])->name('get-receipt-details');
+
+    Route::post('get-postal-name/{id}', [SBPController::class,'getPostalName'])->name('get-postal-name');
+    Route::get('get-activity-detail/{id}', [SBPController::class,'getActivityDetail'])->name('get-activity-detail');
+    Route::get('store-business', [SBPController::class,'storeBusiness'])->name('store-business');
+    Route::post('pay-sbp', [SBPController::class,'payment'])->name('pay-sbp');
+    Route::get('confirm-sbp-details', [SBPController::class,'confirmDetails'])->name('confirm-sbp-details');
+    Route::get('get-permit', [SBPController::class,'getPermit'])->name('get-permit');
+    Route::get('get-permit-form', [SBPController::class,'getPermitForm'])->name('get-permit-form');
+    Route::get('view-sbp-permit/{id}/{business_id}', [SBPController::class,'viewPermit'])->name('view-sbp-permit');
+    Route::get('get-sbp-charges/{id}', [SBPController::class,'getSBPcharges'])->name('get-sbp-charges');
+    Route::post('update-business', [SBPController::class,'update'])->name('update-business');
+    Route::post('renew-business', [SBPController::class,'renew'])->name('renew-business');
+    Route::get('get-sbp-receipt/{id}', [SBPController::class,'getReceipt'])->name('get-sbp-receipt');
+    Route::get('view-sbp-receipt/{id}', [SBPController::class,'viewReceipt'])->name('view-sbp-receipt');
+    Route::post('bill-payment', [SBPController::class,'billPayment'])->name('bill-payment');
+    Route::get('get-overall-receipt/{id}', [SBPController::class,'getOverallReceipt'])->name('get-overall-receipt');
+    Route::get('all-printables/{id}', [SBPController::class,'allPrints'])->name('all-printables');
+
+    Route::get('print-sbp-bill/{bill_number}', [SBPController::class,'printBill'])->name('print-sbp-bill');
+    Route::get('print-trade-bill/{id}', [SBPController::class,'printTradeBill'])->name('print-trade-bill');
+    //TRADE
+
 
 
     //DOCUMENTS

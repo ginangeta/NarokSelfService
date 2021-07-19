@@ -3194,6 +3194,30 @@ body {
 
 /* Button Loader */
 
+/* Bill Loader */
+.bill-ellipsis {
+  border: 16px solid #f3f3f3;
+  /* Light grey */
+  border-top: 16px solid #d8091a;
+  /* red */
+  border-radius: 50%;
+  width: 20px;
+  height: 15px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Bill Loader */
+
 
 /*Media Queries*/
 @media only screen and (max-width: 768px) {
@@ -3207,3 +3231,9 @@ body {
 }
 
 /*Media Queries*/
+
+#trade-license-application .form-control {
+  color: #151616;
+  background-color: #cfcfd1;
+  font-size: 12px;
+}

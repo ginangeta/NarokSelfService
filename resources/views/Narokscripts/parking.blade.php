@@ -641,10 +641,52 @@
             });
         });
 
-        $('btn-print-seasonal-bill').on('click', function(e) {
+        $('.btn-print-seasonal-bill').on('click', function(e) {
             e.preventDefault();
 
+            $(this).addClass('py-1');
+            $(this).find('.ti-printer').addClass('d-none');
+            $(this).find('.bill-ellipsis').removeClass('d-none');
 
+            var phone_number = $('#payment-modal .payment-number').text();
+            console.log(phone_number);
+
+            $.ajax({
+                url: "<?php echo url('initiate-seasonal-payment'); ?>",
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: {
+                    phone_number: phone_number
+                },
+
+                success: function(data) {
+                    console.log(data);
+
+                    $(this).removeClass('py-1');
+                    $(this).find('.ti-printer').removeClass('d-none');
+                    $(this).find('.bill-ellipsis').addClass('d-none');
+
+                    if (data.status_code == 200) {
+                        document.getElementById('seasonal_total').innerHTML = charges;
+                        var bill_number = data.response_data.transaction_reference;
+                        var win = window.open("print-bill/" + bill_number, '_blank');
+                        if (win) {
+                            //Browser has allowed it to be opened
+                            win.focus();
+                        } else {
+                            //Browser has blocked it
+                            alert('Please allow popups for this website');
+                        }
+                    } else {
+                        document.getElementById('seasonal-footer-errors').innerHTML =
+                            data.message;
+                        $('#seasonal-footer-errors').removeClass('d-none');
+
+                    }
+                }
+            });
         });
     });
 </script>
@@ -885,8 +927,6 @@
             $('#payment-modal .payment-plate').text($("#penalty-plates").html());
 
         });
-
-
     });
 </script>
 {{-- Penalties Parking --}}

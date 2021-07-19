@@ -239,6 +239,8 @@ class SeasonalController extends Controller
             'token' => $token,
         ];
 
+        dd($data);
+
         $paidVehicle = json_decode($this->to_curl($url, $data));
 
         // dd($paidVehicle);

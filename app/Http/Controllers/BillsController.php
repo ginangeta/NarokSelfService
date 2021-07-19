@@ -64,8 +64,8 @@ class BillsController extends Controller
       // dd($url);
 
         $data = [
-            'email' => 'akiburei@gmail.com',
-            'password'=>'123456789'
+            "email" => "biller@narok.prod",
+            "password" => "biller@2021!"
         ];
 
         // dd($data);
@@ -209,8 +209,8 @@ class BillsController extends Controller
       // dd($url);
 
       $data = [
-          "email" => "akiburei@gmail.com",
-          "password" => "123456789"
+          "email" => "biller@narok.prod",
+          "password" => "biller@2021!"
 
       ];
 

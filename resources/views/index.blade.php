@@ -481,7 +481,7 @@
                     </div>
                 </li>
 
-                <li class="print_permit" data-toggle="modal" data-target="#trade-license-application">
+                <li class="print_permit">
                     <div>
                         <img src="img\icons\new-icons\line\print.svg" class="img">
                     </div>
@@ -836,6 +836,36 @@
 
     <!-- trade services sub revenue streams -->
     <div class="aside-container aside-summary trade-subs">
+        <aside class="right-neg-100" id="renew_permit">
+            <div class="aside-header">
+                <div class="header-side-sub">
+                    <h4>Renew Business Permit</h4>
+                    <i class="mdi mdi-close close-sub-aside"></i>
+                </div>
+            </div>
+            <hr>
+            <!-- the sub menu streams -->
+            <ul class="sub-streams">
+                <!-- the inputs -->
+                <div class="the-aside-inputs">
+
+                    <div class="form-group">
+                        <label>Business Number</label>
+                        <input type="text" class="form-control w-100" id="plot" placeholder="Enter Business Number"
+                            name="businessID" value="{{ old('businessID') }}">
+                    </div>
+
+                    <button class="btn-process btn-block btn-update-permit">Update Business Details <span
+                            class="ti-arrow-right mx-2"></span> </button>
+
+                    <div class="bg-error d-none">
+                        <p class="mb-0">Permit Not Found.</p>
+                    </div>
+
+                </div>
+            </ul>
+        </aside>
+
         <aside class="right-neg-100" id="print_permit">
             <div class="aside-header">
                 <div class="header-side-sub">
@@ -1012,8 +1042,10 @@
                         <button class="btn-process btn-success btn-pay-now w-100">PAY NOW</button>
                     </div>
                     <div class="col-2 pl-0">
-                        <button class="btn-process-outline btn-outline-info w-100 btn-print-seasonal-bill"><span
-                                class="ti-printer"></span></button>
+                        <button class="btn-process-outline btn-outline-info w-100 btn-print-seasonal-bill">
+                            <span class="ti-printer"></span>
+                            <div class="bill-ellipsis d-none"></div>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -1238,6 +1270,105 @@
                 </form>
             </div>
         </aside>
+    </div>
+
+    <div class="aside-container aside-summary trading-subs">
+
+        <aside class="right-neg-100" id="renew-trade-confirm">
+            <div class="aside-header">
+                <div class="header-side-sub">
+                    <h4>TRANSACTION SUMMARY</h4>
+                    <span class="close-confirm-aside">EDIT</span>
+                </div>
+            </div>
+            <hr>
+            <!-- the inputs -->
+            <div class="the-aside-inputs">
+                <div class="transactions-details-container bg-confirm">
+                    <h5 class="mb-3">Renew Trade License</h5>
+                    <p class="">Below are the transaction details you provided plus the computed prices for your
+                        transaction.</p>
+                    <div class="mt-3">
+                        <div class="d-flex justify-content-between">
+                            <span class="m-0">Client Name</span>
+                            <strong id="client_name"></strong>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span class="m-0">Client Number</span>
+                            <strong id="client_number"></strong>
+                        </div>
+                        <hr class="dashed">
+                        <div class="d-flex justify-content-between">
+                            <span class="m-0">Bill Number</span>
+                            <strong id="bill_number"></strong>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span class="m-0">Description</span>
+                            <strong id="client_description"></strong>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span class="m-0">Fiscal Year</span>
+                            <strong id="fiscal_year"></strong>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span class="m-0">Created date</span>
+                            <strong id="created_date"></strong>
+                        </div>
+
+                        <hr>
+                        <div class="d-flex justify-content-between">
+                            <strong class="bill-total">TOTAL</strong>
+                            <strong id="renew_total"></strong>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="aside-footer-confirm right-neg-100">
+                <form>
+                    <div>
+                        <p id="trade-errors" class="alert alert-danger d-none"></p>
+                    </div>
+                    <div class="col-sm-12 pl-0 d-none" id="print-renew-receipt">
+                        <p><b>You can now proceed to print your receipt</b></p>
+                        <a href="" target="_blank" id="receipt-link"
+                            class="btn btn-secondary text-white font-14 w-100  center mx-0 ">
+                            <div class="btn-txt animated print-receipt">
+                                <span class="btn-text text-uppercase font-12 ">Print receipt</span>
+
+                            </div>
+                        </a>
+                    </div>
+                    <div class="form-group mt-2">
+                        <label>Mpesa No.</label>
+                        @if (Session::has('resource'))
+                            <input type="text" class="form-control w-100" id="renew-phone-number" name="renew-phone-number"
+                                value="{{ Session::get('resource')['phone_number'] }}">
+                        @else
+                            <input type="text" class="form-control w-100" id="renew-phone-number" name="renew-phone-number"
+                                placeholder="Enter your phone number" value="{{ old('renew-phone-number') }}">
+                        @endif
+                    </div>
+                    <input type="hidden" name="amount" id="renew_permit_amount">
+                    <div class="form-group">
+                        <button class="btn-process" id="renew_permit_pay">
+                            <div class="btn-txt animated">
+                                <span class="btn-text text-uppercase font-12"></span>
+                                <i class="ti-arrow-right ml-2"></i>
+                            </div>
+                            <div class="btn-ellipsis d-none">
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                            </div>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </aside>
 
     </div>
 
@@ -1357,7 +1488,7 @@
                         <strong>Press retry</strong>
                         below or pay directly through mpesa by using the <strong> paybill number 272525</strong> and the
                         account your
-                        account name is <strong class="payment-account">76768DHJJH</strong>
+                        account name is <strong class="payment-account"></strong>
                     </p>
 
                     <div class="row bill-buttons mt-5">
@@ -1433,8 +1564,13 @@
 
                     <i class="mdi mdi-close" data-dismiss="modal"></i>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" style="position: relative;">
                     <form>
+                        <div class="slider d-none" style="z-index: 10; width: 100%">
+                            <div class="line"></div>
+                            <div class="subline inc"></div>
+                            <div class="subline dec"></div>
+                        </div>
                         <div class="slider-container wow animated slideInLeft">
                             <div class="card">
                                 <div class="card-header">
@@ -1444,60 +1580,62 @@
                                 <div class="card-body row">
                                     <div class="col-sm-12 col-md-4">
                                         <div class="form-group">
+                                            <label>Business ID<strong class="text-danger">*</strong></label>
+                                            <input type="text" class="form-control form-control-lg" name="businessID"
+                                                placeholder="Enter Business ID">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-4">
+                                        <div class="form-group">
                                             <label>Business Name<strong class="text-danger">*</strong></label>
-                                            <input type="text" class="form-control form-control-lg"
+                                            <input type="text" class="form-control form-control-lg" name="businessName"
                                                 placeholder="Enter Business Name">
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-4">
                                         <div class="form-group">
-                                            <label>Certificate of incorporation<strong
-                                                    class="text-danger">*</strong></label>
-                                            <input type="text" class="form-control form-control-lg"
-                                                placeholder="Enter Certificate of incorporation">
+                                            <label>Business Category<strong class="text-danger">*</strong></label>
+                                            <input type="text" class="form-control form-control-lg" name="codeDescription"
+                                                placeholder="Enter Business Category">
+                                            <input type="hidden" class="form-control form-control-lg" name="ActivityCode">
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-4">
                                         <div class="form-group">
-                                            <label>KRA Pin Number<strong class="text-danger">*</strong></label>
-                                            <input type="text" class="form-control form-control-lg"
-                                                placeholder="Enter KRA Pin Number">
+                                            <label>Period<strong class="text-danger">*</strong></label>
+                                            <select class="selectpicker show-tick  w-100 form-control no-btn"
+                                                title="Select period" data-live-search="true" name="period">
+                                                <option value="1">Yearly</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-12 col-md-4">
+                                        <div class="form-group">
+                                            <label>Contact person name<strong class="text-danger">*</strong></label>
+                                            <input type="text" class="form-control form-control-lg" name="contactPersonName"
+                                                placeholder="Enter Contact Person's Name">
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-4">
                                         <div class="form-group">
-                                            <label>VAT Number<strong class="text-danger">*</strong></label>
+                                            <label>Contact person telephone<strong class="text-danger">*</strong></label>
                                             <input type="text" class="form-control form-control-lg"
-                                                placeholder="Enter VAT Number">
+                                                name="ContactPersonTelephone1" placeholder="Enter Contact Person's Number">
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-8">
-                                        <div class="row">
-                                            <div class="col-sm-12 col-md-4">
-                                                <div class="form-group">
-                                                    <label>P.O Box<strong class="text-danger">*</strong></label>
-                                                    <input type="text" class="form-control form-control-lg"
-                                                        placeholder="Enter P.O Box">
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-12 col-md-4">
-                                                <div class="form-group">
-                                                    <label>Postal Code</label>
-                                                    <select class="form-control">
-                                                        <option>Select postal code</option>
-                                                        <option>00200</option>
-                                                        <option>00100</option>
-                                                        <option>00205</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-12 col-md-4">
-                                                <div class="form-group">
-                                                    <label>Postal town<strong class="text-danger">*</strong></label>
-                                                    <input type="text" class="form-control form-control-lg"
-                                                        placeholder="Enter Postal town">
-                                                </div>
-                                            </div>
+                                    <div class="col-sm-12 col-md-4">
+                                        <div class="form-group">
+                                            <label>Contact person ID<strong class="text-danger">*</strong></label>
+                                            <input type="text" class="form-control form-control-lg" name="idDocumentNumber"
+                                                placeholder="Enter Contact Person's Number">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-4">
+                                        <div class="form-group">
+                                            <label>Physical address<strong class="text-danger">*</strong></label>
+                                            <input type="text" class="form-control form-control-lg" name="physicalAddress"
+                                                placeholder="Enter Physical Address">
                                         </div>
                                     </div>
                                     <div class="col-12 modal-nav">
@@ -1522,60 +1660,63 @@
                                 <div class="card-body row">
                                     <div class="col-sm-12 col-md-4">
                                         <div class="form-group">
-                                            <label>Business Name<strong class="text-danger">*</strong></label>
-                                            <input type="text" class="form-control form-control-lg"
-                                                placeholder="Enter Business Name">
+                                            <label>Building name<strong class="text-danger">*</strong></label>
+                                            <input type="text" class="form-control form-control-lg" name="building"
+                                                placeholder="Enter Building Name">
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-4">
                                         <div class="form-group">
-                                            <label>Certificate of incorporation<strong
-                                                    class="text-danger">*</strong></label>
-                                            <input type="text" class="form-control form-control-lg"
-                                                placeholder="Enter Certificate of incorporation">
+                                            <label>Building type<strong class="text-danger">*</strong></label>
+                                            <select class="selectpicker show-tick  w-100 form-control no-btn"
+                                                title="Select Building Type" data-live-search="true" name="buildingType">
+                                                <option value='1'>Storey</option>
+                                                <option value='0'>Non storey</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-4">
                                         <div class="form-group">
-                                            <label>KRA Pin Number<strong class="text-danger">*</strong></label>
-                                            <input type="text" class="form-control form-control-lg"
-                                                placeholder="Enter KRA Pin Number">
+                                            <label>Floor<strong class="text-danger">*</strong></label>
+                                            <input type="text" class="form-control form-control-lg" name="floor"
+                                                placeholder="Enter Floor Name">
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-4">
                                         <div class="form-group">
-                                            <label>VAT Number<strong class="text-danger">*</strong></label>
-                                            <input type="text" class="form-control form-control-lg"
-                                                placeholder="Enter VAT Number">
+                                            <label>Room<strong class="text-danger">*</strong></label>
+                                            <input type="text" class="form-control form-control-lg" name="houseNumber"
+                                                placeholder="Enter House Number">
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-8">
-                                        <div class="row">
-                                            <div class="col-sm-12 col-md-4">
-                                                <div class="form-group">
-                                                    <label>P.O Box<strong class="text-danger">*</strong></label>
-                                                    <input type="text" class="form-control form-control-lg"
-                                                        placeholder="Enter P.O Box">
-                                                </div>
+                                    <div class="col-sm-12 col-md-4">
+                                        <div class="form-group">
+                                            <label>Plot number<strong class="text-danger">*</strong></label>
+                                            <input type="text" class="form-control form-control-lg" name="plotNumber"
+                                                placeholder="Enter Plot Number">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-4">
+                                        <div class="form-group">
+                                            <label>Sub county<strong class="text-danger">*</strong></label>
+                                            <select class="selectpicker show-tick  w-100 form-control no-btn"
+                                                title="Select Sub County" data-live-search="true" id="Subcounty"
+                                                name="subCountyCode">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-4">
+                                        <div class="form-group">
+                                            <label>Ward<strong class="text-danger">*</strong></label>
+                                            <div class="ward-ellipsis d-none">
+                                                <div></div>
+                                                <div></div>
+                                                <div></div>
+                                                <div></div>
                                             </div>
-                                            <div class="col-sm-12 col-md-4">
-                                                <div class="form-group">
-                                                    <label>Postal Code</label>
-                                                    <select class="form-control">
-                                                        <option>Select postal code</option>
-                                                        <option>00200</option>
-                                                        <option>00100</option>
-                                                        <option>00205</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-12 col-md-4">
-                                                <div class="form-group">
-                                                    <label>Postal town<strong class="text-danger">*</strong></label>
-                                                    <input type="text" class="form-control form-control-lg"
-                                                        placeholder="Enter Postal town">
-                                                </div>
-                                            </div>
+                                            <select class="selectpicker show-tick  w-100 form-control no-btn"
+                                                title="Select Ward" data-live-search="true" id="ward" name="wardCode">
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="col-12 modal-nav">
@@ -1588,89 +1729,8 @@
                                             <i data-icon="#" class="fs1" aria-hidden="true"></i>
                                             PREVIOUS
                                         </button>
-                                        <button type="button" class="btn-process btn-next btn-success">NEXT
-                                            <i data-icon="$" class="fs1" aria-hidden="true"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="slider-container d-none wow animated slideInLeft">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h5>Last Business information</h5>
-                                    <p>Please fill all the required(*) fields.</p>
-                                </div>
-                                <div class="card-body row">
-                                    <div class="col-sm-12 col-md-4">
-                                        <div class="form-group">
-                                            <label>Business Name<strong class="text-danger">*</strong></label>
-                                            <input type="text" class="form-control form-control-lg"
-                                                placeholder="Enter Business Name">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12 col-md-4">
-                                        <div class="form-group">
-                                            <label>Certificate of incorporation<strong
-                                                    class="text-danger">*</strong></label>
-                                            <input type="text" class="form-control form-control-lg"
-                                                placeholder="Enter Certificate of incorporation">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12 col-md-4">
-                                        <div class="form-group">
-                                            <label>KRA Pin Number<strong class="text-danger">*</strong></label>
-                                            <input type="text" class="form-control form-control-lg"
-                                                placeholder="Enter KRA Pin Number">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12 col-md-4">
-                                        <div class="form-group">
-                                            <label>VAT Number<strong class="text-danger">*</strong></label>
-                                            <input type="text" class="form-control form-control-lg"
-                                                placeholder="Enter VAT Number">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12 col-md-8">
-                                        <div class="row">
-                                            <div class="col-sm-12 col-md-4">
-                                                <div class="form-group">
-                                                    <label>P.O Box<strong class="text-danger">*</strong></label>
-                                                    <input type="text" class="form-control form-control-lg"
-                                                        placeholder="Enter P.O Box">
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-12 col-md-4">
-                                                <div class="form-group">
-                                                    <label>Postal Code</label>
-                                                    <select class="form-control">
-                                                        <option>Select postal code</option>
-                                                        <option>00200</option>
-                                                        <option>00100</option>
-                                                        <option>00205</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-12 col-md-4">
-                                                <div class="form-group">
-                                                    <label>Postal town<strong class="text-danger">*</strong></label>
-                                                    <input type="text" class="form-control form-control-lg"
-                                                        placeholder="Enter Postal town">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 modal-nav">
-                                    </div>
-                                </div>
-                                <div class="card-footer d-flex justify-content-between">
-                                    <span>STEP 3</span>
-                                    <div class="modal-footer-buttons">
-                                        <button type="button" class="btn-process-outline btn-previous btn-outline-info">
-                                            <i data-icon="#" class="fs1" aria-hidden="true"></i>
-                                            PREVIOUS
-                                        </button>
-                                        <button type="button" class="btn-process btn-submit btn-success">Submit
+                                        <button type="button" id="trade-license-submit"
+                                            class="btn-process btn-next btn-success">SUBMIT
                                             <i class="mdi mdi-check-all"></i>
                                         </button>
                                     </div>
@@ -1737,10 +1797,13 @@
         });
     </script>
 
+    {{-- Parking --}}
+    @include('Narokscripts.parking')
+    {{-- Parking --}}
 
-    {{-- Daily Parking --}}
-    @include('scripts.parking')
-    {{-- Daily Parking --}}
+    {{-- Trade --}}
+    @include('Narokscripts.trade')
+    {{-- Trade --}}
 
 
 @endsection
