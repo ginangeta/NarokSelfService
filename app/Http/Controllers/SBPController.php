@@ -28,7 +28,7 @@ class SBPController extends Controller
       $this->data['receipt'] = json_decode($this->trade_curl($url, $data));
         $receipt = $this->data['receipt']->data[0];
         if ($this->data['receipt']->status ===200) {
-            return view(  'receipts.receipt-demo', ['receipt'=> $receipt]);
+            return view(  'documents.receipt', ['receipt'=> $receipt]);
         }else{
             return Redirect::back()->withErrors($this->data['receipt']->message);
         }
@@ -42,8 +42,6 @@ class SBPController extends Controller
 
         return view('nakuru-sbp.all-printables', compact('pay_id'));
     }
-
-
 
     public function billPayment(Request $request)
     {
@@ -66,7 +64,8 @@ class SBPController extends Controller
       return response()->json(['success'=>$payment_info]);
 
     }
-       public function getOverallReceipt($pay_id)
+
+    public function getOverallReceipt($pay_id)
     {
       //$url = $this->url. 'getreceipt';
       $url = config('global.bill-payment');
@@ -82,9 +81,8 @@ class SBPController extends Controller
         return response()->json(['success'=>$checkPaymentVerification]);
     }
 
-
-
-    public function registerBusinessForm() {
+    public function registerBusinessForm()
+    {
       $url = config('global.trade-license');
       $data=[
         'function'=>'getPostalCodes',
@@ -103,10 +101,10 @@ class SBPController extends Controller
           return redirect()->back()->withErrors($postal_info->message);
       }
 
-//      $url = $this->url. 'permit/api/sbp/subcountys';
-//      $sub_info = json_decode($this->get_curl($url));
+      //      $url = $this->url. 'permit/api/sbp/subcountys';
+      //      $sub_info = json_decode($this->get_curl($url));
 
-        $url = config('global.demographics');
+      $url = config('global.demographics');
 
        $data=[
          'function'=>'getSubCounty',
@@ -121,7 +119,7 @@ class SBPController extends Controller
       {
         return redirect()->back()->withErrors('Something went wrong. Please try again.');
       }
-//      if($sub_info->status_code != 200)
+      //      if($sub_info->status_code != 200)
       if($sub_info->success === false)
       {
           return redirect()->back()->withErrors($sub_info->message);
@@ -171,16 +169,17 @@ class SBPController extends Controller
     	$business_activities = $act_info->data;
     	$documents = $doc_info->data;
 
+      $data = [
+        'postalcodes' => $postalcodes,
+        'subcounties' => $subcounties,
+        'business_activities' => $business_activities,
+        'documents' => $documents,
+      ];
+
 
     	// dd($postalcodes);
-      if (is_null(Session::get('resource'))) {
-            Session::put('url', url()->current());
-            return redirect()->route('login');
-        }else{
-    	return view('sbp.register-business', ['postalcodes' => $postalcodes, 'subcounties' =>$subcounties, 'business_activities' => $business_activities, 'documents' => $documents]);
-      }
+      return response()->json($data);
     }
-
 
     public function getPostalName($id)
     {
@@ -207,9 +206,6 @@ class SBPController extends Controller
     	return response()->json($postal_info->data);
 
     }
-
-
-
 
     public function getWards(Request $request)
     {
@@ -263,69 +259,71 @@ class SBPController extends Controller
     	return response()->json($subs);
     }
 
+    public function registerTradeLicense(Request $request)
+    {
+      // dd($request->all());
 
-     public function registerTradeLicense(Request $request)
-     {
+        $url = config('global.trade-license');
 
-      $url = config('global.trade-license');
+        $data = [
+          'function'=>'registerBusiness',
+          'businessName'=>$request->RegBusinessName,
+          'telephone1'=>$request->telephone1,
+          'telephone2'=>$request->telephone2,
+          'FaxNumber'=>$request->faxNumber,
+          'email'=>$request->email,
+          'newphysicalAddress'=>$request->newphysicalAddress,
+          'plotNumber'=>$request->newplotNumber,
+          'contactPersonDesignation'=>$request->contactPersonDesignation,
+          'contactPersonPOBox'=>$request->contactPersonPOBox,
+          'contactPersonPostalCode'=>$request->contactPersonPostalCode,
+          'contactPersonTown'=>$request->contactPersonTown,
+          'contactPersonTelephone1'=>$request->contactPersonTelephone1,
+          'contactPersonTelephone2'=>$request->contactPersonTelephone2,
+          'contactPersonFaxNumber'=>$request->contactPersonFaxNumber,
+          'businessActivityDescription'=>$request->businessActivityDescription,
 
-      $data = [
-        'function'=>'registerBusiness',
-        'businessName'=>$request->businessName,
-        'telephone1'=>$request->telephone1,
-        'telephone2'=>$request->telephone2,
-        'FaxNumber'=>$request->FaxNumber,
-        'email'=>$request->email,
-        'physicalAddress'=>$request->physicalAddress,
-        'plotNumber'=>$request->plotNumber,
-        'contactPersonDesignation'=>$request->contactPersonDesignation,
-        'contactPersonPOBox'=>$request->contactPersonPOBox,
-        'contactPersonPostalCode'=>$request->contactPersonPostalCode,
-        'contactPersonTown'=>$request->contactPersonTown,
-        'contactPersonTelephone1'=>$request->contactPersonTelephone1,
-        'contactPersonTelephone2'=>$request->contactPersonTelephone2,
-        'contactPersonFaxNumber'=>$request->contactPersonFaxNumber,
-        'businessActivityDescription'=>$request->businessActivityDescription,
+          'otherBusinessClassificationDetails'=>$request->otherBusinessClassificationDetails,
+          'premisesArea'=>$request->premisesArea,
+          'numberOfEmployees'=>$request->numberOfEmployees,
+          'activityCode'=>$request->newactivityCode,
+          'zoneCode'=>$request->NewSubcounty,
+          'wardCode'=>$request->NewwardCode,
+          'relativeSize'=>$request->relativeSize,
+          'building'=>$request->newbuildingName,
 
-        'otherBusinessClassificationDetails'=>$request->otherBusinessClassificationDetails,
-        'premisesArea'=>$request->premisesArea,
-        'numberOfEmployees'=>$request->numberOfEmployees,
-        'activityCode'=>$request->activityCode,
-        'zoneCode'=>$request->zoneCode,
-        'wardCode'=>$request->wardCode,
-        'relativeSize'=>$request->relativeSize,
-        'building'=>$request->building,
+          'floor'=>$request->newfloor,
+          'houseNumber'=>$request->newhouseNumber,
+          'businessRegistrationNo'=>$request->ceriOfIncorporation,
+          'pinNumber'=>$request->KRAPin,
+          'vatNumber'=>$request->VatNumber,
+          'poBox'=>$request->pobox,
+          'postalCode'=>$request->postalCode,
 
-        'floor'=>$request->floor,
-        'houseNumber'=>$request->houseNumber,
-        'businessRegistrationNo'=>$request->businessRegistrationNo,
-        'pinNumber'=>$request->pinNumber,
-        'vatNumber'=>$request->vatNumber,
-        'poBox'=>$request->poBox,
-        'postalCode'=>$request->postalCode,
+          'idTypeCode'=>$request->idTypeCode,
+          'town'=>$request->postalTown,
+          'idDocumentNumber'=>$request->idDocumentNumber,
+          'updatedBy'=>$request->updatedBy,
+          'operationalStatus'=>$request->operationalStatus,
+        ];
 
-        'idTypeCode'=>$request->idTypeCode,
-        'town'=>$request->town,
-        'idDocumentNumber'=>$request->idDocumentNumber,
-        'updatedBy'=>$request->updatedBy,
-        'operationalStatus'=>$request->operationalStatus,
-      ];
+        // dd($data);
+        $this->data['TradeLicense'] = json_decode($this->trade_curl($url,$data));
+      // dd($this->data);
 
-      //dd($data);
-      $this->data['TradeLicense'] = json_decode($this->trade_curl($url,$data));
-     // dd($this->data);
+        if(is_null($this->data))
+        {
+          return redirect()->back()->withErrors('Something went wrong. Please try again.');
+        }
 
-      if(is_null($this->data))
-      {
-        return redirect()->back()->withErrors('Something went wrong. Please try again.');
-      }
+        if($this->data['TradeLicense']->status != 200)
+        {
+            return redirect()->back()->withErrors($this->data['TradeLicense']->message);
+        }else {
+            // return view('nakuru-sbp.registration-bill')->with($this->data);
+            return response()->json($this->data);
 
-      if($this->data['TradeLicense']->status != 200)
-      {
-          return redirect()->back()->withErrors($this->data['TradeLicense']->message);
-      }else {
-          return view('nakuru-sbp.registration-bill')->with($this->data);
-      }
+        }
 
     }
 
@@ -364,7 +362,6 @@ class SBPController extends Controller
         //return view('bills.trade-bill', ['bill' => $bill]);
     }
 
-
     public function registerBusiness(Request $request)
     {
     	dd($request->all());
@@ -386,9 +383,6 @@ class SBPController extends Controller
       {
           return redirect()->back()->withErrors($registered->message);
       }
-
-
-
 
       $url = $this->url. 'permit/api/sbp/getbillinfos';
 
@@ -417,11 +411,10 @@ class SBPController extends Controller
         'business_id' => $bill_info->response_data->RentIdentifier,
       ];
 
-      return view('sbp.confirm-details', $data);
+      // return view('sbp.confirm-details', $data);
+      return response()->json($data);
+
     }
-
-
-
 
     public function getSBPcharges($id)
     {
@@ -469,11 +462,12 @@ class SBPController extends Controller
             Session::put('url', url()->current());
             return redirect()->route('login');
         }else{
-      return view('sbp.renew-business-permit');
-    }
+        return view('sbp.renew-business-permit');
+      }
     }
 
-    public function update(Request $request){
+    public function update(Request $request)
+    {
         # code...
         $formData = $request->all();
         $validator = Validator::make($formData,[
@@ -529,7 +523,6 @@ class SBPController extends Controller
         }
 
     }
-
 
     public function renew(Request $request)
     {
@@ -623,7 +616,6 @@ class SBPController extends Controller
       return response()->json($data);
     }
 
-
     public function printBill($id)
     {
       $url = config('global.bill_url').'billing/GetBill';
@@ -666,7 +658,8 @@ class SBPController extends Controller
       return view('sbp.bill', ['bill' => $bill_info->response_data]);
     }
 
-    public function getPermit(Request $request){
+    public function getPermit(Request $request)
+    {
       $url = config('global.trade-license');
 
       $data = [
@@ -693,50 +686,78 @@ class SBPController extends Controller
       }
 
 
-//      $bill_number = $bills_info->response_data[0]->BillNo;
-//
-//      $url = $this->url .'permit/api/sbp/get_permit';
-//      $data = [
-//        'BusinessID' => $request->business_id,
-//        'BillNo' => $bill_number,
-//      ];
-//
-//      $permit_info = json_decode($this->pay_permit_curl($url, $data));
-//
-//      // dd($permit_info);
-//      if(is_null($permit_info))
-//      {
-//        return redirect()->back()->withErrors('Something went wrong. Please try again.');
-//      }
+        //      $bill_number = $bills_info->response_data[0]->BillNo;
+        //
+        //      $url = $this->url .'permit/api/sbp/get_permit';
+        //      $data = [
+        //        'BusinessID' => $request->business_id,
+        //        'BillNo' => $bill_number,
+        //      ];
+        //
+        //      $permit_info = json_decode($this->pay_permit_curl($url, $data));
+        //
+        //      // dd($permit_info);
+        //      if(is_null($permit_info))
+        //      {
+        //        return redirect()->back()->withErrors('Something went wrong. Please try again.');
+        //      }
 
 
-//      if($permit_info->status_code !== 200)
-//      {
-//        return back()->withErrors($permit_info->message);
-//      }
-//
-//      // dd($permit_info);
-//      if($permit_info->response_data->Period == 1)
-//      {
-//        $amount_in_words = NumConvert::word((int)$permit_info->response_data->SBPFee);
-//      }
-//      else
-//      {
-//       $amount_in_words = NumConvert::word((int)$permit_info->response_data->AmountPaid);
-//      }
+        //      if($permit_info->status_code !== 200)
+        //      {
+        //        return back()->withErrors($permit_info->message);
+        //      }
+        //
+        //      // dd($permit_info);
+        //      if($permit_info->response_data->Period == 1)
+        //      {
+        //        $amount_in_words = NumConvert::word((int)$permit_info->response_data->SBPFee);
+        //      }
+        //      else
+        //      {
+        //       $amount_in_words = NumConvert::word((int)$permit_info->response_data->AmountPaid);
+        //      }
 
 
-      // $data = [
-      //       'permit' => $permit_info->response_data,
-      //       'amount_in_words' => $amount_in_words,
-      //   ];
-      //   $pdf = PDF::loadView('sbp.permit', $data);
-      //   return $pdf->stream('receipt.pdf',array('Attachment'=>0));
+              // $data = [
+              //       'permit' => $permit_info->response_data,
+              //       'amount_in_words' => $amount_in_words,
+              //   ];
+              //   $pdf = PDF::loadView('sbp.permit', $data);
+              //   return $pdf->stream('receipt.pdf',array('Attachment'=>0));
 
-      // dd($permit_info);
+              // dd($permit_info);
 
-//      return view('sbp.permit', ['permit' => $permit_info->response_data, 'amount_in_words' => $amount_in_words]);
+        //      return view('sbp.permit', ['permit' => $permit_info->response_data, 'amount_in_words' => $amount_in_words]);
 
+    }
+
+    public function getPermitDocument($BusinessID)
+    {
+      $url = config('global.trade-license');
+
+      $data = [
+          'function'=>'getActiveCerts',
+         'businessID' => $BusinessID
+      ];
+
+      // dd($data);
+      $this->data['permit'] = json_decode($this->trade_curl($url, $data));
+      // dd($this->data);
+
+      if(is_null($this->data))
+      {
+        return redirect()->back()->withErrors('Something went wrong. Please try again.');
+      }
+
+
+      if( $this->data['permit'] ->success === false)
+      {
+        return back()->withErrors( $this->data['permit'] ->message);
+      }else{
+          return view('documents.tradepermit')->with( $this->data);
+
+      }
     }
 
     public function getPermitForm()
@@ -746,7 +767,7 @@ class SBPController extends Controller
             return redirect()->route('login');
         }else{
       return view('sbp.print-permit');
-    }
+      }
     }
 
     public function viewPermit($id, $business_id)
@@ -827,491 +848,491 @@ class SBPController extends Controller
       return view('sbp.receipt', ['receipt' => $receipt,'amount_in_words' => $amount_in_words]);
     }
 
- function trade_curl($url, $data){
+    function trade_curl($url, $data){
 
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST" );
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1 );
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST" );
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1 );
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-        $output = curl_exec($ch);
-        $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+            $output = curl_exec($ch);
+            $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
-        curl_close($ch);
-        return $output;
-
-    }
-
-
-
-
-    public function register_curl($url, $data){
-        $curl = curl_init();
-
-        curl_setopt_array($curl, array(
-          CURLOPT_URL => $url,
-          CURLOPT_RETURNTRANSFER => true,
-          CURLOPT_ENCODING => "",
-          CURLOPT_MAXREDIRS => 10,
-          CURLOPT_TIMEOUT => 0,
-          CURLOPT_FOLLOWLOCATION => false,
-          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-          CURLOPT_CUSTOMREQUEST => "POST",
-          CURLOPT_SSL_VERIFYHOST => FALSE,
-          CURLOPT_SSL_VERIFYPEER => FALSE,
-          CURLOPT_POSTFIELDS => array('BusinessName' => $data['BusinessName'],
-          	'businessRegistrationNo' => $data['businessRegistrationNo'],
-          	'PINNumber' => $data['PINNumber'],
-          	'VATNumber' => $data['VATNumber'],
-          	'POBox' => $data['POBox']
-          	,'PostalCode]' => $data['PostalCode']
-          	,'Town' => $data['Town']
-          	,'Telephone1' => $data['Telephone1']
-          	,'Telephone2' => $data['Telephone2']
-          	,'FaxNumber' => $data['FaxNumber']
-          	,'Email' => $data['Email'],
-          	'PhysicalAddress' => $data['PhysicalAddress']
-          	,'PlotNumber' => $data['PlotNumber']
-          	,'building' => $data['building'],
-          	'floor' => $data['floor']
-          	,'houseNumber' => $data['houseNumber'],
-          	'ContactPersonDesignation' => $data['ContactPersonDesignation'],
-          	'ContactPersonName' => $data['ContactPersonName'],
-          	'IDTypeCode' => $data['IDTypeCode'],
-          	'IDDocumentNumber' => $data['IDDocumentNumber'],
-          	'ContactPersonFaxNumber' => $data['ContactPersonFaxNumber'],
-          	'ContactPersonTelephone1' => $data['ContactPersonTelephone1'],
-          	'ContactPersonTelephone2' => $data['ContactPersonTelephone2'],
-            'ContactPersonPOBox' => $data['ContactPersonPOBox'],
-            'contactPersonPostalCode' => $data['contactPersonPostalCode'],
-            'contactPersonTown' => $data['contactPersonTown'],
-            'BusinessActivityDescription' => $data['BusinessActivityDescription'],
-            'PremisesArea' => $data['PremisesArea'],
-            'OtherBusinessClassificationDetails_' => $data['OtherBusinessClassificationDetails'],
-            'ZoneCode' => $data['ZoneCode'],
-            'WardCode' => $data['WardCode'],
-            'businessActivity' => $data['businessActivity'],
-            'ActivityCode' => $data['ActivityCode'],
-            'NumberOfEmployees' => $data['NumberOfEmployees'],
-            'RelativeSize' => $data['RelativeSize'],
-            'Period' => $data['Period'],)
-
-        ));
-
-        $response = curl_exec($curl);
-
-        // dd($response);
-        $err = curl_error($curl);
-
-        curl_close($curl);
-
-        if ($err) {
-          echo "cURL Error #:" . $err;
-        } else {
-          return $response;
-        }
-    }
-
-
-    public function renew_curl($url, $data){
-        $curl = curl_init();
-
-        curl_setopt_array($curl, array(
-          CURLOPT_URL => $url,
-          CURLOPT_RETURNTRANSFER => true,
-          CURLOPT_ENCODING => "",
-          CURLOPT_MAXREDIRS => 10,
-          CURLOPT_TIMEOUT => 0,
-          CURLOPT_FOLLOWLOCATION => false,
-          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-          CURLOPT_CUSTOMREQUEST => "POST",
-          CURLOPT_SSL_VERIFYHOST => FALSE,
-          CURLOPT_SSL_VERIFYPEER => FALSE,
-          CURLOPT_POSTFIELDS => array(
-            'BusinessID' => $data['BusinessID'],
-            'ContactPersonName' => $data['ContactPersonName'],
-            'ContactPersonTelephone1' => $data['ContactPersonTelephone1'],
-            'building' => $data['building'],
-            'floor' => $data['floor'],
-            'houseNumber' => $data['houseNumber'],
-            'plotNumber' => $data['plotNumber'],
-            'zoneCode' => $data['zoneCode'],
-            'wardCode' => $data['wardCode'],
-            'PhysicalAddress' => $data['PhysicalAddress'],
-            'IDDocumentNumber' => $data['IDDocumentNumber'],
-            'PhysicalAddress' => $data['PhysicalAddress'],
-            'Period' => $data['Period'],
-            'ActivityCode' =>$data['ActivityCode'],
-            )
-
-        ));
-
-        $response = curl_exec($curl);
-        $err = curl_error($curl);
-        // dd($response);
-        curl_close($curl);
-
-        if ($err) {
-          echo "cURL Error #:" . $err;
-        } else {
-          return $response;
-        }
-    }
-
-
-    public function to_curl( $url) {
-        // append the header putting the secret key and hash
-        $headers = array(
-            'Content-Type: application/json',
-            // 'Authorization: Bearer ' .$this->token,
-        );
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 60);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        $output = curl_exec($ch);
-        // dd($output);
-        if (curl_errno($ch))
-        {
-            print "Error: " . curl_error($ch);
-        }
-        else
-        {
-            // Show me the result
+            curl_close($ch);
             return $output;
+
         }
 
-        curl_close($ch);
-    }
 
 
-    public function postal_curl($url, $data){
-        $curl = curl_init();
 
-        curl_setopt_array($curl, array(
-          CURLOPT_URL => $url,
-          CURLOPT_RETURNTRANSFER => true,
-          CURLOPT_ENCODING => "",
-          CURLOPT_MAXREDIRS => 10,
-          CURLOPT_TIMEOUT => 0,
-          CURLOPT_FOLLOWLOCATION => false,
-          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-          CURLOPT_SSL_VERIFYHOST => FALSE,
-          CURLOPT_SSL_VERIFYPEER => FALSE,
-          CURLOPT_CUSTOMREQUEST => "POST",
-          CURLOPT_POSTFIELDS => array('code' => $data['code']),
-        ));
+        public function register_curl($url, $data){
+            $curl = curl_init();
 
-        $response = curl_exec($curl);
-        $err = curl_error($curl);
-        // dd($response);
-        curl_close($curl);
+            curl_setopt_array($curl, array(
+              CURLOPT_URL => $url,
+              CURLOPT_RETURNTRANSFER => true,
+              CURLOPT_ENCODING => "",
+              CURLOPT_MAXREDIRS => 10,
+              CURLOPT_TIMEOUT => 0,
+              CURLOPT_FOLLOWLOCATION => false,
+              CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+              CURLOPT_CUSTOMREQUEST => "POST",
+              CURLOPT_SSL_VERIFYHOST => FALSE,
+              CURLOPT_SSL_VERIFYPEER => FALSE,
+              CURLOPT_POSTFIELDS => array('BusinessName' => $data['BusinessName'],
+                'businessRegistrationNo' => $data['businessRegistrationNo'],
+                'PINNumber' => $data['PINNumber'],
+                'VATNumber' => $data['VATNumber'],
+                'POBox' => $data['POBox']
+                ,'PostalCode]' => $data['PostalCode']
+                ,'Town' => $data['Town']
+                ,'Telephone1' => $data['Telephone1']
+                ,'Telephone2' => $data['Telephone2']
+                ,'FaxNumber' => $data['FaxNumber']
+                ,'Email' => $data['Email'],
+                'PhysicalAddress' => $data['PhysicalAddress']
+                ,'PlotNumber' => $data['PlotNumber']
+                ,'building' => $data['building'],
+                'floor' => $data['floor']
+                ,'houseNumber' => $data['houseNumber'],
+                'ContactPersonDesignation' => $data['ContactPersonDesignation'],
+                'ContactPersonName' => $data['ContactPersonName'],
+                'IDTypeCode' => $data['IDTypeCode'],
+                'IDDocumentNumber' => $data['IDDocumentNumber'],
+                'ContactPersonFaxNumber' => $data['ContactPersonFaxNumber'],
+                'ContactPersonTelephone1' => $data['ContactPersonTelephone1'],
+                'ContactPersonTelephone2' => $data['ContactPersonTelephone2'],
+                'ContactPersonPOBox' => $data['ContactPersonPOBox'],
+                'contactPersonPostalCode' => $data['contactPersonPostalCode'],
+                'contactPersonTown' => $data['contactPersonTown'],
+                'BusinessActivityDescription' => $data['BusinessActivityDescription'],
+                'PremisesArea' => $data['PremisesArea'],
+                'OtherBusinessClassificationDetails_' => $data['OtherBusinessClassificationDetails'],
+                'ZoneCode' => $data['ZoneCode'],
+                'WardCode' => $data['WardCode'],
+                'businessActivity' => $data['businessActivity'],
+                'ActivityCode' => $data['ActivityCode'],
+                'NumberOfEmployees' => $data['NumberOfEmployees'],
+                'RelativeSize' => $data['RelativeSize'],
+                'Period' => $data['Period'],)
 
-        if ($err) {
-          echo "cURL Error #:" . $err;
-        } else {
-          return $response;
-        }
-    }
+            ));
 
-    public function business_curl($url, $data){
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-          CURLOPT_URL => $url,
-          CURLOPT_RETURNTRANSFER => true,
-          CURLOPT_ENCODING => "",
-          CURLOPT_MAXREDIRS => 10,
-          CURLOPT_TIMEOUT => 0,
-          CURLOPT_FOLLOWLOCATION => false,
-          CURLOPT_SSL_VERIFYHOST => FALSE,
-          CURLOPT_SSL_VERIFYPEER => FALSE,
-          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-          CURLOPT_CUSTOMREQUEST => "POST",
-          CURLOPT_POSTFIELDS => array('BusinessID' => $data['BusinessID']),
-        ));
+            $response = curl_exec($curl);
 
-        $response = curl_exec($curl);
-        $err = curl_error($curl);
-        // dd($response);
-        curl_close($curl);
+            // dd($response);
+            $err = curl_error($curl);
 
-        if ($err) {
-          echo "cURL Error #:" . $err;
-        } else {
-          return $response;
-        }
-    }
+            curl_close($curl);
 
-    public function permit_curl($url, $data){
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-          CURLOPT_URL => $url,
-          CURLOPT_RETURNTRANSFER => true,
-          CURLOPT_ENCODING => "",
-          CURLOPT_MAXREDIRS => 10,
-          CURLOPT_TIMEOUT => 0,
-          CURLOPT_FOLLOWLOCATION => false,
-          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-          CURLOPT_SSL_VERIFYHOST => FALSE,
-          CURLOPT_SSL_VERIFYPEER => FALSE,
-          CURLOPT_CUSTOMREQUEST => "POST",
-          CURLOPT_POSTFIELDS => array('business_id' => $data['business_id']),
-        ));
-
-        $response = curl_exec($curl);
-        $err = curl_error($curl);
-        // dd($response);
-        curl_close($curl);
-
-        if ($err) {
-          echo "cURL Error #:" . $err;
-        } else {
-          return $response;
-        }
-    }
-
-    public function pay_permit_curl($url, $data){
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-          CURLOPT_URL => $url,
-          CURLOPT_RETURNTRANSFER => true,
-          CURLOPT_ENCODING => "",
-          CURLOPT_MAXREDIRS => 10,
-          CURLOPT_TIMEOUT => 0,
-          CURLOPT_FOLLOWLOCATION => false,
-          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-          CURLOPT_SSL_VERIFYHOST => FALSE,
-          CURLOPT_SSL_VERIFYPEER => FALSE,
-          CURLOPT_CUSTOMREQUEST => "POST",
-          CURLOPT_POSTFIELDS => array('BusinessID' => $data['BusinessID'], 'BillNo' => $data['BillNo']),
-        ));
-
-        $response = curl_exec($curl);
-        $err = curl_error($curl);
-        // dd($response);
-        curl_close($curl);
-
-        if ($err) {
-          echo "cURL Error #:" . $err;
-        } else {
-          return $response;
-        }
-    }
-
-    public function bill_curl($url, $data){
-        $curl = curl_init();
-
-        curl_setopt_array($curl, array(
-          CURLOPT_URL => $url,
-          CURLOPT_RETURNTRANSFER => true,
-          CURLOPT_ENCODING => "",
-          CURLOPT_MAXREDIRS => 10,
-          CURLOPT_TIMEOUT => 0,
-          CURLOPT_FOLLOWLOCATION => false,
-          CURLOPT_SSL_VERIFYHOST => FALSE,
-          CURLOPT_SSL_VERIFYPEER => FALSE,
-          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-          CURLOPT_CUSTOMREQUEST => "POST",
-          CURLOPT_POSTFIELDS => array('BillNo' => $data['BillNo']),
-        ));
-
-        $response = curl_exec($curl);
-        $err = curl_error($curl);
-        // dd($response);
-        curl_close($curl);
-
-        if ($err) {
-          echo "cURL Error #:" . $err;
-        } else {
-          return $response;
-        }
-    }
-
-    public function pay_curl($url, $data){
-        $curl = curl_init();
-
-        curl_setopt_array($curl, array(
-          CURLOPT_URL => $url,
-          CURLOPT_RETURNTRANSFER => true,
-          CURLOPT_ENCODING => "",
-          CURLOPT_MAXREDIRS => 10,
-          CURLOPT_TIMEOUT => 0,
-          CURLOPT_FOLLOWLOCATION => false,
-          CURLOPT_SSL_VERIFYHOST => FALSE,
-          CURLOPT_SSL_VERIFYPEER => FALSE,
-          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-          CURLOPT_CUSTOMREQUEST => "POST",
-          CURLOPT_POSTFIELDS => array('BillNo' => $data['BillNo'], 'PhoneNumber' => $data['PhoneNumber']),
-        ));
-
-        $response = curl_exec($curl);
-        $err = curl_error($curl);
-        // dd($response);
-        curl_close($curl);
-
-        if ($err) {
-          echo "cURL Error #:" . $err;
-        } else {
-          return $response;
-        }
-    }
-
-
-    public function charges_curl($url, $data){
-        $curl = curl_init();
-
-        curl_setopt_array($curl, array(
-          CURLOPT_URL => $url,
-          CURLOPT_RETURNTRANSFER => true,
-          CURLOPT_ENCODING => "",
-          CURLOPT_MAXREDIRS => 10,
-          CURLOPT_TIMEOUT => 0,
-          CURLOPT_FOLLOWLOCATION => false,
-          CURLOPT_SSL_VERIFYHOST => FALSE,
-          CURLOPT_SSL_VERIFYPEER => FALSE,
-          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-          CURLOPT_CUSTOMREQUEST => "POST",
-          CURLOPT_POSTFIELDS => array('activity_code' => $data['activity_code']),
-        ));
-
-        $response = curl_exec($curl);
-        $err = curl_error($curl);
-        // dd($response);
-        curl_close($curl);
-
-        if ($err) {
-          echo "cURL Error #:" . $err;
-        } else {
-          return $response;
-        }
-    }
-
-    public function subs_curl($url, $data){
-        $curl = curl_init();
-
-        curl_setopt_array($curl, array(
-          CURLOPT_URL => $url,
-          CURLOPT_RETURNTRANSFER => true,
-          CURLOPT_ENCODING => "",
-          CURLOPT_MAXREDIRS => 10,
-          CURLOPT_TIMEOUT => 0,
-          CURLOPT_FOLLOWLOCATION => false,
-          CURLOPT_SSL_VERIFYHOST => FALSE,
-          CURLOPT_SSL_VERIFYPEER => FALSE,
-          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-          CURLOPT_CUSTOMREQUEST => "POST",
-          CURLOPT_POSTFIELDS => array('parent_brims_code' => $data['parent_brims_code']),
-        ));
-
-        $response = curl_exec($curl);
-        $err = curl_error($curl);
-        // dd($response);
-        curl_close($curl);
-
-        if ($err) {
-          echo "cURL Error #:" . $err;
-        } else {
-          return $response;
-        }
-    }
-
-    public function get_curl( $url) {
-        // append the header putting the secret key and hash
-        $headers = array(
-            'Content-Type: application/json',
-            //
-            // 'Authorization: Bearer ',
-        );
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 60);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        $output = curl_exec($ch);
-        // dd($output);
-        if (curl_errno($ch))
-        {
-            print "Error: " . curl_error($ch);
-        }
-        else
-        {
-            // Show me the result
-            return $output;
-        }
-        // dd($output);
-        curl_close($ch);
-    }
-
-
-    public function check_bill_curl($url, $data){
-        $curl = curl_init();
-
-        curl_setopt_array($curl, array(
-          CURLOPT_URL => $url,
-          CURLOPT_RETURNTRANSFER => true,
-          CURLOPT_ENCODING => "",
-          CURLOPT_MAXREDIRS => 10,
-          CURLOPT_TIMEOUT => 0,
-          CURLOPT_FOLLOWLOCATION => false,
-          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-          CURLOPT_CUSTOMREQUEST => "POST",
-          CURLOPT_SSL_VERIFYHOST => FALSE,
-          CURLOPT_SSL_VERIFYPEER => FALSE,
-          CURLOPT_POSTFIELDS => array('BillNumber' => $data['BillNumber']),
-        ));
-
-        $response = curl_exec($curl);
-
-        // dd($response);
-        $err = curl_error($curl);
-
-        curl_close($curl);
-
-        if ($err) {
-          echo "cURL Error #:" . $err;
-        } else {
-          return $response;
-        }
-    }
-
-    function food_hygiene_alex_to_curl($url, $data){
-
-        //        $headers = array
-        //        (
-        //            'Content-Type: application/json',
-        //            'Content-Length: ' . strlen( json_encode($data) )
-        //        );
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST" );
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1 );
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        //        curl_setopt($ch, CURLOPT_HTTPHEADER,  $headers );
-
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-        $output = curl_exec($ch);
-        $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        /*if($httpcode != 200)
-            {
-            $this->session->set_flashdata( "error", "An error has ocurred . Try again" );
-            redirect('land');
+            if ($err) {
+              echo "cURL Error #:" . $err;
+            } else {
+              return $response;
             }
-        */
-        curl_close($ch);
-        return $output;
+        }
+
+
+        public function renew_curl($url, $data){
+            $curl = curl_init();
+
+            curl_setopt_array($curl, array(
+              CURLOPT_URL => $url,
+              CURLOPT_RETURNTRANSFER => true,
+              CURLOPT_ENCODING => "",
+              CURLOPT_MAXREDIRS => 10,
+              CURLOPT_TIMEOUT => 0,
+              CURLOPT_FOLLOWLOCATION => false,
+              CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+              CURLOPT_CUSTOMREQUEST => "POST",
+              CURLOPT_SSL_VERIFYHOST => FALSE,
+              CURLOPT_SSL_VERIFYPEER => FALSE,
+              CURLOPT_POSTFIELDS => array(
+                'BusinessID' => $data['BusinessID'],
+                'ContactPersonName' => $data['ContactPersonName'],
+                'ContactPersonTelephone1' => $data['ContactPersonTelephone1'],
+                'building' => $data['building'],
+                'floor' => $data['floor'],
+                'houseNumber' => $data['houseNumber'],
+                'plotNumber' => $data['plotNumber'],
+                'zoneCode' => $data['zoneCode'],
+                'wardCode' => $data['wardCode'],
+                'PhysicalAddress' => $data['PhysicalAddress'],
+                'IDDocumentNumber' => $data['IDDocumentNumber'],
+                'PhysicalAddress' => $data['PhysicalAddress'],
+                'Period' => $data['Period'],
+                'ActivityCode' =>$data['ActivityCode'],
+                )
+
+            ));
+
+            $response = curl_exec($curl);
+            $err = curl_error($curl);
+            // dd($response);
+            curl_close($curl);
+
+            if ($err) {
+              echo "cURL Error #:" . $err;
+            } else {
+              return $response;
+            }
+        }
+
+
+        public function to_curl( $url) {
+            // append the header putting the secret key and hash
+            $headers = array(
+                'Content-Type: application/json',
+                // 'Authorization: Bearer ' .$this->token,
+            );
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 60);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            $output = curl_exec($ch);
+            // dd($output);
+            if (curl_errno($ch))
+            {
+                print "Error: " . curl_error($ch);
+            }
+            else
+            {
+                // Show me the result
+                return $output;
+            }
+
+            curl_close($ch);
+        }
+
+
+        public function postal_curl($url, $data){
+            $curl = curl_init();
+
+            curl_setopt_array($curl, array(
+              CURLOPT_URL => $url,
+              CURLOPT_RETURNTRANSFER => true,
+              CURLOPT_ENCODING => "",
+              CURLOPT_MAXREDIRS => 10,
+              CURLOPT_TIMEOUT => 0,
+              CURLOPT_FOLLOWLOCATION => false,
+              CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+              CURLOPT_SSL_VERIFYHOST => FALSE,
+              CURLOPT_SSL_VERIFYPEER => FALSE,
+              CURLOPT_CUSTOMREQUEST => "POST",
+              CURLOPT_POSTFIELDS => array('code' => $data['code']),
+            ));
+
+            $response = curl_exec($curl);
+            $err = curl_error($curl);
+            // dd($response);
+            curl_close($curl);
+
+            if ($err) {
+              echo "cURL Error #:" . $err;
+            } else {
+              return $response;
+            }
+        }
+
+        public function business_curl($url, $data){
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
+              CURLOPT_URL => $url,
+              CURLOPT_RETURNTRANSFER => true,
+              CURLOPT_ENCODING => "",
+              CURLOPT_MAXREDIRS => 10,
+              CURLOPT_TIMEOUT => 0,
+              CURLOPT_FOLLOWLOCATION => false,
+              CURLOPT_SSL_VERIFYHOST => FALSE,
+              CURLOPT_SSL_VERIFYPEER => FALSE,
+              CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+              CURLOPT_CUSTOMREQUEST => "POST",
+              CURLOPT_POSTFIELDS => array('BusinessID' => $data['BusinessID']),
+            ));
+
+            $response = curl_exec($curl);
+            $err = curl_error($curl);
+            // dd($response);
+            curl_close($curl);
+
+            if ($err) {
+              echo "cURL Error #:" . $err;
+            } else {
+              return $response;
+            }
+        }
+
+        public function permit_curl($url, $data){
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
+              CURLOPT_URL => $url,
+              CURLOPT_RETURNTRANSFER => true,
+              CURLOPT_ENCODING => "",
+              CURLOPT_MAXREDIRS => 10,
+              CURLOPT_TIMEOUT => 0,
+              CURLOPT_FOLLOWLOCATION => false,
+              CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+              CURLOPT_SSL_VERIFYHOST => FALSE,
+              CURLOPT_SSL_VERIFYPEER => FALSE,
+              CURLOPT_CUSTOMREQUEST => "POST",
+              CURLOPT_POSTFIELDS => array('business_id' => $data['business_id']),
+            ));
+
+            $response = curl_exec($curl);
+            $err = curl_error($curl);
+            // dd($response);
+            curl_close($curl);
+
+            if ($err) {
+              echo "cURL Error #:" . $err;
+            } else {
+              return $response;
+            }
+        }
+
+        public function pay_permit_curl($url, $data){
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
+              CURLOPT_URL => $url,
+              CURLOPT_RETURNTRANSFER => true,
+              CURLOPT_ENCODING => "",
+              CURLOPT_MAXREDIRS => 10,
+              CURLOPT_TIMEOUT => 0,
+              CURLOPT_FOLLOWLOCATION => false,
+              CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+              CURLOPT_SSL_VERIFYHOST => FALSE,
+              CURLOPT_SSL_VERIFYPEER => FALSE,
+              CURLOPT_CUSTOMREQUEST => "POST",
+              CURLOPT_POSTFIELDS => array('BusinessID' => $data['BusinessID'], 'BillNo' => $data['BillNo']),
+            ));
+
+            $response = curl_exec($curl);
+            $err = curl_error($curl);
+            // dd($response);
+            curl_close($curl);
+
+            if ($err) {
+              echo "cURL Error #:" . $err;
+            } else {
+              return $response;
+            }
+        }
+
+        public function bill_curl($url, $data){
+            $curl = curl_init();
+
+            curl_setopt_array($curl, array(
+              CURLOPT_URL => $url,
+              CURLOPT_RETURNTRANSFER => true,
+              CURLOPT_ENCODING => "",
+              CURLOPT_MAXREDIRS => 10,
+              CURLOPT_TIMEOUT => 0,
+              CURLOPT_FOLLOWLOCATION => false,
+              CURLOPT_SSL_VERIFYHOST => FALSE,
+              CURLOPT_SSL_VERIFYPEER => FALSE,
+              CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+              CURLOPT_CUSTOMREQUEST => "POST",
+              CURLOPT_POSTFIELDS => array('BillNo' => $data['BillNo']),
+            ));
+
+            $response = curl_exec($curl);
+            $err = curl_error($curl);
+            // dd($response);
+            curl_close($curl);
+
+            if ($err) {
+              echo "cURL Error #:" . $err;
+            } else {
+              return $response;
+            }
+        }
+
+        public function pay_curl($url, $data){
+            $curl = curl_init();
+
+            curl_setopt_array($curl, array(
+              CURLOPT_URL => $url,
+              CURLOPT_RETURNTRANSFER => true,
+              CURLOPT_ENCODING => "",
+              CURLOPT_MAXREDIRS => 10,
+              CURLOPT_TIMEOUT => 0,
+              CURLOPT_FOLLOWLOCATION => false,
+              CURLOPT_SSL_VERIFYHOST => FALSE,
+              CURLOPT_SSL_VERIFYPEER => FALSE,
+              CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+              CURLOPT_CUSTOMREQUEST => "POST",
+              CURLOPT_POSTFIELDS => array('BillNo' => $data['BillNo'], 'PhoneNumber' => $data['PhoneNumber']),
+            ));
+
+            $response = curl_exec($curl);
+            $err = curl_error($curl);
+            // dd($response);
+            curl_close($curl);
+
+            if ($err) {
+              echo "cURL Error #:" . $err;
+            } else {
+              return $response;
+            }
+        }
+
+
+        public function charges_curl($url, $data){
+            $curl = curl_init();
+
+            curl_setopt_array($curl, array(
+              CURLOPT_URL => $url,
+              CURLOPT_RETURNTRANSFER => true,
+              CURLOPT_ENCODING => "",
+              CURLOPT_MAXREDIRS => 10,
+              CURLOPT_TIMEOUT => 0,
+              CURLOPT_FOLLOWLOCATION => false,
+              CURLOPT_SSL_VERIFYHOST => FALSE,
+              CURLOPT_SSL_VERIFYPEER => FALSE,
+              CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+              CURLOPT_CUSTOMREQUEST => "POST",
+              CURLOPT_POSTFIELDS => array('activity_code' => $data['activity_code']),
+            ));
+
+            $response = curl_exec($curl);
+            $err = curl_error($curl);
+            // dd($response);
+            curl_close($curl);
+
+            if ($err) {
+              echo "cURL Error #:" . $err;
+            } else {
+              return $response;
+            }
+        }
+
+        public function subs_curl($url, $data){
+            $curl = curl_init();
+
+            curl_setopt_array($curl, array(
+              CURLOPT_URL => $url,
+              CURLOPT_RETURNTRANSFER => true,
+              CURLOPT_ENCODING => "",
+              CURLOPT_MAXREDIRS => 10,
+              CURLOPT_TIMEOUT => 0,
+              CURLOPT_FOLLOWLOCATION => false,
+              CURLOPT_SSL_VERIFYHOST => FALSE,
+              CURLOPT_SSL_VERIFYPEER => FALSE,
+              CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+              CURLOPT_CUSTOMREQUEST => "POST",
+              CURLOPT_POSTFIELDS => array('parent_brims_code' => $data['parent_brims_code']),
+            ));
+
+            $response = curl_exec($curl);
+            $err = curl_error($curl);
+            // dd($response);
+            curl_close($curl);
+
+            if ($err) {
+              echo "cURL Error #:" . $err;
+            } else {
+              return $response;
+            }
+        }
+
+        public function get_curl( $url) {
+            // append the header putting the secret key and hash
+            $headers = array(
+                'Content-Type: application/json',
+                //
+                // 'Authorization: Bearer ',
+            );
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 60);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            $output = curl_exec($ch);
+            // dd($output);
+            if (curl_errno($ch))
+            {
+                print "Error: " . curl_error($ch);
+            }
+            else
+            {
+                // Show me the result
+                return $output;
+            }
+            // dd($output);
+            curl_close($ch);
+        }
+
+
+        public function check_bill_curl($url, $data){
+            $curl = curl_init();
+
+            curl_setopt_array($curl, array(
+              CURLOPT_URL => $url,
+              CURLOPT_RETURNTRANSFER => true,
+              CURLOPT_ENCODING => "",
+              CURLOPT_MAXREDIRS => 10,
+              CURLOPT_TIMEOUT => 0,
+              CURLOPT_FOLLOWLOCATION => false,
+              CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+              CURLOPT_CUSTOMREQUEST => "POST",
+              CURLOPT_SSL_VERIFYHOST => FALSE,
+              CURLOPT_SSL_VERIFYPEER => FALSE,
+              CURLOPT_POSTFIELDS => array('BillNumber' => $data['BillNumber']),
+            ));
+
+            $response = curl_exec($curl);
+
+            // dd($response);
+            $err = curl_error($curl);
+
+            curl_close($curl);
+
+            if ($err) {
+              echo "cURL Error #:" . $err;
+            } else {
+              return $response;
+            }
+        }
+
+        function food_hygiene_alex_to_curl($url, $data){
+
+            //        $headers = array
+            //        (
+            //            'Content-Type: application/json',
+            //            'Content-Length: ' . strlen( json_encode($data) )
+            //        );
+
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST" );
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1 );
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            //        curl_setopt($ch, CURLOPT_HTTPHEADER,  $headers );
+
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+            $output = curl_exec($ch);
+            $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            /*if($httpcode != 200)
+                {
+                $this->session->set_flashdata( "error", "An error has ocurred . Try again" );
+                redirect('land');
+                }
+            */
+            curl_close($ch);
+            return $output;
+
+        }
 
     }
-
-}

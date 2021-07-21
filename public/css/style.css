@@ -440,13 +440,13 @@ nav ul li.active a::before {
   border: 2px solid black;
 }
 
-#trade-license-application {
+.trade-modal {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
     "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !important;
 }
 
-#trade-license-application h1,
+.trade-modal h1,
 h2,
 h3,
 h4,
@@ -457,33 +457,33 @@ h6 {
     "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !important;
 }
 
-#trade-license-application .modal-dialog {
+.trade-modal .modal-dialog {
   max-width: 70% !important;
 }
 
-#trade-license-application .modal-header {
+.trade-modal .modal-header {
   background-color: #e9e9e9;
   padding: 20px 30px !important;
 }
 
-#trade-license-application .modal-header i {
+.trade-modal .modal-header i {
   font-size: 25px;
   color: black;
   cursor: pointer;
 }
 
-#trade-license-application .modal-body {
+.trade-modal .modal-body {
   background-color: white;
   padding: 0px;
 }
 
-#trade-license-application p {
+.trade-modal p {
   padding: 0px;
   margin-bottom: 0;
   color: black;
 }
 
-#trade-license-application .modal-body .card-body input,
+.trade-modal .modal-body .card-body input,
 .form-control .btn {
   border-style: none;
   background-color: #cfcfd1;
@@ -493,11 +493,11 @@ h6 {
   color: #000000;
 }
 
-#trade-license-application .modal-body .card-body input {
+.trade-modal .modal-body .card-body input {
   padding: 22px 10px !important;
 }
 
-#trade-license-application .modal-body .card-body .modal-dots {
+.trade-modal .modal-body .card-body .modal-dots {
   background-color: #f49492;
   height: 3px;
   width: 30px;
@@ -507,30 +507,30 @@ h6 {
   border-style: none;
 }
 
-#trade-license-application .modal-body .card-body .modal-nav .active {
+.trade-modal .modal-body .card-body .modal-nav .active {
   background-color: #bd0001 !important;
 }
 
-#trade-license-application .form-group {
+.trade-modal .form-group {
   margin-bottom: 25px;
 }
 
-#trade-license-application label {
+.trade-modal label {
   color: black;
   font-size: 12px;
   font-weight: 500;
 }
 
-#trade-license-application .modal-body .card-header {
+.trade-modal .modal-body .card-header {
   background-color: white;
   padding: 20px 30px !important;
 }
 
-#trade-license-application .modal-body .card-footer {
+.trade-modal .modal-body .card-footer {
   background-color: #e9e9e9;
 }
 
-#trade-license-application .modal-body .card-footer span {
+.trade-modal .modal-body .card-footer span {
   color: black;
   font-weight: 600;
   font-size: 16px;
@@ -539,17 +539,17 @@ h6 {
   align-items: center;
 }
 
-#trade-license-application .modal-body .card-footer i {
+.trade-modal .modal-body .card-footer i {
   font-size: 14px;
   margin-right: 5px;
   margin-left: 10px;
 }
 
-#trade-license-application .modal-footer-buttons {
+.trade-modal .modal-footer-buttons {
   display: flex;
 }
 
-#trade-license-application .modal-footer-buttons button {
+.trade-modal .modal-footer-buttons button {
   display: flex;
   margin: 10px;
 }
@@ -3232,8 +3232,14 @@ body {
 
 /*Media Queries*/
 
-#trade-license-application .form-control {
+.trade-modal .form-control {
   color: #151616;
-  background-color: #cfcfd1;
+  background-color: #e0e0e3;
   font-size: 12px;
+}
+
+.notification-img {
+  height: 150px;
+  width: 150px;
+
 }

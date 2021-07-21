@@ -134,15 +134,15 @@
 
 
     // Confirm Bill Details
-    $('body').on('click', '.the-aside-inputs .btn-process', function () {
-        var confirmservice = $(this).parent().attr("class");
-        $('#' + confirmservice).removeClass('right-neg-100');
-        $('.landing-page-container').addClass('margin-neg-400-left');
-        $('.aside-footer').addClass('right-neg-100');
-        $('.aside-footer-confirm').removeClass('right-neg-100');
-        $('.aside-footer-to-confirm').addClass('right-neg-100');
+    // $('body').on('click', '.the-aside-inputs .btn-process', function () {
+    //     var confirmservice = $(this).parent().attr("class");
+    //     $('#' + confirmservice).removeClass('right-neg-100');
+    //     $('.landing-page-container').addClass('margin-neg-400-left');
+    //     $('.aside-footer').addClass('right-neg-100');
+    //     $('.aside-footer-confirm').removeClass('right-neg-100');
+    //     $('.aside-footer-to-confirm').addClass('right-neg-100');
 
-    });
+    // });
 
     // selecting parking details
     $('body').on('click', '.aside-footer-to-confirm .btn-process', function () {
@@ -159,6 +159,7 @@
     $('body').on('click', '.btn-pay-now', function () {
         // alert("clicked");
         $('.aside-footer-confirm').removeClass('d-none');
+        $('.seasonal-number-input').addClass('d-none');
     });
 
     $('body').on('click', '.btn-modal-pay', function () {
@@ -194,11 +195,28 @@
         Trade Modal Navigation Code
     ___________________________________*/
 
+    $('#trade-license-renewal .slider-container').each(function (key, value) {
+        if (key == 0) {
+            $('#trade-license-renewal .modal-nav').append(`<button type="button" class="modal-dots active"></button>`);
+        } else {
+            $('#trade-license-renewal .modal-nav').append(`<button type="button" class="modal-dots"></button>`);
+        }
+    });
+
+    $('#trade-license-renewal .slider-container .modal-nav:first-child').addClass('active');
+
+    $('#trade-license-renewal .slider-container .modal-dots').on('click', function () {
+        var DotIndex = $(this).index();
+        $('#trade-license-renewal .slider-container').eq(DotIndex).removeClass('d-none').siblings().addClass('d-none');
+        $('#trade-license-renewal .slider-container').eq(DotIndex).find('.modal-dots').eq(DotIndex).addClass('active').siblings().removeClass("active");
+
+    });
+
     $('#trade-license-application .slider-container').each(function (key, value) {
         if (key == 0) {
-            $('.modal-nav').append(`<button type="button" class="modal-dots active"></button>`);
+            $('#trade-license-application .modal-nav').append(`<button type="button" class="modal-dots active"></button>`);
         } else {
-            $('.modal-nav').append(`<button type="button" class="modal-dots"></button>`);
+            $('#trade-license-application .modal-nav').append(`<button type="button" class="modal-dots"></button>`);
         }
     });
 
@@ -211,29 +229,60 @@
 
     });
 
+    /*___________________________________
+        Trade Modal Navigation Code
+    ___________________________________*/
+
+    /*___________________________________
+        Hygiene Modal Navigation Code
+    ___________________________________*/
+
+    $('#food-hygiene-application .slider-container').each(function (key, value) {
+        if (key == 0) {
+            $('#food-hygiene-application .modal-nav').append(`<button type="button" class="modal-dots active"></button>`);
+        } else {
+            $('#food-hygiene-application .modal-nav').append(`<button type="button" class="modal-dots"></button>`);
+        }
+    });
+
+    $('#food-hygiene-application .slider-container .modal-nav:first-child').addClass('active');
+
+    $('#food-hygiene-application .slider-container .modal-dots').on('click', function () {
+        var DotIndex = $(this).index();
+        $('#food-hygiene-application .slider-container').eq(DotIndex).removeClass('d-none').siblings().addClass('d-none');
+        $('#food-hygiene-application .slider-container').eq(DotIndex).find('.modal-dots').eq(DotIndex).addClass('active').siblings().removeClass("active");
+
+    });
+    /*___________________________________
+        Hygiene Modal Navigation Code
+    ___________________________________*/
+
     $('body').on('click', '.btn-next', function () {
         var Slider = $(this).parent().parent().parent().parent();
         var theParentIndex = Slider.index();
-        var theLastIndex = $(".slider-container:last-child").index();
+        var theLastIndex = Slider.find(".slider-container:last-child").index();
         $(Slider).next().find('.modal-dots').each(function () {
             var valueIndex = $(this).index();
-            if (valueIndex == theParentIndex + 1) {
+            if (valueIndex == theParentIndex) {
                 $(this).addClass('active').siblings().removeClass('active');
                 return false;
             }
         });
+        // console.log(theParentIndex);
+
         if (theParentIndex != theLastIndex) {
             $(Slider).addClass('d-none').next().removeClass('d-none');
+            $(Slider).css('background-color', 'red');
         }
     });
 
     $('body').on('click', '.btn-previous', function () {
         var Slider = $(this).parent().parent().parent().parent();
         var theParentIndex = Slider.index();
-        var theFirstIndex = $(".slider-container:first-child").index()
+        var theFirstIndex = Slider.find(".slider-container:first-child").index()
         $(Slider).prev().find('.modal-dots').each(function () {
             var valueIndex = $(this).index();
-            if (valueIndex == theParentIndex - 1) {
+            if (valueIndex == theParentIndex) {
                 $(this).addClass('active').siblings().removeClass('active');
                 return false;
             }
@@ -246,6 +295,32 @@
     /*___________________________________
         Trade Modal Navigation Code
     ___________________________________*/
+
+    /*___________________________________
+        Handler Modal Navigation Code
+    ___________________________________*/
+
+    $('#food-handlers-application .slider-container').each(function (key, value) {
+        if (key == 0) {
+            $('#food-handlers-application .modal-nav').append(`<button type="button" class="modal-dots active"></button>`);
+        } else {
+            $('#food-handlers-application .modal-nav').append(`<button type="button" class="modal-dots"></button>`);
+        }
+    });
+
+    $('#food-handlers-application .slider-container .modal-nav:first-child').addClass('active');
+
+    $('#food-handlers-application .slider-container .modal-dots').on('click', function () {
+        var DotIndex = $(this).index();
+        $('#food-handlers-application .slider-container').eq(DotIndex).removeClass('d-none').siblings().addClass('d-none');
+        $('#food-handlers-application .slider-container').eq(DotIndex).find('.modal-dots').eq(DotIndex).addClass('active').siblings().removeClass("active");
+
+    });
+
+    /*___________________________________
+        Handler Modal Navigation Code
+    ___________________________________*/
+
 
 
     // slider-carousel

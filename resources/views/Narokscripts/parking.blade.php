@@ -200,7 +200,7 @@
             // var amount = 1;
             var regex =
                 /(\+?254|0|^){1}[-. ]?[7]{1}([0-2]{1}[0-9]{1}|[9]{1}[0-9]{1}|[4]{1}[0-9]{1})[0-9]{6}/;
-            console.log(phone_number);
+            // console.log(phone_number);
 
             if (regex.test(phone_number) == false) {
                 document.getElementById('errors').innerHTML = 'Please enter a valid Safaricom number';
@@ -211,6 +211,12 @@
                 return;
             }
 
+            $('#payment-modal-header').empty();
+            $('#payment-modal .modal-title-sub').empty();
+            $('#payment-modal .payment-number').empty();
+            $('#payment-modal .payment-amount').empty();
+            $('#payment-modal .payment-zone').empty();
+
             $('#payment-modal-header').text("Daily Parking Payment");
             $('#payment-modal .modal-title-sub').text('Daily Parking');
             $('#payment-modal .payment-plate').text(registration_number);
@@ -218,6 +224,9 @@
             $('#payment-modal .payment-amount').text('KES ' + amount);
             $('#payment-modal .payment-number').text(phone_number);
             $('#payment-modal').modal('show');
+
+            $(this).find('.btn-txt').removeClass('d-none');
+            $(this).find('.btn-ellipsis').addClass('d-none');
         });
 
     });
@@ -393,40 +402,47 @@
                     $('#seasonal_parking .slider').addClass('d-none');
 
                     if (data == "") {
-                        document.getElementById('errors').innerHTML =
+                        document.getElementById('seasonal_parking_errors').innerHTML =
                             'Your session has expired. Please log in again to continue.';
-                        $('#errors').removeClass('d-none');
+                        $('#seasonal_parking_errors').removeClass('d-none');
                     }
 
-                    if (data.newVehicle.status_code == 200) {
-                        // console.log(data);
-                        $('.cars-container').empty();
-                        var container = $('.cars-container');
-                        var seasonalVehicles = data.newVehicleDetails.response_data
-                            .parking_entries;
-                        // console.log(seasonalVehicles);
+                    if (data.status_code === 208) {
+                        document.getElementById('seasonal_parking_errors').innerHTML = data
+                            .message;
+                        $('#seasonal_parking_errors').removeClass('d-none');
+                    } else {
+                        if (data.newVehicle.status_code == 200) {
+                            // console.log(data);
+                            $('#seasonal_parking_errors').addClass('d-none');
+                            $('.cars-container').empty();
+                            var container = $('.cars-container');
+                            var seasonalVehicles = data.newVehicleDetails.response_data
+                                .parking_entries;
+                            // console.log(seasonalVehicles);
 
-                        $.each(seasonalVehicles, function(i,
-                            item) {
-                            // console.log(item);
+                            $.each(seasonalVehicles, function(i,
+                                item) {
+                                // console.log(item);
 
-                            var plate = item.number_plate;
-                            var plate_id = item.id;
-                            if (plate != null || plate != "") {
-                                container.append(`<span class="font-12 cars-add">
+                                var plate = item.number_plate;
+                                var plate_id = item.id;
+                                if (plate != null || plate != "") {
+                                    container.append(`<span class="font-12 cars-add">
                          <span class="number-plate" id="` + plate_id + `">` + plate + `</span>
                         <i class="remove-car font-14 ti-close ml-2" title="Remove Car"></i>
                         </span>`);
-                            }
-                        });
-                        // window.location = "seasonal-parking";
+                                }
+                            });
+                            // window.location = "seasonal-parking";
+                        } else {
+                            document.getElementById('seasonal_parking_errors').innerHTML =
+                                data
+                                .newVehicle
+                                .message;
+                            $('#seasonal_parking_errors').removeClass('d-none');
 
-
-                    } else {
-                        document.getElementById('errors').innerHTML = data.newVehicle
-                            .message;
-                        $('#errors').removeClass('d-none');
-
+                        }
                     }
 
 
@@ -610,7 +626,7 @@
             // var amount = 1;
             var regex =
                 /(\+?254|0|^){1}[-. ]?[7]{1}([0-2]{1}[0-9]{1}|[9]{1}[0-9]{1}|[4]{1}[0-9]{1})[0-9]{6}/;
-            console.log(charges);
+            // console.log(charges);
 
             if (regex.test(phone_number) == false) {
                 document.getElementById('errors').innerHTML = 'Please enter a valid Safaricom number';
@@ -621,11 +637,21 @@
                 return;
             }
 
-            $('#payment-modal').modal('show');
+            $('#payment-modal-header').empty();
+            $('#payment-modal .modal-title-sub').empty();
+            $('#payment-modal .payment-number').empty();
+            $('#payment-modal .payment-amount').empty();
+            $('#payment-modal .payment-zone').empty();
+
             $('#payment-modal-header').text('Seasonal Parking Payment');
             $('#payment-modal .modal-title-sub').text('Seasonal Parking');
             $('#payment-modal .payment-number').text(phone_number);
             $('#payment-modal .payment-amount').text(charges);
+
+            $('#payment-modal').modal('show');
+
+            $(this).find('.btn-txt').removeClass('d-none');
+            $(this).find('.btn-ellipsis').addClass('d-none');
 
 
             $.each($('.seasonal-parking-container i'), function(i,
@@ -648,8 +674,20 @@
             $(this).find('.ti-printer').addClass('d-none');
             $(this).find('.bill-ellipsis').removeClass('d-none');
 
-            var phone_number = $('#payment-modal .payment-number').text();
-            console.log(phone_number);
+            // console.log(phone_number);
+            $('.seasonal-number-input').removeClass('d-none');
+            $('.aside-footer-confirm').addClass('d-none');
+
+        });
+
+        $('#seasonal_bill_parking_bill').on('click', function(e) {
+            e.preventDefault();
+
+            $(this).find('.btn-text').addClass('d-none');
+            $(this).find('.btn-ellipsis').removeClass('d-none');
+
+            var phone_number = $("input[name=seasonal-bill-phone-number]").val();
+            // console.log(phone_number);
 
             $.ajax({
                 url: "<?php echo url('initiate-seasonal-payment'); ?>",
@@ -662,11 +700,10 @@
                 },
 
                 success: function(data) {
-                    console.log(data);
+                    // console.log(data);
 
-                    $(this).removeClass('py-1');
-                    $(this).find('.ti-printer').removeClass('d-none');
-                    $(this).find('.bill-ellipsis').addClass('d-none');
+                    $(this).find('.btn-text').removeClass('d-none');
+                    $(this).find('.btn-ellipsis').addClass('d-none');
 
                     if (data.status_code == 200) {
                         document.getElementById('seasonal_total').innerHTML = charges;
@@ -680,11 +717,14 @@
                             alert('Please allow popups for this website');
                         }
                     } else {
-                        document.getElementById('seasonal-footer-errors').innerHTML =
+                        document.getElementById('seasonal-bill-footer-errors').innerHTML =
                             data.message;
-                        $('#seasonal-footer-errors').removeClass('d-none');
-
+                        $('#seasonal-bill-footer-errors').removeClass('d-none');
                     }
+
+                    $('.btn-print-seasonal-bill').removeClass('py-1');
+                    $('.btn-print-seasonal-bill').find('.ti-printer').removeClass('d-none');
+                    $('.btn-print-seasonal-bill').find('.bill-ellipsis').addClass('d-none');
                 }
             });
         });
@@ -723,7 +763,7 @@
                 },
 
                 success: function(data) {
-                    console.log(data);
+                    // console.log(data);
                     $('.offstreet-parking-confirm .lds-ellipsis').addClass('d-none');
                     $('.btn-offstreet-confirm').text('CHECK STATUS');
                     if (data == "") {
@@ -784,7 +824,7 @@
             // var amount = 1;
             var regex =
                 /(\+?254|0|^){1}[-. ]?[7]{1}([0-2]{1}[0-9]{1}|[9]{1}[0-9]{1}|[4]{1}[0-9]{1})[0-9]{6}/;
-            console.log(charges);
+            // console.log(charges);
 
             if (regex.test(phone_number) == false) {
                 document.getElementById('offstreet-footer-errors').innerHTML =
@@ -796,12 +836,22 @@
                 return;
             }
 
-            $('#payment-modal').modal('show');
+            $('#payment-modal-header').empty();
+            $('#payment-modal .modal-title-sub').empty();
+            $('#payment-modal .payment-number').empty();
+            $('#payment-modal .payment-amount').empty();
+            $('#payment-modal .payment-zone').empty();
+
             $('#payment-modal-header').text('Offstreet Parking Payment');
             $('#payment-modal .modal-title-sub').text('Offstreet Parking');
             $('#payment-modal .payment-number').text(phone_number);
             $('#payment-modal .payment-amount').text(charges);
             $('#payment-modal .payment-plate').text($("#offstreet-plates").text());
+            $('#payment-modal').modal('show');
+
+
+            $(this).find('.btn-txt').removeClass('d-none');
+            $(this).find('.btn-ellipsis').addClass('d-none');
 
         });
     });
@@ -839,7 +889,7 @@
                 },
 
                 success: function(data) {
-                    console.log(data);
+                    // console.log(data);
                     $('.penalty-parking-confirm .lds-ellipsis').addClass('d-none');
                     $('.btn-penalty-confirm').text('CHECK STATUS');
                     if (data == "") {
@@ -907,7 +957,7 @@
             // var amount = 1;
             var regex =
                 /(\+?254|0|^){1}[-. ]?[7]{1}([0-2]{1}[0-9]{1}|[9]{1}[0-9]{1}|[4]{1}[0-9]{1})[0-9]{6}/;
-            console.log(charges);
+            // console.log(charges);
 
             if (regex.test(phone_number) == false) {
                 document.getElementById('penalties-footer-errors').innerHTML =
@@ -919,235 +969,23 @@
                 return;
             }
 
-            $('#payment-modal').modal('show');
+            $('#payment-modal-header').empty();
+            $('#payment-modal .modal-title-sub').empty();
+            $('#payment-modal .payment-number').empty();
+            $('#payment-modal .payment-amount').empty();
+            $('#payment-modal .payment-zone').empty();
+
             $('#payment-modal-header').text('Penalties Parking Payment');
             $('#payment-modal .modal-title-sub').text('Penalties Parking');
             $('#payment-modal .payment-number').text(phone_number);
             $('#payment-modal .payment-amount').text(charges);
             $('#payment-modal .payment-plate').text($("#penalty-plates").html());
+            $('#payment-modal').modal('show');
+
+            $(this).find('.btn-txt').removeClass('d-none');
+            $(this).find('.btn-ellipsis').addClass('d-none');
 
         });
     });
 </script>
 {{-- Penalties Parking --}}
-
-{{-- Parking Payments --}}
-<script type="text/javascript">
-    $(document).ready(function() {
-        $('#payment-modal .modal-footer .btn-process').on('click', function() {
-            var paymentType = $('#payment-modal-header').text();
-            console.log(paymentType);
-            var recheck_count = 1;
-
-            if (paymentType === "Daily Parking Payment") {
-                var daily_vehicle_category_code = $("select[name=daily_vehicle_category_code]").val();
-                var registration_number = $("input[name=registration_number]").val();
-                var zone_code = $("select[name=zone_code]").val();
-                var phone_number = $("input[name=phone]").val();
-                var amount = $("input[name=amount]").val();
-                // var amount = 1;
-                var regex =
-                    /(\+?254|0|^){1}[-. ]?[7]{1}([0-2]{1}[0-9]{1}|[9]{1}[0-9]{1}|[4]{1}[0-9]{1})[0-9]{6}/;
-                console.log(daily_vehicle_category_code);
-                console.log(registration_number);
-                console.log(phone_number);
-                console.log(zone_code);
-                console.log(amount);
-
-                $('#daily_parking_pay').find('.btn-txt').removeClass('d-none');
-                $('#daily_parking_pay').find('.btn-ellipsis').addClass('d-none');
-
-                $.ajax({
-                    url: "<?php echo url('initiate-onstreet-parking-payment'); ?>",
-                    type: "POST",
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    data: {
-                        daily_vehicle_category_code: daily_vehicle_category_code,
-                        zone_code: zone_code,
-                        registration_number: registration_number,
-                        phone_number: phone_number,
-                        amount: amount
-                    },
-                    success: function(res) {
-                        console.log(res);
-                        if (res == "") {
-                            document.getElementById('errors').innerHTML =
-                                'We are having trouble initiating payment. Please try again later.';
-                            $('#errors').removeClass('d-none');
-                            $(this).find('.btn-txt').removeClass('d-none');
-                            $(this).find('.btn-ellipsis').addClass('d-none');
-                            return;
-                        }
-                        if (res.status_code == 200) {
-                            var pay_id = res.response_data.transaction_reference;
-                            checkagain(pay_id, recheck_count);
-                        } else {
-                            document.getElementById('errors').innerHTML = res.message;
-                            $('#errors').removeClass('d-none');
-                            $(this).find('.btn-txt').removeClass('d-none');
-                            $(this).find('.btn-ellipsis').addClass('d-none');
-                        }
-
-
-                    },
-
-                });
-            } else if (paymentType === "Seasonal Parking Payment") {
-
-                var phone_number = $('#payment-modal .payment-number').text();
-                $('#seasonal_parking_pay').find('.btn-txt').removeClass('d-none');
-                $('#seasonal_parking_pay').find('.btn-ellipsis').addClass('d-none');
-
-                $.ajax({
-                    url: "<?php echo url('initiate-seasonal-payment'); ?>",
-                    type: "POST",
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    data: {
-                        phone_number: phone_number
-                    },
-
-                    success: function(data) {
-                        console.log(data);
-
-                        if (data.status_code == 200) {
-                            document.getElementById('seasonal_total').innerHTML = charges;
-                            var pay_id = data.response_data.transaction_reference;
-                            // var pay_id = 'PKX2020041175519';
-                            checkagain(pay_id, recheck_count);
-                        } else {
-                            document.getElementById('seasonal-footer-errors').innerHTML =
-                                data.message;
-                            $('#seasonal-footer-errors').removeClass('d-none');
-
-                        }
-                    }
-                });
-
-            } else if (paymentType === "Offstreet Parking Payment") {
-
-                var phone_number = $('#payment-modal .payment-number').text();
-                $('#offstreet_parking_pay').find('.btn-txt').removeClass('d-none');
-                $('#offstreet_parking_pay').find('.btn-ellipsis').addClass('d-none');
-
-                $.ajax({
-                    url: "<?php echo url('initiate-offstreet-payment'); ?>",
-                    type: "POST",
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    data: {
-                        phone_number: phone_number
-                    },
-
-                    success: function(data) {
-                        console.log(data);
-
-                        if (data.status_code == 200) {
-                            document.getElementById('offstreet_total').innerHTML = charges;
-                            var pay_id = data.response_data.transaction_reference;
-                            // var pay_id = 'PKX2020041175519';
-                            checkagain(pay_id, recheck_count);
-                        } else {
-                            document.getElementById('offstreet-footer-errors').innerHTML =
-                                data.message;
-                            $('#offstreet-footer-errors').removeClass('d-none');
-
-                        }
-                    }
-                });
-
-            } else if (paymentType === "Penalties Parking Payment") {
-
-                var phone_number = $('#payment-modal .payment-number').text();
-                $('#penalties_parking_pay').find('.btn-txt').removeClass('d-none');
-                $('#penalties_parking_pay').find('.btn-ellipsis').addClass('d-none');
-
-                $.ajax({
-                    url: "<?php echo url('initiate-penalties-payment'); ?>",
-                    type: "POST",
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    data: {
-                        phone_number: phone_number
-                    },
-
-                    success: function(data) {
-                        console.log(data);
-
-                        if (data.status_code == 200) {
-                            document.getElementById('penalties_total').innerHTML = charges;
-                            var pay_id = data.response_data.transaction_reference;
-                            // var pay_id = 'PKX2020041175519';
-                            checkagain(pay_id, recheck_count);
-                        } else {
-                            document.getElementById('penalties-footer-errors').innerHTML =
-                                data.message;
-                            $('#penalties-footer-errors').removeClass('d-none');
-
-                        }
-                    }
-                });
-
-            }
-        });
-
-        $('#payment-cancelled-modal .btn-retry').on('click', function() {
-            $('#payment-cancelled-modal').modal('hide');
-            $('#payment-modal').modal('show');
-        });
-
-        function checkagain(pay_id, recheck_count) {
-
-            if (recheck_count == 12) {
-                $('#bill_pay').text(pay_id);
-                var amount = $("input[name=amount]").val();
-                // var amount = 1;
-                $('#pay_amount').text(amount.toLocaleString());
-                $('#payment-modal').modal('hide');
-                $('#payment-cancelled-modal').modal('show');
-                $('.payment-account').text(pay_id);
-
-            } else {
-                recheck_count++;
-                setTimeout(function() {
-                    $.ajax({
-                        url: "get-receipt/" + pay_id,
-                        type: "GET",
-                        dataType: "JSON",
-                        success: function(data) {
-                            if (data == "") {
-                                document.getElementById('errors').innerHTML =
-                                    'We are having trouble retrieving your receipt. Please try again later.';
-                                $('#errors').removeClass('d-none');
-                                return;
-                            }
-                            if (data.status != 200) {
-                                checkagain(pay_id, recheck_count);
-
-                            } else {
-                                console.log(data)
-                                $('receipt-number').text('PAY');
-                                $('#payment-received-modal').modal('show');
-
-                                var a = document.getElementById('receipt-link');
-                                a.href = "print-receipt/" + pay_id;
-
-                                // window.location = 'print-receipt/' +pay_id;
-
-
-
-                            }
-                        },
-                    });
-                }, 3000);
-
-            }
-        }
-    });
-</script>
-{{-- Parking Payments --}}

@@ -235,7 +235,7 @@ class BillsController extends Controller
       
       // dd($sent);
 
-      return view('bill', ['bill' => $sent->data]);
+      return view('documents.bill', ['bill' => $sent->data]);
 
       // return view('bill', ['bill' => $bill]);
     }

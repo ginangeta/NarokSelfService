@@ -32,8 +32,6 @@ class ReceiptController extends Controller
 
             // dd($this->data);
 
-
-
             if ($this->data['receipt']->status ===200) {
               $url = config('global.biller_url'). 'users/authenticate';
               $data = [
@@ -60,12 +58,9 @@ class ReceiptController extends Controller
               $receipt = $this->data['receipt']->data[0];
 
               return response()->json($counted);
+            }else{
+              return response()->json($this->data);
 
-
-            //     // return view('receipts.demo-receipt')->with($this->data->receipt->data[0]);
-            //     return view(  'receipts.receipt-demo', ['receipt'=> $receipt]);
-            // }else{
-            //     return Redirect::back()->withErrors($this->data['receipt']->message);
             }
 
     }

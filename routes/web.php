@@ -5,6 +5,7 @@ use App\Http\Controllers\SBPController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BillsController;
+use App\Http\Controllers\HealthController;
 use App\Http\Controllers\ParkingController;
 use App\Http\Controllers\ReceiptController;
 use App\Http\Controllers\SeasonalController;
@@ -122,6 +123,7 @@ Route::group(['middleware' => ['active']], function () {
     Route::post('pay-sbp', [SBPController::class,'payment'])->name('pay-sbp');
     Route::get('confirm-sbp-details', [SBPController::class,'confirmDetails'])->name('confirm-sbp-details');
     Route::get('get-permit', [SBPController::class,'getPermit'])->name('get-permit');
+    Route::get('get-permit-document/{business_id}', [SBPController::class,'getPermitDocument'])->name('get-permit-document');
     Route::get('get-permit-form', [SBPController::class,'getPermitForm'])->name('get-permit-form');
     Route::get('view-sbp-permit/{id}/{business_id}', [SBPController::class,'viewPermit'])->name('view-sbp-permit');
     Route::get('get-sbp-charges/{id}', [SBPController::class,'getSBPcharges'])->name('get-sbp-charges');
@@ -137,7 +139,85 @@ Route::group(['middleware' => ['active']], function () {
     Route::get('print-trade-bill/{id}', [SBPController::class,'printTradeBill'])->name('print-trade-bill');
     //TRADE
 
+    //HEALTH
+    //Health routes
+    Route::get('create-food-handlers-bill', [HealthController::class, 'billForm'])->name('create-food-handlers-bill');
+    Route::get('view-food-handlers-certificate/{id}', [HealthController::class, 'viewHealthCertificate'])->name('view-food-handlers-certificate');
+    Route::get('print-certificate/{bill_id}', [HealthController::class, 'printCertificate'])->name('print-certificate');
+    Route::post('health-register', [HealthController::class, 'register'])->name('health-register');
+    Route::get('get-health-receipt/{id}', [HealthController::class, 'getReceipt'])->name('get-health-receipt');
+    Route::get('view-health-receipt/{id}', [HealthController::class, 'viewReceipt'])->name('view-health-receipt');
+    Route::get('print-health-bill/{id}', [HealthController::class, 'printBill'])->name('print-health-bill');
+    Route::post('generate-health-bill', [HealthController::class, 'generateBill'])->name('generate-health-bill');
+    Route::post('pay-health-bill', [HealthController::class, 'payment'])->name('pay-health-bill');
+    Route::get('health-credentials', [HealthController::class, 'healthCredentials'])->name('health-credentials');
+    Route::post('confirm-otp', [HealthController::class, 'confirmOtp'])->name('confirm-otp');
+    Route::post('get-otp', [HealthController::class, 'getOtp'])->name('get-otp');
+    Route::get('health-application', [HealthController::class, 'apply'])->name('health-application');
+    Route::get('health-verify', [HealthController::class, 'checkID'])->name('health-verify');
+    Route::get('print-health-certificate/{ApplicantID}/{BillID}', [HealthController::class, 'printHealthCertificate'])->name('print-health-certificate');
 
+
+    //Health food hygiene
+    Route::get('food-hygiene-business-details', [HealthController::class, 'FoodHygieneBusinessDetails'])->name('food-hygiene-business-details');
+    Route::post('pull-business-details', [HealthController::class, 'PullBusinessDetails'])->name('pull-business-details');
+    Route::post('register-food-hygiene', [HealthController::class, 'registerFoodHygiene'])->name('register-food-hygiene');
+    Route::get('get-health-bill/{id}', [HealthController::class, 'getFoodHygieneBill'])->name('get-health-bill');
+    Route::get('print-food-hygiene-bill/{businessID}', [HealthController::class, 'printFoodHygieneBill'])->name('print-food-hygiene-bill');
+    Route::post('pay-food-hygiene-bill', [HealthController::class, 'payFoodHygiene'])->name('pay-food-hygiene-bill');
+
+    Route::get('get-food-hygiene-receipt/{id}', [HealthController::class, 'getFoodHygieneReceipt'])->name('get-food-hygiene-receipt');
+    Route::get('hygiene-printables/{id}', [HealthController::class, 'hygienePrints'])->name('hygiene-printables');
+    Route::post('print-food-hygiene-cert', [HealthController::class, 'printFoodHygieneCert'])->name('print-food-hygiene-cert');
+    Route::get('renew-food-hygiene', [HealthController::class, 'renewForm'])->name('renew-food-hygiene');
+    Route::get('food-hygiene-document/{id}', [HealthController::class, 'FoodHygieneDocument'])->name('food-hygiene-document');
+    Route::post('rnw-food-hygiene', [HealthController::class, 'renewFoodHygiene'])->name('rnw-food-hygiene');
+
+    //Health food handler
+    Route::get('apply-food-handler', [HealthController::class, 'ApplyFoodHandlerForm'])->name('apply-food-handler');
+    Route::post('register-food-handler', [HealthController::class, 'registerFoodHandler'])->name('register-food-handler');
+    Route::get('get-foodhandler-bill/{id}', [HealthController::class, 'getFoodHandlerBill'])->name('get-foodhandler-bill');
+    Route::get('handler-printables/{id}', [HealthController::class, 'handlerPrints'])->name('handler-printables');
+    Route::post('print-food-handler-cert', [HealthController::class, 'printFoodHandlerCert'])->name('print-food-handler-cert');
+    Route::get('renew-handler', [HealthController::class, 'renewHandler'])->name('renew-handler');
+    Route::post('rnw-food-handler', [HealthController::class, 'renewFoodHandler'])->name('rnw-food-handler');
+    Route::get('get-certificates/{id}', [HealthController::class, 'allHandlerCerts'])->name('get-certificates');
+    Route::get('get-slip/{id}', [HealthController::class, 'getSlip'])->name('get-slip');
+    Route::get('print-food-handler-bill/{idNo}', [HealthController::class, 'printFoodHandlerBill'])->name('print-food-handler-bill');
+    Route::get('print-trade-bill/{id}', 'SBPController@printTradeBill')->name('print-trade-bill');
+    Route::get('print-multi-handler-bill/{idNo}', [HealthController::class, 'multiFoodHandlerBill'])->name('print-multi-handler-bill');
+    Route::get('print-health-slip', [HealthController::class, 'printHealthSlip'])->name('print-health-slip');
+
+    Route::post('print-corp-food-handler-cert', [HealthController::class, 'printCorpFoodHandlerCert'])->name('print-corp-food-handler-cert');
+
+
+    //Corporate
+    Route::get('get-corporate', [HealthController::class, 'GetCorporate'])->name('get-corporate');
+    Route::get('pull-corporate-auth', [HealthController::class, 'GetCorporateAuth'])->name('pull-corporate-auth');
+    Route::post('get-otp-corporate', [HealthController::class, 'getOtpCorporate'])->name('get-otp-corporate');
+    Route::post('confirm-otp-corporate', [HealthController::class, 'confirmOtpCorporate'])->name('confirm-otp-corporate');
+    Route::get('get-corporate-individuals/{id}', [HealthController::class, 'getCorporateIndividuals'])->name('get-corporate-individual');
+    Route::get('add-corporate-individual', [HealthController::class, 'addIndivCorporate'])->name('add-corporate-individual');
+    Route::post('register-corporate-individual', [HealthController::class, 'registerIndivCorporate'])->name('register-corporate-individual');
+    Route::post('get-corporate-bill', [HealthController::class, 'getCorporateBill'])->name('get-corporate-bill');
+    Route::get('corporate-printables/{id}', [HealthController::class, 'corporatePrints'])->name('corporate-printables');
+    Route::get('corporate-cert', [HealthController::class, 'corporateCert'])->name('corporate-cert');
+    Route::get('get-corp-cert', [HealthController::class, 'getCorpCert'])->name('get-corp-cert');
+    Route::post('get-corporate-cert', [HealthController::class, 'getCorporateCert'])->name('get-corporate-cert');
+    Route::get('get-corporate-cert/{idNo}', [HealthController::class, 'getCorporateCertificate'])->name('get-corporate-cert');
+    Route::get('get-result-slip/{idNo}', [HealthController::class, 'getResultSlip'])->name('get-result-slip');
+
+
+    Route::get('upload-individual', [HealthController::class, 'uploadCorpIndiv'])->name('upload-individual');
+
+    Route::post('bill-selected', [HealthController::class, 'getSelectedBill'])->name('bill-selected');
+    Route::post('print-corporate-cert', [HealthController::class, 'printCorpCert'])->name('print-corporate-cert');
+    Route::get('suspend-individual/{idNo}', [HealthController::class, 'suspendCorporateIndvi'])->name('suspend-individual');
+    Route::get('print-handler-cert', [HealthController::class, 'printHandlerCertForm'])->name('print-handler-cert');
+    Route::post('print-foodhandler-cert', [HealthController::class, 'getFoodHandlerCert'])->name('print-foodhandler-cert');
+    Route::post('get-otp-indiv', [HealthController::class, 'getOtpIndiv'])->name('get-otp-indiv');
+    Route::get('get-corp-cert-form', [HealthController::class, 'getCorpCertForm'])->name('get-corp-cert-form');
+    //HEALTH
 
     //DOCUMENTS
     //Receipt routes

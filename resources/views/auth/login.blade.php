@@ -14,7 +14,7 @@
                     class="w-100 filter hero__form v3 listing-filter">
                     @csrf
                     <div class="login-form-header mb-4 d-flex flex-column align-items-center">
-                        <img src="img/logo-files/county-logo.png" class="login-logo">
+                        <img src="{{ asset('img/logo-files/county-logo.png') }}" class="login-logo">
                         <p class="mb-0">Narok County Government</p>
                         <h2>Self Service <span class="text-danger">Portal</span></h2>
                     </div>
