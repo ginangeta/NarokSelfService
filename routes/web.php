@@ -43,7 +43,7 @@ Route::post('/change-password', [AuthController::class, 'changePassword'])->name
 Route::get('/newpassword', [AuthController::class, 'newpassword'])->name('password.new');
 Route::post('/password-reset', [AuthController::class, 'resetPassword'])->name('password.reset');
 Route::get('/user-password-reset', [AuthController::class, 'userResetPassword'])->name('user-password-reset');
-Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/signin', [AuthController::class, 'signin'])->name('signin');
 Route::get('/signup', [SiteController::class, 'signup'])->name('signup');
 
