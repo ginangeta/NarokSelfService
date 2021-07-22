@@ -23,24 +23,24 @@ class HealthController extends Controller
     {
         if (is_null(Session::get('resource'))) {
             Session::put('url', url()->current());
-            return redirect()->route('login');
-        }
+            return redirect()->route('signin');
+          }
             return view('health.print-handler-cert');
     }
     public function uploadCorpIndiv()
     {
         if (is_null(Session::get('resource'))) {
             Session::put('url', url()->current());
-            return redirect()->route('login');
-        }
+            return redirect()->route('signin');
+          }
             return view('health.corporate.upload');
     }
     public function addIndivCorporate()
     {
         if (is_null(Session::get('resource'))) {
             Session::put('url', url()->current());
-            return redirect()->route('login');
-        }
+            return redirect()->route('signin');
+          }
             return view('health.corporate.add-individual');
     }
 
@@ -48,8 +48,8 @@ class HealthController extends Controller
     {
         if (is_null(Session::get('resource'))) {
             Session::put('url', url()->current());
-            return redirect()->route('login');
-        }
+            return redirect()->route('signin');
+          }
         return view('health.corporate.print-cert');
 
     }
@@ -58,8 +58,8 @@ class HealthController extends Controller
     {
         if (is_null(Session::get('resource'))) {
             Session::put('url', url()->current());
-            return redirect()->route('login');
-        }
+            return redirect()->route('signin');
+          }
         return view('health.corporate.cert-form');
     }
 
@@ -67,8 +67,8 @@ class HealthController extends Controller
     {
         if (is_null(Session::get('resource'))) {
             Session::put('url', url()->current());
-            return redirect()->route('login');
-        }
+            return redirect()->route('signin');
+          }
         return view('health.corporate.corp-cert');
 
     }
@@ -253,8 +253,8 @@ class HealthController extends Controller
     {
         if (is_null(Session::get('resource'))) {
             Session::put('url', url()->current());
-            return redirect()->route('login');
-        }
+            return redirect()->route('signin');
+          }
             return view('health.corporate.get-corporate');
     }
 
@@ -372,7 +372,7 @@ class HealthController extends Controller
     public function printHealthSlip(){
         if (is_null(Session::get('resource'))) {
             Session::put('url', url()->current());
-            return redirect()->route('login');
+            return redirect()->route('signin');
         }
 
         return view('health.food-handler.slip');
@@ -383,8 +383,8 @@ class HealthController extends Controller
     {
         if (is_null(Session::get('resource'))) {
             Session::put('url', url()->current());
-            return redirect()->route('login');
-        }
+            return redirect()->route('signin');
+          }
             return view('health.food-hygiene.business-details');
 
     }
@@ -393,8 +393,8 @@ class HealthController extends Controller
 
         if (is_null(Session::get('resource'))) {
             Session::put('url', url()->current());
-            return redirect()->route('login');
-        }
+            return redirect()->route('signin');
+          }
 
         $url = config('global.demographics');
 
@@ -544,8 +544,8 @@ class HealthController extends Controller
     {
         if (is_null(Session::get('resource'))) {
             Session::put('url', url()->current());
-            return redirect()->route('login');
-        }
+            return redirect()->route('signin');
+          }
 
         return view('health.food-handler.renew-handler');
 
@@ -556,8 +556,8 @@ class HealthController extends Controller
     {
         if (is_null(Session::get('resource'))) {
             Session::put('url', url()->current());
-            return redirect()->route('login');
-        }
+            return redirect()->route('signin');
+          }
 
         return view('health.food-hygiene.renew-form');
 
@@ -625,8 +625,8 @@ class HealthController extends Controller
     {
         if (is_null(Session::get('resource'))) {
             Session::put('url', url()->current());
-            return redirect()->route('login');
-        }
+            return redirect()->route('signin');
+          }
 
 
         $url = 'https://biller.revenuesure.co.ke/permit/api/sbp/subcountys';

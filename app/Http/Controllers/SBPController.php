@@ -83,102 +83,112 @@ class SBPController extends Controller
 
     public function registerBusinessForm()
     {
-      $url = config('global.trade-license');
-      $data=[
-        'function'=>'getPostalCodes',
-      ];
+      if (is_null(Session::get('resource'))) {
+        Session::put('url', url()->current());
+        return redirect()->route('signin');
+      }else{
+        $url = config('global.trade-license');
+        $data=[
+          'function'=>'getPostalCodes',
+        ];
 
-    	$postal_info = json_decode($this->trade_curl($url,$data));
-    	//dd($postal_info);
+        $postal_info = json_decode($this->trade_curl($url,$data));
+        //dd($postal_info);
 
-      if(is_null($postal_info))
-      {
-        return redirect()->back()->withErrors('We are unable to pull postal addresses. Kindly try later');
+        if(is_null($postal_info))
+        {
+          return redirect()->back()->withErrors('We are unable to pull postal addresses. Kindly try later');
+        }
+
+        if($postal_info->success != true)
+        {
+            return redirect()->back()->withErrors($postal_info->message);
+        }
+
+        //      $url = $this->url. 'permit/api/sbp/subcountys';
+        //      $sub_info = json_decode($this->get_curl($url));
+
+        $url = config('global.demographics');
+
+        $data=[
+          'function'=>'getSubCounty',
+            'countyCode'=>33
+        ];
+
+        $sub_info = json_decode($this->trade_curl($url,$data));
+
+        //dd($sub_info);
+
+        if(is_null($sub_info))
+        {
+          return redirect()->back()->withErrors('Something went wrong. Please try again.');
+        }
+        //      if($sub_info->status_code != 200)
+        if($sub_info->success === false)
+        {
+            return redirect()->back()->withErrors($sub_info->message);
+        }
+
+        $url = config('global.trade-license');
+
+
+        $data=[
+          'function'=>'getCategoryCharges',
+        ];
+
+        $act_info = json_decode($this->trade_curl($url,$data));
+
+        //dd($act_info);
+
+        if(is_null($act_info))
+        {
+          return redirect()->back()->withErrors('Something went wrong. Please try again.');
+        }
+
+        if($act_info->success === false)
+        {
+            return redirect()->back()->withErrors($act_info->message);
+        }
+
+        $data=[
+          'function'=>'getDocuments',
+        ];
+
+
+        $doc_info = json_decode($this->trade_curl($url,$data));
+
+        if(is_null($doc_info))
+        {
+          return redirect()->back()->withErrors('Something went wrong. Please try again.');
+        }
+
+        if($doc_info->success != true)
+        {
+            return redirect()->back()->withErrors($doc_info->message);
+        }
+
+        // dd($act_info->response_data);
+        $postalcodes = $postal_info->data;
+        $subcounties = $sub_info->data;
+        $business_activities = $act_info->data;
+        $documents = $doc_info->data;
+
+        $data = [
+          'postalcodes' => $postalcodes,
+          'subcounties' => $subcounties,
+          'business_activities' => $business_activities,
+          'documents' => $documents,
+        ];
+
+
+        // dd($postalcodes);
+        if (is_null(Session::get('resource'))) {
+            Session::put('url', url()->current());
+            return redirect()->route('signin');
+        }else{
+            return response()->json($data);
+        }
       }
-
-      if($postal_info->success != true)
-      {
-          return redirect()->back()->withErrors($postal_info->message);
-      }
-
-      //      $url = $this->url. 'permit/api/sbp/subcountys';
-      //      $sub_info = json_decode($this->get_curl($url));
-
-      $url = config('global.demographics');
-
-       $data=[
-         'function'=>'getSubCounty',
-           'countyCode'=>33
-       ];
-
-    	 $sub_info = json_decode($this->trade_curl($url,$data));
-
-      //dd($sub_info);
-
-      if(is_null($sub_info))
-      {
-        return redirect()->back()->withErrors('Something went wrong. Please try again.');
-      }
-      //      if($sub_info->status_code != 200)
-      if($sub_info->success === false)
-      {
-          return redirect()->back()->withErrors($sub_info->message);
-      }
-
-    	$url = config('global.trade-license');
-
-
-      $data=[
-        'function'=>'getCategoryCharges',
-      ];
-
-    	$act_info = json_decode($this->trade_curl($url,$data));
-
-      //dd($act_info);
-
-      if(is_null($act_info))
-      {
-        return redirect()->back()->withErrors('Something went wrong. Please try again.');
-      }
-
-      if($act_info->success === false)
-      {
-          return redirect()->back()->withErrors($act_info->message);
-      }
-
-      $data=[
-        'function'=>'getDocuments',
-      ];
-
-
-      $doc_info = json_decode($this->trade_curl($url,$data));
-
-      if(is_null($doc_info))
-      {
-        return redirect()->back()->withErrors('Something went wrong. Please try again.');
-      }
-
-      if($doc_info->success != true)
-      {
-          return redirect()->back()->withErrors($doc_info->message);
-      }
-
-    	// dd($act_info->response_data);
-    	$postalcodes = $postal_info->data;
-    	$subcounties = $sub_info->data;
-    	$business_activities = $act_info->data;
-    	$documents = $doc_info->data;
-
-      $data = [
-        'postalcodes' => $postalcodes,
-        'subcounties' => $subcounties,
-        'business_activities' => $business_activities,
-        'documents' => $documents,
-      ];
-
-
-    	// dd($postalcodes);
-      return response()->json($data);
     }
 
     public function getPostalName($id)
@@ -460,7 +470,7 @@ class SBPController extends Controller
     {
       if (is_null(Session::get('resource'))) {
             Session::put('url', url()->current());
-            return redirect()->route('login');
+            return redirect()->route('signin');
         }else{
         return view('sbp.renew-business-permit');
       }
@@ -468,58 +478,63 @@ class SBPController extends Controller
 
     public function update(Request $request)
     {
-        # code...
-        $formData = $request->all();
-        $validator = Validator::make($formData,[
-            'businessID'=>'required',
-        ]);
-        if ($validator->fails()) {
-            # code...
-            $request->session()->flash('message.level', 'danger');
-            $request->session()->flash('message.content', $validator->errors());
-            return Redirect::back()->withErrors($validator->errors());
-        }
+      if (is_null(Session::get('resource'))) {
+        Session::put('url', url()->current());
+        return redirect()->route('signin');
+      }else{
+          # code...
+          $formData = $request->all();
+          $validator = Validator::make($formData,[
+              'businessID'=>'required',
+          ]);
+          if ($validator->fails()) {
+              # code...
+              $request->session()->flash('message.level', 'danger');
+              $request->session()->flash('message.content', $validator->errors());
+              return Redirect::back()->withErrors($validator->errors());
+          }
 
-        $url= config('global.trade-license');
-        $data = [
-            'function'=>'getBusinessDetails',
-            'businessID'=>$request->businessID
-        ];
+          $url= config('global.trade-license');
+          $data = [
+              'function'=>'getBusinessDetails',
+              'businessID'=>$request->businessID
+          ];
 
-        $this->data['business']=json_decode($this->trade_curl($url,$data));
-        // dd($this->data);
+          $this->data['business']=json_decode($this->trade_curl($url,$data));
+          // dd($this->data);
 
 
-        if ($this->data['business']->success != true) {
-            # code...
-            $request->session()->flash('message.level', 'danger');
-            $request->session()->flash('message.content', $this->data['business']->message);
-            return Redirect::back()->withErrors($this->data['business']->message);
+          if ($this->data['business']->success != true) {
+              # code...
+              $request->session()->flash('message.level', 'danger');
+              $request->session()->flash('message.content', $this->data['business']->message);
+              return Redirect::back()->withErrors($this->data['business']->message);
 
-        }else{
-            $url = config('global.demographics');
-            $data=[
-                'function'=>'getSubCounty',
-                'countyCode'=>33
-            ];
+          }else{
+              $url = config('global.demographics');
+              $data=[
+                  'function'=>'getSubCounty',
+                  'countyCode'=>33
+              ];
 
-            $this->data['subcounties'] = json_decode($this->food_hygiene_alex_to_curl($url,$data));
+              $this->data['subcounties'] = json_decode($this->food_hygiene_alex_to_curl($url,$data));
 
-            //dd($this->data);
+              //dd($this->data);
 
-            if ($this->data['subcounties']->success != true) {
+              if ($this->data['subcounties']->success != true) {
 
-                $request->session()->flash('message.level', 'danger');
-                $request->session()->flash('message.content', $this->data['subcounties']->message);
-                return Redirect::back()->withErrors($this->data['subcounties']->message);
+                  $request->session()->flash('message.level', 'danger');
+                  $request->session()->flash('message.content', $this->data['subcounties']->message);
+                  return Redirect::back()->withErrors($this->data['subcounties']->message);
 
-            }else{
-              $RenewBusiness = collect([
-                'business' => $this->data['business'],
-                'subcounties' => $this->data['subcounties'],
-              ]);
-                return response()->json($RenewBusiness);
-            }
+              }else{
+                $RenewBusiness = collect([
+                  'business' => $this->data['business'],
+                  'subcounties' => $this->data['subcounties'],
+                ]);
+                  return response()->json($RenewBusiness);
+              }
+          }
         }
 
     }

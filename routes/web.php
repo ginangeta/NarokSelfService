@@ -47,8 +47,17 @@ Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/signin', [AuthController::class, 'signin'])->name('signin');
 Route::get('/signup', [SiteController::class, 'signup'])->name('signup');
 
+//Daily
+Route::get('daily-parking', [ParkingController::class, 'dailyParking'])->name('daily-parking');
+Route::get('confirm-daily-parking-details', [ParkingController::class, 'confirmDailyParkingDetails'])->name('confirm-daily-parking-details');
 
-Route::group(['middleware' => ['active']], function () {
+//Parking payment
+Route::post('get-parking-charges', [ParkingController::class, 'getParkingCharges'])->name('get-parking-charges');
+Route::post('initiate-onstreet-parking-payment', [ParkingController::class, 'initiateOnstreetPayment'])->name('initiate-onstreet-parking-payment');
+Route::post('initiate-offstreet-parking-payment', [ParkingController::class, 'initiateOffstreetPayment'])->name('initiate-onstreet-parking-payment');
+
+
+// Route::group(['middleware' => ['active']], function () {
     //PARKING
     //Parking routes
     Route::get('get-parking-receipt/{id}', [ParkingController::class, 'getParkingReceipt'])->name('get-parking-receipt');
@@ -63,19 +72,10 @@ Route::group(['middleware' => ['active']], function () {
     Route::get('offstreet-parking', [ParkingController::class, 'offstreetParking'])->name('offstreet-parking');
     Route::post('get-offstreet-charge', [ParkingController::class, 'offstreetParkingPayment'])->name('get-offstreet-charge');
 
-    //Daily
-    Route::get('daily-parking', [ParkingController::class, 'dailyParking'])->name('daily-parking');
-    Route::get('confirm-daily-parking-details', [ParkingController::class, 'confirmDailyParkingDetails'])->name('confirm-daily-parking-details');
-
     //Parking penalties
     Route::get('parking-penalties', [ParkingPenaltiesController::class, 'parkingPenalties'])->name('parking-penalties');
     Route::post('get-parking-penalties', [ParkingPenaltiesController::class, 'getParkingPenalties'])->name('get-parking-penalties');
     Route::post('initiate-penalty-payment', [ParkingPenaltiesController::class, 'initiateParkingPayment'])->name('initiate-penalty-payment');
-
-    //Parking payment
-    Route::post('get-parking-charges', [ParkingController::class, 'getParkingCharges'])->name('get-parking-charges');
-    Route::post('initiate-onstreet-parking-payment', [ParkingController::class, 'initiateOnstreetPayment'])->name('initiate-onstreet-parking-payment');
-    Route::post('initiate-offstreet-parking-payment', [ParkingController::class, 'initiateOffstreetPayment'])->name('initiate-onstreet-parking-payment');
 
     //Seasonal Parking
     
@@ -242,4 +242,4 @@ Route::group(['middleware' => ['active']], function () {
     Route::get('view-bill-receipt/{id}', [BillsController::class, 'viewBillReceipt'])->name('view-bill-receipt');
     Route::get('print-bill/{bill_number}', [BillsController::class, 'printBill'])->name('print-bill');
     //DOCUMENTS
-});
+// });

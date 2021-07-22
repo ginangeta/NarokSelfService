@@ -94,6 +94,8 @@ class SeasonalController extends Controller
             $token = Session::get('seasonal_token');
         }
 
+        // dd($token);
+
     	$data = [
     		'number_plate' => $request->seasonal_registration_no,
     		'category_id' => (int)$request->seasonal_vehicle_category_code,
@@ -219,14 +221,15 @@ class SeasonalController extends Controller
 
     public function initiatePayment(Request $request)
     {
-            if(Session::has('token'))
-            {
-                $token = Session::get('token');
-            }
-            else
-            {
-                $token = Session::get('seasonal_token');
-            }
+        if(Session::has('token'))
+        {
+            $token = Session::get('token');
+        }
+        else
+        {
+            $token = Session::get('seasonal_token');
+        }
+
         $url = $this->url . 'Parking/InitiateParkingMultiple';
 
         $data = [
@@ -248,14 +251,15 @@ class SeasonalController extends Controller
 
     public function getReceipt($id)
     {
-            if(Session::has('token'))
-            {
-                $token = Session::get('token');
-            }
-            else
-            {
-                $token = Session::get('seasonal_token');
-            }
+        if(Session::has('token'))
+        {
+            $token = Session::get('token');
+        }
+        else
+        {
+            $token = Session::get('seasonal_token');
+        }
+
         $url =  $this->url. 'Parking/GetSeasonalParkingReceipt';
 
         $data = [
@@ -271,13 +275,14 @@ class SeasonalController extends Controller
     public function viewReceipt($id)
     {
         if(Session::has('token'))
-            {
-                $token = Session::get('token');
-            }
-            else
-            {
-                $token = Session::get('seasonal_token');
-            }
+        {
+            $token = Session::get('token');
+        }
+        else
+        {
+            $token = Session::get('seasonal_token');
+        }
+
         $url =  $this->url. 'Parking/GetSeasonalParkingReceipt';
 
         $data = [
@@ -299,7 +304,7 @@ class SeasonalController extends Controller
         // 
         // return view('seasonal.receipt',['receipt' => $receiptInfo->response_data, 'amount_in_words' => $amount_in_words]);
 
-}
+    }
 
     public function getStickers($id)
     {

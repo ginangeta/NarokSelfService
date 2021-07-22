@@ -38,6 +38,9 @@ class ParkingController extends Controller
             ];
 
             $token = json_decode(stripslashes($this->token_curl($url,$data)))->token;
+
+            // dd($token);
+
         }
 
         return $token;
@@ -45,11 +48,11 @@ class ParkingController extends Controller
 
     }
 
-
     public function getParkingCategories()
     {
         $url = $this->url. 'Parking/GetParkingCategories';
         $parking_info = json_decode($this->get_curl($url));
+
         if(is_null($parking_info))
         {
             return redirect()->back()->withErrors('We are having trouble retrieving parking categories. Please try again later.');
@@ -59,6 +62,9 @@ class ParkingController extends Controller
         {
             return redirect()->back()->withErrors($parking_info->message);
         }
+
+        // dd($parking_info);
+
         return $parking_info;
 
     }
@@ -119,7 +125,6 @@ class ParkingController extends Controller
 
     	return $zones_info;
     }
-
 
 
     public function offstreetParkingPayment(Request $request)
@@ -198,7 +203,6 @@ class ParkingController extends Controller
 
     }
 
-
     public function viewParkingReceipt($id)
     {
         $url = $this->url . 'Parking/GetTransactionReceipt?transactionCode='.$id;
@@ -250,7 +254,6 @@ class ParkingController extends Controller
         return response()->json($receipt_info);
 
     }
-
 
     public function viewOffstreetParkingReceipt($id)
     {
