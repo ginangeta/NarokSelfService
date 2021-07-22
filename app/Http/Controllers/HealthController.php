@@ -1254,7 +1254,7 @@ class HealthController extends Controller
             return redirect()->back()->withErrors("We're having trouble retrieving your details. Please try again later");
         }
         
-    //     dd($getCorporate->data);
+        // dd($getCorporate->data);
 
     //   dd($getCorporate->data->telephone1);
 
@@ -1268,6 +1268,7 @@ class HealthController extends Controller
           $data = [
             'function' => 'sendOTP',
             'phoneNumber' => $getCorporate->data->telephone1,
+            // 'phoneNumber' => '0700191331',
             'message' => 'Your PIN is '. $otp .'. Use this PIN to access your certificates.',
           ];
 

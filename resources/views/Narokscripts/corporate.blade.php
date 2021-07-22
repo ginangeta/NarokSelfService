@@ -89,8 +89,8 @@
                         $('#check-corporate-otp .btn-text').text('CHECK FOR CERTIFICATES');
                         $('#check-corporate-otp .btn-ellipsis').addClass('d-none');
 
-                        var id = $('input[name=slip_handler_number]').val();
-                        //alert(id);
+                        var id = $('input[name=slip-pin]').val();
+                        // alert(id);
 
                         setTimeout(function() {
                             window.location = '<?php echo url('get-corporate-individuals'); ?>/' + id;
