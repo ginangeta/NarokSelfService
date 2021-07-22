@@ -423,7 +423,7 @@
                     </div>
                     <div>
                         <strong>Seasonal Parking</strong>
-                        <p>Pay for parking up to a specified duration.</p>
+                        <p>Pay for seasonal parking up to a specified duration.</p>
                     </div>
                 </li>
 
@@ -433,7 +433,7 @@
                     </div>
                     <div>
                         <strong>Off-steet parking</strong>
-                        <p>Pay for parking up to a specified duration.</p>
+                        <p>Pay for offstreet parking up to a specified duration.</p>
                     </div>
                 </li>
 
@@ -443,7 +443,7 @@
                     </div>
                     <div>
                         <strong>Reserved parking</strong>
-                        <p>Pay for parking up to a specified duration.</p>
+                        <p>Pay for parking in a reserved location.</p>
                     </div>
                 </li>
 
@@ -453,7 +453,17 @@
                     </div>
                     <div>
                         <strong>Parking penalties</strong>
-                        <p>Pay for parking up to a specified duration.</p>
+                        <p>Pay for parking penalties.</p>
+                    </div>
+                </li>
+
+                <li class="parking_stickers">
+                    <div>
+                        <img src="{{ asset('img/icons/Bills/licensing.svg') }}" class="img">
+                    </div>
+                    <div>
+                        <strong>Seasonal Parking Stickers</strong>
+                        <p>Print vehicle stickers.</p>
                     </div>
                 </li>
 
@@ -961,6 +971,47 @@
                 </div>
             </form>
         </aside>
+
+        <aside class="right-neg-100" id="parking_stickers">
+            <div class="aside-header">
+                <div class="header-side-sub">
+                    <div data-icon="#" aria-hidden="true" class="fs1 close-sub-aside"></div>
+                    <h4>Seasonal Parking Stickers</h4>
+                </div>
+            </div>
+
+            <hr>
+            <!-- the inputs -->
+            <form class="transaction-form">
+                <div class="alert alert-danger d-none" id="stickers_parking_errors">
+                </div>
+                @csrf
+                <div class="the-aside-inputs">
+                    <div class="form-group">
+                        <label>Parking payment code</label>
+                        <input type="text" placeholder="Enter the parking code used for payment eg PKX..."
+                            name="stickers_id" value="{{ old('stickers_id') }}" class="form-control w-100">
+                    </div>
+
+                    <div class="stickers-parking-confirm">
+                        <div class="d-flex flex-column align-items-end">
+                            <div class="lds-ellipsis d-none">
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                            </div>
+                            <button class="btn-process btn-block btn-stickers-confirm">Check For Stickers</button>
+                        </div>
+                    </div>
+
+                    <div class="bg-error stickers-error d-none">
+                        <p class="mb-0">Vehicle has no stickers.</p>
+                    </div>
+
+                </div>
+            </form>
+        </aside>
     </div>
 
     <!-- bill services sub revenue streams -->
@@ -1135,7 +1186,8 @@
                                 <div></div>
                                 <div></div>
                             </div>
-                            <button type="button" class="btn-process btn-block btn-print-permit-confirm">Print Permit</button>
+                            <button type="button" class="btn-process btn-block btn-print-permit-confirm">Print
+                                Permit</button>
                         </div>
                     </div>
                 </div>

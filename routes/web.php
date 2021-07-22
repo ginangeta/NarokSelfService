@@ -91,6 +91,7 @@ Route::post('initiate-offstreet-parking-payment', [ParkingController::class, 'in
     Route::get('seasonal-stickers/{id}', [SeasonalController::class, 'getStickers'])->name('stickers');
     Route::get('view-seasonal-stickers', [SeasonalController::class, 'viewStickers'])->name('view-seasonal-stickers');
     Route::post('print-stickers', [SeasonalController::class, 'printStickers'])->name('print-stickers');
+    Route::get('print-stickers-document', [SeasonalController::class, 'printStickersDocument'])->name('print-stickers-document');
 
         
     //Parking penalties

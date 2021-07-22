@@ -989,3 +989,117 @@
     });
 </script>
 {{-- Penalties Parking --}}
+
+{{-- Seasonal Stickers Parking --}}
+<script type="text/javascript">
+    $(document).ready(function() {
+        $(".stickers-parking-confirm").click(function(e) {
+            e.preventDefault();
+
+            $('.btn-stickers-confirm').text('Checking details...');
+            $('.stickers-parking-confirm .lds-ellipsis').removeClass('d-none');
+
+            var stickers_id = $("input[name=stickers_id]").val();
+
+            // console.log(stickers_id);
+
+            if (stickers_id == "") {
+                $('#stickers_parking_errors').html(
+                    "Kindly supply all information before proceeding.");
+                $('#stickers_parking_errors').removeClass('d-none');
+                return;
+            }
+
+            $.ajax({
+                url: "<?php echo url('print-stickers'); ?>",
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: {
+                    stickers_id: stickers_id,
+                },
+
+                success: function(data) {
+                    console.log(data);
+                    $('.stickers-parking-confirm .lds-ellipsis').addClass('d-none');
+                    $('.btn-stickers-confirm').text('CHECK STATUS');
+                    if (data === "" || data === null) {
+                        document.getElementById('stickers_parking_errors').innerHTML =
+                            "We're having trouble retrieving your seasonal parking stickers. Please try again later.";
+                        $('#stickers_parking_errors').removeClass('d-none');
+                    }
+                    if (data === " ") {
+                        document.getElementById('stickers_parking_errors').innerHTML =
+                            "We're having trouble retrieving your seasonal parking stickers. Please try again later.";
+                        $('#stickers_parking_errors').removeClass('d-none');
+                    }
+                    if (data.status_code == 200) {
+
+                        // var confirmservice = $('.btn-confirm-seasonal-details')
+                        //     .parent()
+                        //     .parent().attr("class");
+                        // $('#' + confirmservice).removeClass('right-neg-100');
+                        // $('.landing-page-container').addClass(
+                        //     'margin-neg-400-left');
+                        // $('.aside-footer').addClass('right-neg-100');
+                        // $('#' + confirmservice + ' .aside-footer-confirm')
+                        //     .removeClass(
+                        //         'right-neg-100');
+                        // $('.aside-footer-to-confirm').addClass(
+                        //     'right-neg-100');
+                    } else {
+                        document.getElementById('stickers_parking_errors').innerHTML = data
+                            .message;
+                        $('#stickers_parking_errors').removeClass('d-none');
+                    }
+
+                }
+            });
+        });
+
+        $("#offstreet_parking_pay").click(function(e) {
+            e.preventDefault();
+
+            $(this).find('.btn-txt').addClass('d-none');
+            $(this).find('.btn-ellipsis').removeClass('d-none');
+
+            var phone_number = $('#offstreet-phone-number').val();
+            var charges = $('#offstreet_total').text();
+
+            // var amount = 1;
+            var regex =
+                /(\+?254|0|^){1}[-. ]?[7]{1}([0-2]{1}[0-9]{1}|[9]{1}[0-9]{1}|[4]{1}[0-9]{1})[0-9]{6}/;
+            // console.log(charges);
+
+            if (regex.test(phone_number) == false) {
+                document.getElementById('offstreet-footer-errors').innerHTML =
+                    'Please enter a valid Safaricom number';
+                $('#offstreet-footer-errors').removeClass('d-none');
+                $(this).find('.btn-txt').text('PAY');
+                $(this).find('.btn-txt').removeClass('d-none');
+                $(this).find('.btn-ellipsis').addClass('d-none');
+                return;
+            }
+
+            $('#payment-modal-header').empty();
+            $('#payment-modal .modal-title-sub').empty();
+            $('#payment-modal .payment-number').empty();
+            $('#payment-modal .payment-amount').empty();
+            $('#payment-modal .payment-zone').empty();
+
+            $('#payment-modal-header').text('Offstreet Parking Payment');
+            $('#payment-modal .modal-title-sub').text('Offstreet Parking');
+            $('#payment-modal .payment-number').text(phone_number);
+            $('#payment-modal .payment-amount').text(charges);
+            $('#payment-modal .payment-plate').text($("#offstreet-plates").text());
+            $('#payment-modal').modal('show');
+
+
+            $(this).find('.btn-txt').removeClass('d-none');
+            $(this).find('.btn-ellipsis').addClass('d-none');
+
+        });
+    });
+</script>
+{{-- Seasonal Stickers Parking --}}

@@ -339,15 +339,16 @@ class SeasonalController extends Controller
 
     public function printStickers(Request $request)
     {
-        // dd($request->all);
+        // dd($request->all());
         if(Session::has('token'))
-            {
-                $token = Session::get('token');
-            }
-            else
-            {
-                $token = Session::get('seasonal_token');
-            }
+        {
+            $token = Session::get('token');
+        }
+        else
+        {
+            $token = Session::get('seasonal_token');
+        }
+
         $url =  $this->url. 'Parking/GetSeasonalParkingReceipt';
 
         $data = [
@@ -355,31 +356,40 @@ class SeasonalController extends Controller
             'token' => $token,
         ];
 
+        // dd($url);
+
         $receiptInfo = json_decode($this->to_curl($url,$data));
 
         if(is_null($receiptInfo))
-            {
-                return redirect()->back()->withErrors('We are having trouble retrieving your stickers. Please try again later.');
-            }
+        {
+            // dd(json($receiptInfo));
 
-            if($receiptInfo->status_code !=200 )
-            {
-                return redirect()->back()->withErrors('Payment not found! Please check the payment code.');
-            }
+            return response()->json($receiptInfo);
 
-            $stickers_data = [
-                'receipt'=>$receiptInfo->response_data,
-            ];
+        }
+
+        if($receiptInfo->status_code !=200 )
+        {
+            return response()->json($receiptInfo);
+
+        }
+
+        $stickers_data = [
+            'receipt'=>$receiptInfo->response_data,
+        ];
 
         // dd($receiptInfo);
             // $pdf = PDF::loadView('seasonal.stickers', $stickers_data);  
             // return $pdf->stream('stickers.pdf',array('Attachment'=>0));
 
-        return view('seasonal.stickers', ['receipt'=>$receiptInfo->response_data]);
-
+        return redirect()->route('print-stickers-document')->with(['receipt'=>$receiptInfo->response_data]);
 
     }
 
+    public function printStickersDocument(){
+
+        return view('documents.seasonalstickers');
+    }
 
 
 
