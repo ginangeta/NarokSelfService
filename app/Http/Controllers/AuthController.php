@@ -67,6 +67,7 @@ class AuthController extends Controller
                     {
 
                         $previous_url = Session::get('url');
+                        $previous_url = null;
 
                         // dd($previous_url);
 
