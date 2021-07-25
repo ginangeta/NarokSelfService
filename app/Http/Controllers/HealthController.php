@@ -23,7 +23,7 @@ class HealthController extends Controller
     {
         if (is_null(Session::get('resource'))) {
             Session::put('url', url()->current());
-            return redirect()->route('signin');
+            return route('signin');
           }
             return view('health.print-handler-cert');
     }
@@ -31,7 +31,7 @@ class HealthController extends Controller
     {
         if (is_null(Session::get('resource'))) {
             Session::put('url', url()->current());
-            return redirect()->route('signin');
+            return route('signin');
           }
             return view('health.corporate.upload');
     }
@@ -39,7 +39,7 @@ class HealthController extends Controller
     {
         if (is_null(Session::get('resource'))) {
             Session::put('url', url()->current());
-            return redirect()->route('signin');
+            return route('signin');
           }
             return view('health.corporate.add-individual');
     }
@@ -48,7 +48,7 @@ class HealthController extends Controller
     {
         if (is_null(Session::get('resource'))) {
             Session::put('url', url()->current());
-            return redirect()->route('signin');
+            return route('signin');
           }
         return view('health.corporate.print-cert');
 
@@ -58,7 +58,7 @@ class HealthController extends Controller
     {
         if (is_null(Session::get('resource'))) {
             Session::put('url', url()->current());
-            return redirect()->route('signin');
+            return route('signin');
           }
         return view('health.corporate.cert-form');
     }
@@ -67,7 +67,7 @@ class HealthController extends Controller
     {
         if (is_null(Session::get('resource'))) {
             Session::put('url', url()->current());
-            return redirect()->route('signin');
+            return route('signin');
           }
         return view('health.corporate.corp-cert');
 
@@ -75,27 +75,32 @@ class HealthController extends Controller
 
     public function getFoodHandlerCert(Request $request)
     {
-        $url = $this->url = config('global.food_hygiene');
-        $request->validate([
-            'idNo'=>'required',
-        ]);
+      if (is_null(Session::get('resource'))) {
+        Session::put('url', url()->current());
+        return route('signin');
+      }
 
-        $data = [
-            'function'=>'getFoodHandlerCert',
-            'idNo'=>$request->idNo,
-        ];
-        //dd($data);
+      $url = $this->url = config('global.food_hygiene');
+      $request->validate([
+          'idNo'=>'required',
+      ]);
 
-        $this->data['getFoodHygieneLicence'] = json_decode($this->food_hygiene_alex_to_curl($url, $data));
+      $data = [
+          'function'=>'getFoodHandlerCert',
+          'idNo'=>$request->idNo,
+      ];
+      //dd($data);
 
-        //dd($this->data['getFoodHygieneLicence']);
-        if ($this->data['getFoodHygieneLicence']->success === true) {
-            return view('documents.certificate')->with($this->data);
+      $this->data['getFoodHygieneLicence'] = json_decode($this->food_hygiene_alex_to_curl($url, $data));
 
-           }else{
-                // return redirect()->back()->withErrors($this->data['getFoodHygieneLicence']->message);
-                return response()->json($this->data['getFoodHygieneLicence']);
-           }
+      //dd($this->data['getFoodHygieneLicence']);
+      if ($this->data['getFoodHygieneLicence']->success === true) {
+          return view('documents.certificate')->with($this->data);
+
+      }else{
+          // return redirect()->back()->withErrors($this->data['getFoodHygieneLicence']->message);
+          return response()->json($this->data['getFoodHygieneLicence']);
+      }
     }
 
     public function printCorpCert(Request $request)
@@ -253,7 +258,7 @@ class HealthController extends Controller
     {
         if (is_null(Session::get('resource'))) {
             Session::put('url', url()->current());
-            return redirect()->route('signin');
+            return route('signin');
           }
             return view('health.corporate.get-corporate');
     }
@@ -372,7 +377,7 @@ class HealthController extends Controller
     public function printHealthSlip(){
         if (is_null(Session::get('resource'))) {
             Session::put('url', url()->current());
-            return redirect()->route('signin');
+            return route('signin');
         }
 
         return view('health.food-handler.slip');
@@ -383,7 +388,7 @@ class HealthController extends Controller
     {
         if (is_null(Session::get('resource'))) {
             Session::put('url', url()->current());
-            return redirect()->route('signin');
+            return route('signin');
           }
             return view('health.food-hygiene.business-details');
 
@@ -393,7 +398,7 @@ class HealthController extends Controller
 
         if (is_null(Session::get('resource'))) {
             Session::put('url', url()->current());
-            return redirect()->route('signin');
+            return route('signin');
           }
 
         $url = config('global.demographics');
@@ -416,6 +421,11 @@ class HealthController extends Controller
 
     public function PullBusinessDetails(Request $request)
     {
+      if (is_null(Session::get('resource'))) {
+        Session::put('url', url()->current());
+        return route('signin');
+      }
+
         $url = $this->url = config('global.food_hygiene');
         $request->validate([
             'businessID'=>'required',
@@ -537,14 +547,11 @@ class HealthController extends Controller
         //dd($registerCorporates);
     }
 
-
-
-
     public function renewHandler()
     {
         if (is_null(Session::get('resource'))) {
             Session::put('url', url()->current());
-            return redirect()->route('signin');
+            return route('signin');
           }
 
         return view('health.food-handler.renew-handler');
@@ -556,7 +563,7 @@ class HealthController extends Controller
     {
         if (is_null(Session::get('resource'))) {
             Session::put('url', url()->current());
-            return redirect()->route('signin');
+            return route('signin');
           }
 
         return view('health.food-hygiene.renew-form');
@@ -566,27 +573,32 @@ class HealthController extends Controller
 
     public function renewFoodHandler(Request $request)
     {
-        $url = $this->url = config('global.food_hygiene');
-        $request->validate([
-            'idNo'=>'required',
-        ]);
+      if (is_null(Session::get('resource'))) {
+        Session::put('url', url()->current());
+        return route('signin');
+      }
 
-        $data=[
-            'function'=>'renewFoodHandler',
-            'idNo'=>$request->idNo
-        ];
+      $url = $this->url = config('global.food_hygiene');
+      $request->validate([
+          'idNo'=>'required',
+      ]);
 
-        //dd($data);
-        $this->data['getFoodHygieneBill'] = json_decode($this->food_hygiene_alex_to_curl($url, $data));
-        //dd($this->data['getFoodHygieneBill']);
+      $data=[
+          'function'=>'renewFoodHandler',
+          'idNo'=>$request->idNo
+      ];
 
-        return response()->json($this->data['getFoodHygieneBill']);
+      //dd($data);
+      $this->data['getFoodHygieneBill'] = json_decode($this->food_hygiene_alex_to_curl($url, $data));
+      //dd($this->data['getFoodHygieneBill']);
 
-        // if ($this->data['getFoodHygieneBill']->success === true) {
-        //     return view('health.food-handler.handler-bill')->with($this->data);
-        //  }else{
-        //  return redirect()->back()->withErrors($this->data['getFoodHygieneBill']->message);
-        // }
+      return response()->json($this->data['getFoodHygieneBill']);
+
+      // if ($this->data['getFoodHygieneBill']->success === true) {
+      //     return view('health.food-handler.handler-bill')->with($this->data);
+      //  }else{
+      //  return redirect()->back()->withErrors($this->data['getFoodHygieneBill']->message);
+      // }
 
 
     }
@@ -595,6 +607,10 @@ class HealthController extends Controller
 
     public function renewFoodHygiene(Request $request)
     {
+      if (is_null(Session::get('resource'))) {
+        Session::put('url', url()->current());
+        return route('signin');
+      }
         $url = $this->url = config('global.food_hygiene');
         $request->validate([
             'businessID'=>'required',
@@ -625,7 +641,7 @@ class HealthController extends Controller
     {
         if (is_null(Session::get('resource'))) {
             Session::put('url', url()->current());
-            return redirect()->route('signin');
+            return route('signin');
           }
 
 
@@ -833,7 +849,6 @@ class HealthController extends Controller
 
 
 
-
     public function printFoodHandlerCert(Request $request)
     {
         $url = $this->url = config('global.food_hygiene');
@@ -885,6 +900,10 @@ class HealthController extends Controller
     }
 
     public function FoodHygieneDocument($businessID){
+      if (is_null(Session::get('resource'))) {
+        Session::put('url', url()->current());
+        return redirect()->route('signin');
+      }
         $url = $this->url = config('global.food_hygiene');
 
         $data=[
@@ -911,9 +930,9 @@ class HealthController extends Controller
         'businessID' => Session::get('businessID'),
     ];
 
-    dd($data);
+    // dd($data);
     $getFoodHygieneLicence = json_decode($this->receipt_curl($url, $data));
-     dd($getFoodHygieneLicence);
+    //  dd($getFoodHygieneLicence);
 
 
     if(empty($getFoodHygieneLicence))
@@ -1195,6 +1214,11 @@ class HealthController extends Controller
 
     public function getOtpIndiv(Request $request)
     {
+      if (is_null(Session::get('resource'))) {
+        Session::put('url', url()->current());
+        return route('signin');
+      }
+
       $url = config('global.food_hygiene');
       $data = [
           'function'=>'getIndividual',
@@ -1217,18 +1241,18 @@ class HealthController extends Controller
       {
           $otp = rand(1000,9999);
 
-          Session::put('otp', $otp);
-          $url = config('global.food_hygiene');
+        Session::put('otp', $otp);
+        $url = config('global.food_hygiene');
 
-          $data = [
-            'function' => 'sendOTP',
-            'phoneNumber' => $getIndividual->data->mobile,
-            'message' => 'Your PIN is '. $otp .'. Use this PIN to access your certificates.',
-          ];
+        $data = [
+          'function' => 'sendOTP',
+          'phoneNumber' => $getIndividual->data->mobile,
+          'message' => 'Your PIN is '. $otp .'. Use this PIN to access your certificates.',
+        ];
 
-          $credentials = json_decode($this->food_hygiene_alex_to_curl($url, $data));
+        $credentials = json_decode($this->food_hygiene_alex_to_curl($url, $data));
 
-          return response()->json($credentials);
+        return response()->json($credentials);
       }
       else
       {
@@ -1239,6 +1263,11 @@ class HealthController extends Controller
 
     public function getOtpCorporate(Request $request)
     {
+      if (is_null(Session::get('resource'))) {
+        Session::put('url', url()->current());
+        return route('signin');
+      }
+
       $url = config('global.food_hygiene');
       $data = [
           'function'=>'getCorporate',
@@ -1256,7 +1285,7 @@ class HealthController extends Controller
         
         // dd($getCorporate->data);
 
-    //   dd($getCorporate->data->telephone1);
+        //   dd($getCorporate->data->telephone1);
 
       if($getCorporate->success === true)
       {

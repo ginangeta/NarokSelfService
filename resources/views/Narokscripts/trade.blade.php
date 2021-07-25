@@ -14,6 +14,9 @@
                 },
 
                 success: function(data) {
+                    if (typeof data === 'string') {
+                        window.open(data, "_self");
+                    }
                     // console.log(data);
 
                     BusinessInformation = data.business.data;
@@ -273,75 +276,79 @@
                 success: function(response) {
                     slider.addClass('d-none');
 
-                    // console.log(response);
+                    if (typeof response === 'string') {
+                        window.open(response, "_self");
+                    } else {
 
-                    // Postal Code
-                    $('#postalCode').empty();
-                    $('#postalCode').selectpicker('refresh');
-                    $.each(response.postalcodes, function(i, item) {
-                        $('#postalCode').append($('<option>', {
-                            value: item.code,
-                            text: item.town
-                        }));
+                        // console.log(response);
 
-                        // console.log(item);
-                    });
-                    $('#postalCode').selectpicker('refresh');
+                        // Postal Code
+                        $('#postalCode').empty();
+                        $('#postalCode').selectpicker('refresh');
+                        $.each(response.postalcodes, function(i, item) {
+                            $('#postalCode').append($('<option>', {
+                                value: item.code,
+                                text: item.town
+                            }));
 
-                    //Document Type
-                    $('#idTypeCode').empty();
-                    $('#idTypeCode').selectpicker('refresh');
-                    $.each(response.documents, function(i, item) {
-                        $('#idTypeCode').append($('<option>', {
-                            value: item.doumentname,
-                            text: item.doumentname
-                        }));
+                            // console.log(item);
+                        });
+                        $('#postalCode').selectpicker('refresh');
 
-                        // console.log(item);
-                    });
-                    $('#idTypeCode').selectpicker('refresh');
+                        //Document Type
+                        $('#idTypeCode').empty();
+                        $('#idTypeCode').selectpicker('refresh');
+                        $.each(response.documents, function(i, item) {
+                            $('#idTypeCode').append($('<option>', {
+                                value: item.doumentname,
+                                text: item.doumentname
+                            }));
 
-                    //Personal Postal Type
-                    $('#contactPersonPostalCode').empty();
-                    $('#contactPersonPostalCode').selectpicker('refresh');
-                    $.each(response.postalcodes, function(i, item) {
-                        $('#contactPersonPostalCode').append($('<option>', {
-                            value: item.code,
-                            text: item.town
-                        }));
+                            // console.log(item);
+                        });
+                        $('#idTypeCode').selectpicker('refresh');
 
-                        // console.log(item);
-                    });
-                    $('#contactPersonPostalCode').selectpicker('refresh');
+                        //Personal Postal Type
+                        $('#contactPersonPostalCode').empty();
+                        $('#contactPersonPostalCode').selectpicker('refresh');
+                        $.each(response.postalcodes, function(i, item) {
+                            $('#contactPersonPostalCode').append($('<option>', {
+                                value: item.code,
+                                text: item.town
+                            }));
 
-                    //Personal Postal Type
-                    $('#NewSubcounty').empty();
-                    $('#NewSubcounty').selectpicker('refresh');
-                    $.each(response.subcounties, function(i, item) {
-                        $('#NewSubcounty').append($('<option>', {
-                            value: item.subCountyCode,
-                            text: item.subCountyName
-                        }));
+                            // console.log(item);
+                        });
+                        $('#contactPersonPostalCode').selectpicker('refresh');
 
-                        // console.log(item);
-                    });
-                    $('#NewSubcounty').selectpicker('refresh');
+                        //Personal Postal Type
+                        $('#NewSubcounty').empty();
+                        $('#NewSubcounty').selectpicker('refresh');
+                        $.each(response.subcounties, function(i, item) {
+                            $('#NewSubcounty').append($('<option>', {
+                                value: item.subCountyCode,
+                                text: item.subCountyName
+                            }));
 
-                    //Business Activity
-                    $('#businessActivity').empty();
-                    $('#businessActivity').selectpicker('refresh');
-                    $.each(response.business_activities, function(i, item) {
-                        $('#businessActivity').append($('<option>', {
-                            value: item.brimsCode,
-                            text: item.businessActivityName
-                        }));
+                            // console.log(item);
+                        });
+                        $('#NewSubcounty').selectpicker('refresh');
 
-                        // console.log(item);
-                    });
-                    $('#businessActivity').selectpicker('refresh');
+                        //Business Activity
+                        $('#businessActivity').empty();
+                        $('#businessActivity').selectpicker('refresh');
+                        $.each(response.business_activities, function(i, item) {
+                            $('#businessActivity').append($('<option>', {
+                                value: item.brimsCode,
+                                text: item.businessActivityName
+                            }));
 
-                    $('#trade-license-application').modal('show');
+                            // console.log(item);
+                        });
+                        $('#businessActivity').selectpicker('refresh');
 
+                        $('#trade-license-application').modal('show');
+                    }
                 }
             });
         });

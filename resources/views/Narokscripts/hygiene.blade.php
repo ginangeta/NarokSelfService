@@ -27,71 +27,79 @@
                     success: function(data) {
                         // console.log(data)
 
-                        if (data === null || data === "") {
-                            $('#apply_hygiene_errors').html(
-                                'We are having trouble retrieving your business details. Please try again later.'
-                            );
-                            $('#apply_hygiene_errors').removeClass('d-none');
-                            $('.btn-apply-hygiene-confirm').removeClass('d-none');
-                            $('.apply_hygiene_confirm .lds-ellipsis').addClass('d-none');
-                            return;
-
+                        if (typeof data === 'string') {
+                            window.open(data, "_self");
                         } else {
 
-                            if (data.success === false) {
-
-                                $('#apply_hygiene_errors').html(data.message);
+                            if (data === null || data === "") {
+                                $('#apply_hygiene_errors').html(
+                                    'We are having trouble retrieving your business details. Please try again later.'
+                                );
                                 $('#apply_hygiene_errors').removeClass('d-none');
                                 $('.btn-apply-hygiene-confirm').removeClass('d-none');
                                 $('.apply_hygiene_confirm .lds-ellipsis').addClass(
                                     'd-none');
+                                return;
 
                             } else {
-                                BusinessInformation = data.getSBPDetails.data[0];
 
-                                var businessID = BusinessInformation.businessID;
-                                var businessName = BusinessInformation.businessName;
-                                var physicalAddress = BusinessInformation.physicalAddress;
-                                var contactPersonPostalCode = BusinessInformation
-                                    .contactPersonPostalCode;
-                                var contactPersonTelephone1 = BusinessInformation
-                                    .contactPersonTelephone1;
-                                var contactPersonTelephone2 = BusinessInformation
-                                    .contactPersonTelephone2;
+                                if (data.success === false) {
 
-                                $('input[name=hygiene-businessID]').val(businessID);
-                                $('input[name=hygiene-businessName]').val(businessName);
-                                $('input[name=hygiene-telephone1]').val(
-                                    contactPersonTelephone1);
-                                $('input[name=hygiene-telephone2]').val(
-                                    contactPersonTelephone2);
-                                $('input[name=hygiene-address]').val(physicalAddress);
-                                $('input[name=hygiene-postalcode]').val(
-                                    contactPersonPostalCode);
+                                    $('#apply_hygiene_errors').html(data.message);
+                                    $('#apply_hygiene_errors').removeClass('d-none');
+                                    $('.btn-apply-hygiene-confirm').removeClass('d-none');
+                                    $('.apply_hygiene_confirm .lds-ellipsis').addClass(
+                                        'd-none');
 
-                                var Subcounties = data.subcounties.data;
+                                } else {
+                                    BusinessInformation = data.getSBPDetails.data[0];
 
-                                $('#hygiene-subcounty').removeClass('d-none');
-                                $('#hygiene-subcounty').empty();
-                                $('#hygiene-subcounty').selectpicker('refresh');
+                                    var businessID = BusinessInformation.businessID;
+                                    var businessName = BusinessInformation.businessName;
+                                    var physicalAddress = BusinessInformation
+                                        .physicalAddress;
+                                    var contactPersonPostalCode = BusinessInformation
+                                        .contactPersonPostalCode;
+                                    var contactPersonTelephone1 = BusinessInformation
+                                        .contactPersonTelephone1;
+                                    var contactPersonTelephone2 = BusinessInformation
+                                        .contactPersonTelephone2;
 
-                                $.each(Subcounties, function(i, item) {
-                                    $('#hygiene-subcounty').append($('<option>', {
-                                        value: item.subCountyCode,
-                                        text: item.subCountyName
-                                    }));
-                                    // console.log(item);
-                                });
+                                    $('input[name=hygiene-businessID]').val(businessID);
+                                    $('input[name=hygiene-businessName]').val(businessName);
+                                    $('input[name=hygiene-telephone1]').val(
+                                        contactPersonTelephone1);
+                                    $('input[name=hygiene-telephone2]').val(
+                                        contactPersonTelephone2);
+                                    $('input[name=hygiene-address]').val(physicalAddress);
+                                    $('input[name=hygiene-postalcode]').val(
+                                        contactPersonPostalCode);
 
-                                $('#hygiene-subcounty').selectpicker('refresh');
+                                    var Subcounties = data.subcounties.data;
 
-                                $('#food-hygiene-application').modal('show');
+                                    $('#hygiene-subcounty').removeClass('d-none');
+                                    $('#hygiene-subcounty').empty();
+                                    $('#hygiene-subcounty').selectpicker('refresh');
 
+                                    $.each(Subcounties, function(i, item) {
+                                        $('#hygiene-subcounty').append($(
+                                            '<option>', {
+                                                value: item.subCountyCode,
+                                                text: item.subCountyName
+                                            }));
+                                        // console.log(item);
+                                    });
+
+                                    $('#hygiene-subcounty').selectpicker('refresh');
+
+                                    $('#food-hygiene-application').modal('show');
+
+                                }
                             }
-                        }
 
-                        $('.btn-apply-hygiene-confirm').text('Pull Business Details');
-                        $('.apply_hygiene_confirm .lds-ellipsis').addClass('d-none');
+                            $('.btn-apply-hygiene-confirm').text('Pull Business Details');
+                            $('.apply_hygiene_confirm .lds-ellipsis').addClass('d-none');
+                        }
                     }
                 });
             }
@@ -369,61 +377,68 @@
                     success: function(data) {
                         // console.log(data)
 
-                        if (data === null || data === "") {
-                            $('#renew_hygiene_errors').html(
-                                'We are having trouble retrieving your business details. Please try again later.'
-                            );
-                            $('#renew_hygiene_errors').removeClass('d-none');
-                            $('.btn-renew-hygiene-confirm').removeClass('d-none');
-                            $('.renew_hygiene_confirm .lds-ellipsis').addClass('d-none');
-                            return;
-
+                        if (typeof data === 'string') {
+                            window.open(data, "_self");
                         } else {
 
-                            if (data.getFoodHygieneBill.success === false) {
-
-                                $('#renew_hygiene_errors').html(data.getFoodHygieneBill
-                                    .message);
+                            if (data === null || data === "") {
+                                $('#renew_hygiene_errors').html(
+                                    'We are having trouble retrieving your business details. Please try again later.'
+                                );
                                 $('#renew_hygiene_errors').removeClass('d-none');
                                 $('.btn-renew-hygiene-confirm').removeClass('d-none');
                                 $('.renew_hygiene_confirm .lds-ellipsis').addClass(
                                     'd-none');
+                                return;
 
                             } else {
 
-                                var res = data.getFoodHygieneBill.data;
+                                if (data.getFoodHygieneBill.success === false) {
 
-                                $('#renew_hygiene_client_name')
-                                    .html(res.customer);
-                                $('#renew_hygiene_client_number')
-                                    .html(res.paymentCode);
-                                $('#renew_hygiene_bill_number')
-                                    .html(res.billNo);
-                                $('#renew_hygiene_client_description')
-                                    .html(res.description);
-                                $('#renew_hygiene_fiscal_year')
-                                    .html(res.fiscalYear);
+                                    $('#renew_hygiene_errors').html(data.getFoodHygieneBill
+                                        .message);
+                                    $('#renew_hygiene_errors').removeClass('d-none');
+                                    $('.btn-renew-hygiene-confirm').removeClass('d-none');
+                                    $('.renew_hygiene_confirm .lds-ellipsis').addClass(
+                                        'd-none');
 
-                                $('#renew_hygiene_total')
-                                    .html('KES ' + res.billTotal);
-                                $('#renew_hygiene_permit_pay .btn-text')
-                                    .html('PAY KES ' + res.billTotal);
-                                $('#renew_hygiene_permit_amount').val(res.billTotal);
-                                $('#food-hygiene-application').modal('hide');
+                                } else {
 
-                                $('#renew-hygiene-confirm').removeClass('right-neg-100');
-                                $('.landing-page-container').addClass(
-                                    'margin-neg-400-left');
-                                $('.aside-footer').addClass('right-neg-100');
-                                $('#renew-hygiene-confirm .aside-footer-confirm')
-                                    .removeClass('right-neg-100').addClass('d-none');
-                                $('.aside-footer-to-confirm').addClass('right-neg-100');
+                                    var res = data.getFoodHygieneBill.data;
 
+                                    $('#renew_hygiene_client_name')
+                                        .html(res.customer);
+                                    $('#renew_hygiene_client_number')
+                                        .html(res.paymentCode);
+                                    $('#renew_hygiene_bill_number')
+                                        .html(res.billNo);
+                                    $('#renew_hygiene_client_description')
+                                        .html(res.description);
+                                    $('#renew_hygiene_fiscal_year')
+                                        .html(res.fiscalYear);
+
+                                    $('#renew_hygiene_total')
+                                        .html('KES ' + res.billTotal);
+                                    $('#renew_hygiene_permit_pay .btn-text')
+                                        .html('PAY KES ' + res.billTotal);
+                                    $('#renew_hygiene_permit_amount').val(res.billTotal);
+                                    $('#food-hygiene-application').modal('hide');
+
+                                    $('#renew-hygiene-confirm').removeClass(
+                                        'right-neg-100');
+                                    $('.landing-page-container').addClass(
+                                        'margin-neg-400-left');
+                                    $('.aside-footer').addClass('right-neg-100');
+                                    $('#renew-hygiene-confirm .aside-footer-confirm')
+                                        .removeClass('right-neg-100').addClass('d-none');
+                                    $('.aside-footer-to-confirm').addClass('right-neg-100');
+
+                                }
                             }
-                        }
 
-                        $('.btn-renew-hygiene-confirm').text('Renew Food Hygiene');
-                        $('.renew_hygiene_confirm .lds-ellipsis').addClass('d-none');
+                            $('.btn-renew-hygiene-confirm').text('Renew Food Hygiene');
+                            $('.renew_hygiene_confirm .lds-ellipsis').addClass('d-none');
+                        }
                     }
                 });
             }

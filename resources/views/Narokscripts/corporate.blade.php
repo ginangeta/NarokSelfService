@@ -27,38 +27,46 @@
 
                     success: function(data) {
                         console.log(data)
-
-                        if (data === null || data === "") {
-                            $('#register_corporate_errors').html(
-                                'We are having trouble retrieving your business details. Please try again later.'
-                            );
-                            $('#register_corporate_errors').removeClass('d-none');
-                            $('.btn-register-corporate-confirm').removeClass('d-none');
-                            $('.register_corporate_confirm .lds-ellipsis').addClass(
-                                'd-none');
-                            return;
-
+                        if (typeof data === 'string') {
+                            window.open(data, "_self");
                         } else {
 
-                            if (data.success === false) {
-
-                                $('#register_corporate_errors').html(data.message);
+                            if (data === null || data === "") {
+                                $('#register_corporate_errors').html(
+                                    'We are having trouble retrieving your business details. Please try again later.'
+                                );
                                 $('#register_corporate_errors').removeClass('d-none');
                                 $('.btn-register-corporate-confirm').removeClass('d-none');
                                 $('.register_corporate_confirm .lds-ellipsis').addClass(
                                     'd-none');
+                                return;
 
                             } else {
 
-                                $('#check-corporate-otp').removeClass('d-none').siblings()
-                                    .addClass('d-none');
-                                $('#details-confirm').modal('show');
+                                if (data.success === false) {
 
+                                    $('#register_corporate_errors').html(data.message);
+                                    $('#register_corporate_errors').removeClass('d-none');
+                                    $('.btn-register-corporate-confirm').removeClass(
+                                        'd-none');
+                                    $('.register_corporate_confirm .lds-ellipsis').addClass(
+                                        'd-none');
+
+                                } else {
+
+                                    $('#check-corporate-otp').removeClass('d-none')
+                                        .siblings()
+                                        .addClass('d-none');
+                                    $('#details-confirm').modal('show');
+
+                                }
                             }
-                        }
 
-                        $('.btn-register-corporate-confirm').text('Pull Business Details');
-                        $('.register_corporate_confirm .lds-ellipsis').addClass('d-none');
+                            $('.btn-register-corporate-confirm').text(
+                                'Pull Business Details');
+                            $('.register_corporate_confirm .lds-ellipsis').addClass(
+                                'd-none');
+                        }
                     }
                 });
             }

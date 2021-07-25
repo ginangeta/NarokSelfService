@@ -85,7 +85,7 @@ class SBPController extends Controller
     {
       if (is_null(Session::get('resource'))) {
         Session::put('url', url()->current());
-        return redirect()->route('signin');
+        return route('signin');
       }else{
         $url = config('global.trade-license');
         $data=[
@@ -184,7 +184,7 @@ class SBPController extends Controller
         // dd($postalcodes);
         if (is_null(Session::get('resource'))) {
             Session::put('url', url()->current());
-            return redirect()->route('signin');
+            return route('signin');
         }else{
             return response()->json($data);
         }
@@ -470,7 +470,7 @@ class SBPController extends Controller
     {
       if (is_null(Session::get('resource'))) {
             Session::put('url', url()->current());
-            return redirect()->route('signin');
+            return route('signin');
         }else{
         return view('sbp.renew-business-permit');
       }
@@ -480,7 +480,7 @@ class SBPController extends Controller
     {
       if (is_null(Session::get('resource'))) {
         Session::put('url', url()->current());
-        return redirect()->route('signin');
+        return route('signin');
       }else{
           # code...
           $formData = $request->all();
@@ -749,29 +749,34 @@ class SBPController extends Controller
 
     public function getPermitDocument($BusinessID)
     {
-      $url = config('global.trade-license');
-
-      $data = [
-          'function'=>'getActiveCerts',
-         'businessID' => $BusinessID
-      ];
-
-      // dd($data);
-      $this->data['permit'] = json_decode($this->trade_curl($url, $data));
-      // dd($this->data);
-
-      if(is_null($this->data))
-      {
-        return redirect()->back()->withErrors('Something went wrong. Please try again.');
-      }
-
-
-      if( $this->data['permit'] ->success === false)
-      {
-        return back()->withErrors( $this->data['permit'] ->message);
+      if (is_null(Session::get('resource'))) {
+        Session::put('url', url()->current());
+        return redirect()->route('signin');
       }else{
-          return view('documents.tradepermit')->with( $this->data);
+        $url = config('global.trade-license');
 
+        $data = [
+            'function'=>'getActiveCerts',
+            'businessID' => $BusinessID
+        ];
+
+        // dd($data);
+        $this->data['permit'] = json_decode($this->trade_curl($url, $data));
+        // dd($this->data);
+
+        if(is_null($this->data))
+        {
+          return redirect()->back()->withErrors('Something went wrong. Please try again.');
+        }
+
+
+        if( $this->data['permit'] ->success === false)
+        {
+          return back()->withErrors( $this->data['permit'] ->message);
+        }else{
+            return view('documents.tradepermit')->with( $this->data);
+
+        }
       }
     }
 

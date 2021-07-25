@@ -11,24 +11,29 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function(response) {
-                    slider.addClass('d-none');
+                    if (typeof response === 'string') {
+                        window.open(response, "_self");
+                    } else {
 
-                    // console.log(response.subcounties.data);
+                        slider.addClass('d-none');
 
-                    //Personal Postal Type
-                    $('#handlers-subcounty').empty();
-                    $('#handlers-subcounty').selectpicker('refresh');
-                    $.each(response.subcounties.data, function(i, item) {
-                        $('#handlers-subcounty').append($('<option>', {
-                            value: item.subCountyCode,
-                            text: item.subCountyName
-                        }));
+                        // console.log(response.subcounties.data);
 
-                        // console.log(item);
-                    });
-                    $('#handlers-subcounty').selectpicker('refresh');
+                        //Personal Postal Type
+                        $('#handlers-subcounty').empty();
+                        $('#handlers-subcounty').selectpicker('refresh');
+                        $.each(response.subcounties.data, function(i, item) {
+                            $('#handlers-subcounty').append($('<option>', {
+                                value: item.subCountyCode,
+                                text: item.subCountyName
+                            }));
 
-                    $('#food-handlers-application').modal('show');
+                            // console.log(item);
+                        });
+                        $('#handlers-subcounty').selectpicker('refresh');
+
+                        $('#food-handlers-application').modal('show');
+                    }
 
                 }
             });
@@ -289,56 +294,61 @@
                     success: function(data) {
                         console.log(data)
 
-                        $('.renew_handler_confirm .lds-ellipsis').addClass('d-none');
-                        $('.btn-handler-confirm').text('RENEW FOOD HANDLERS');
-
-                        if (data == "") {
-                            $('#renew_handler_errors').html(
-                                'We are having trouble retrieving your parking charges. Please try again later.'
-                            );
-                            $('#renew_handler_errors').removeClass('d-none');
-                            $('.btn-handler-confirm').removeClass('d-none');
+                        if (typeof data === 'string') {
+                            window.open(data, "_self");
+                        } else {
                             $('.renew_handler_confirm .lds-ellipsis').addClass('d-none');
-                            return;
-                        }
+                            $('.btn-handler-confirm').text('RENEW FOOD HANDLERS');
 
-                        if (data.status == 200) {
-                            if (data.success === true) {
-                                var rnwhandlers = data.data.header;
+                            if (data == "") {
+                                $('#renew_handler_errors').html(
+                                    'We are having trouble retrieving your parking charges. Please try again later.'
+                                );
+                                $('#renew_handler_errors').removeClass('d-none');
+                                $('.btn-handler-confirm').removeClass('d-none');
+                                $('.renew_handler_confirm .lds-ellipsis').addClass(
+                                    'd-none');
+                                return;
+                            }
 
-                                $('#renew_handler_client_name')
-                                    .html(rnwhandlers.customer);
-                                $('#renew_handler_client_number')
-                                    .html(rnwhandlers.paymentCode);
-                                $('#renew_handler_bill_number')
-                                    .html(rnwhandlers.billNo);
-                                $('#renew_handler_client_description')
-                                    .html(rnwhandlers.description);
-                                $('#renew_handler_fiscal_year')
-                                    .html(rnwhandlers.fiscalYear);
+                            if (data.status == 200) {
+                                if (data.success === true) {
+                                    var rnwhandlers = data.data.header;
 
-                                $('#renew_handler_total')
-                                    .html('KES ' + rnwhandlers.billTotal);
-                                $('#renew_handler_permit_pay .btn-text')
-                                    .html('PAY KES ' + rnwhandlers.billTotal);
-                                $('#renew_handler_permit_amount').val(rnwhandlers
-                                    .billTotal);
+                                    $('#renew_handler_client_name')
+                                        .html(rnwhandlers.customer);
+                                    $('#renew_handler_client_number')
+                                        .html(rnwhandlers.paymentCode);
+                                    $('#renew_handler_bill_number')
+                                        .html(rnwhandlers.billNo);
+                                    $('#renew_handler_client_description')
+                                        .html(rnwhandlers.description);
+                                    $('#renew_handler_fiscal_year')
+                                        .html(rnwhandlers.fiscalYear);
 
-                                var confirmservice = $('#renew-handler-confirm');
-                                confirmservice.removeClass('right-neg-100');
-                                $('.landing-page-container').addClass(
-                                    'margin-neg-400-left');
-                                $('.aside-footer').addClass('right-neg-100');
-                                $('.aside-footer-confirm').removeClass('right-neg-100');
-                                $('.aside-footer-to-confirm').addClass('right-neg-100');
-                            } else if (data.success === false) {
+                                    $('#renew_handler_total')
+                                        .html('KES ' + rnwhandlers.billTotal);
+                                    $('#renew_handler_permit_pay .btn-text')
+                                        .html('PAY KES ' + rnwhandlers.billTotal);
+                                    $('#renew_handler_permit_amount').val(rnwhandlers
+                                        .billTotal);
+
+                                    var confirmservice = $('#renew-handler-confirm');
+                                    confirmservice.removeClass('right-neg-100');
+                                    $('.landing-page-container').addClass(
+                                        'margin-neg-400-left');
+                                    $('.aside-footer').addClass('right-neg-100');
+                                    $('.aside-footer-confirm').removeClass('right-neg-100');
+                                    $('.aside-footer-to-confirm').addClass('right-neg-100');
+                                } else if (data.success === false) {
+                                    $('#renew_handler_errors').html(data.message);
+                                    $('#renew_handler_errors').removeClass('d-none');
+                                }
+
+                            } else {
                                 $('#renew_handler_errors').html(data.message);
                                 $('#renew_handler_errors').removeClass('d-none');
                             }
-
-                        } else {
-                            $('#renew_handler_errors').html(data.message);
-                            $('#renew_handler_errors').removeClass('d-none');
                         }
                     }
                 });
@@ -420,31 +430,37 @@
                     success: function(data) {
                         console.log(data)
 
-                        $('.print_handler_confirm .lds-ellipsis').addClass('d-none');
-                        $('.btn-print-handler-confirm').text('PRINT CERTIFICATE');
+                        if (typeof data === 'string') {
+                            window.open(data, "_self");
+                        } else {
 
-                        if (data == "") {
-                            $('#print_handler_errors').html(
-                                'We are having trouble retrieving your food handlers certificate. Please try again later.'
-                            );
-                            $('#print_handler_errors').removeClass('d-none');
-                            $('.btn-print-handler-confirm').removeClass('d-none');
                             $('.print_handler_confirm .lds-ellipsis').addClass('d-none');
-                            return;
-                        }
+                            $('.btn-print-handler-confirm').text('PRINT CERTIFICATE');
 
-                        if (data.status == 200) {
-                            if (data.success === true) {
-                                var rnwhandlers = data.data.header;
+                            if (data == "") {
+                                $('#print_handler_errors').html(
+                                    'We are having trouble retrieving your food handlers certificate. Please try again later.'
+                                );
+                                $('#print_handler_errors').removeClass('d-none');
+                                $('.btn-print-handler-confirm').removeClass('d-none');
+                                $('.print_handler_confirm .lds-ellipsis').addClass(
+                                    'd-none');
+                                return;
+                            }
 
-                            } else if (data.success === false) {
+                            if (data.status == 200) {
+                                if (data.success === true) {
+                                    var rnwhandlers = data.data.header;
+
+                                } else if (data.success === false) {
+                                    $('#print_handler_errors').html(data.message);
+                                    $('#print_handler_errors').removeClass('d-none');
+                                }
+
+                            } else {
                                 $('#print_handler_errors').html(data.message);
                                 $('#print_handler_errors').removeClass('d-none');
                             }
-
-                        } else {
-                            $('#print_handler_errors').html(data.message);
-                            $('#print_handler_errors').removeClass('d-none');
                         }
                     }
                 });
@@ -486,28 +502,31 @@
 
                     success: function(data) {
                         console.log(data)
-
-                        $('.slip_handler_confirm .lds-ellipsis').addClass('d-none');
-                        $('.btn-handler-slip-confirm').text('PRINT RESULT SLIP');
-
-                        if (data == "") {
-                            $('#slip_handler_errors').html(
-                                'We are having trouble retrieving your food handlers slip. Please try again later.'
-                            );
-                            $('#slip_handler_errors').removeClass('d-none');
-                            $('.btn-handler-slip-confirm').removeClass('d-none');
-                            $('.slip_handler_confirm .lds-ellipsis').addClass('d-none');
-                            return;
-                        }
-
-                        if (data.success === true) {
-                            $('#check-otp').removeClass('d-none').siblings()
-                                .addClass('d-none');
-                            $('#details-confirm').modal('show');
-
+                        if (typeof data === 'string') {
+                            window.open(data, "_self");
                         } else {
-                            $('#slip_handler_errors').html(data.message);
-                            $('#slip_handler_errors').removeClass('d-none');
+                            $('.slip_handler_confirm .lds-ellipsis').addClass('d-none');
+                            $('.btn-handler-slip-confirm').text('PRINT RESULT SLIP');
+
+                            if (data == "") {
+                                $('#slip_handler_errors').html(
+                                    'We are having trouble retrieving your food handlers slip. Please try again later.'
+                                );
+                                $('#slip_handler_errors').removeClass('d-none');
+                                $('.btn-handler-slip-confirm').removeClass('d-none');
+                                $('.slip_handler_confirm .lds-ellipsis').addClass('d-none');
+                                return;
+                            }
+
+                            if (data.success === true) {
+                                $('#check-otp').removeClass('d-none').siblings()
+                                    .addClass('d-none');
+                                $('#details-confirm').modal('show');
+
+                            } else {
+                                $('#slip_handler_errors').html(data.message);
+                                $('#slip_handler_errors').removeClass('d-none');
+                            }
                         }
                     }
                 });

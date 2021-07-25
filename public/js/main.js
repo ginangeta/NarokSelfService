@@ -321,6 +321,20 @@
         Handler Modal Navigation Code
     ___________________________________*/
 
+    /*___________________________________
+        Disable Key Up
+    ___________________________________*/
+    $('body').on('keyup keypress', function (e) {
+        var keyCode = e.keyCode || e.which;
+        if (keyCode === 13) {
+            e.preventDefault();
+            return false;
+        }
+    });
+    /*___________________________________
+        Disable Key Up
+    ___________________________________*/
+
 
 
     // slider-carousel
