@@ -2659,31 +2659,31 @@
     </script>
 
     {{-- Parking --}}
-    @include('narokjavascripts.parking')
+    @include('narokscripts.parking')
     {{-- Parking --}}
 
     {{-- Trade --}}
-    @include('narokjavascripts.trade')
+    @include('narokscripts.trade')
     {{-- Trade --}}
 
     {{-- Billing --}}
-    @include('narokjavascripts.billing')
+    @include('narokscripts.billing')
     {{-- Billing --}}
 
     {{-- Food Handlers --}}
-    @include('narokjavascripts.handlers')
+    @include('narokscripts.handlers')
     {{-- Food Handlers --}}
 
     {{-- Food Hygiene --}}
-    @include('narokjavascripts.hygiene')
+    @include('narokscripts.hygiene')
     {{-- Food Hygiene --}}
 
     {{-- Corporate --}}
-    @include('narokjavascripts.corporate')
+    @include('narokscripts.corporate')
     {{-- Corporate --}}
 
     {{-- Payments --}}
-    @include('narokjavascripts.payment')
+    @include('narokscripts.payment')
     {{-- Payments --}}
 
 
