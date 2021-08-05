@@ -29,6 +29,9 @@
                         </nav>
                     </div>
                     <div class="col-xl-2 col-md-8 col-sm-12 d-flex justify-content-end">
+                        <a class="header-popup-video all-service-option">
+                            <i class="ti-layout-grid2"></i> </a>
+
                         <div class="wrap_icon inner-table-block">
                             @if (is_null(Session::get('resource')))
                                 <a href="{{ route('signin') }}" class="btn">Login</a>
@@ -393,6 +396,16 @@
                     </div>
                 </li>
 
+                <li class="landrates-service-option">
+                    <div class="the-border-menu"></div>
+                    <div>
+                        <img src="{{ asset('img\icons\landingpage-services\black-plant.svg') }}" class="img">
+                    </div>
+                    <div>
+                        <strong>Land Rates</strong>
+                    </div>
+                </li>
+
             </ul>
         </aside>
 
@@ -720,10 +733,13 @@
                         data-content="<img src='{{ asset('img/icons/new-icons/nutrition.svg') }}' class='img rev-img-option mr-3'> <span class='food-hygiene-service-option'></span> Food hygiene">
                     </option>
                     <option
-                        data-content="<img src='{{ asset('img/icons/new-icons/food-handlers.svg') }}' class='img rev-img-option mr-3'> <span class='food-handler-service-option'></span> Food handlers">
+                        data-content="<img src='{{ asset('img/icons/new-icons/food-handlers.svg') }}' class='img rev-img-option mr-3'> <span class='food-handler-service-option'></span> Food Handlers">
                     </option>
                     <option
                         data-content="<img src='{{ asset('img/icons/Corporate/corporation.svg') }}' class='img rev-img-option mr-3'> <span class='corporate-service-option'></span> Corporate">
+                    </option>
+                    <option
+                        data-content="<img src='{{ asset('img/icons/Landrate/tuscany.svg') }}' class='img rev-img-option mr-3'> <span class='landrates-service-option'></span> Land Rate">
                     </option>
                 </select>
             </div>
@@ -1064,7 +1080,8 @@
 
                 <div class="row bill-buttons mt-2">
                     <div class="col-10">
-                        <button class="btn-process btn-success btn-pay-now w-100" id="bill_details_pay_now_open">PAY NOW</button>
+                        <button class="btn-process btn-success btn-pay-now w-100" id="bill_details_pay_now_open">PAY
+                            NOW</button>
                     </div>
                     <div class="col-2 pl-0">
                         <button class="btn-process-outline btn-outline-info w-100 btn-print-details-bill">

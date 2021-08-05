@@ -777,6 +777,42 @@ main {
   border-color: black;
 }
 
+.header-popup-video {
+  color: #353636;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.header-popup-video i {
+  background-color: #353636;
+  border-radius: 50%;
+  color: white;
+  height: 50px;
+  width: 50px;
+  line-height: normal;
+  text-align: center;
+  margin-right: 10px;
+  transition-duration: 0.3s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 10px;
+  font-size: 22px;
+  border: 2px solid #353636;
+}
+
+.header-popup-video:hover {
+  color: #eea676;
+  background: transparent;
+  color: #151616;
+}
+
+.header-popup-video:hover i {
+  background-color: transparent;
+  color: black;
+  border-color: black;
+}
+
 .slider-thumb {
   position: absolute;
   right: 88px;
@@ -1903,6 +1939,19 @@ aside {
   position: relative;
   cursor: pointer;
 }
+
+.sub-streams-services li:last-child {
+  flex-grow: 0;
+  width: 102px;
+  background-color: #d9d9d9;
+  margin: 10px;
+  padding: 15px;
+  border-radius: 5px;
+  list-style: none !important;
+  position: relative;
+  cursor: pointer;
+}
+
 
 .sub-streams-services li .the-border-menu {
   content: "";
