@@ -223,6 +223,13 @@
                 background: white !important;
             }
 
+            @page {
+                size: auto;
+                /* auto is the initial value */
+                margin: 0;
+                /* this affects the margin in the printer settings */
+            }
+
             /* All your print styles go here */
             .print-btn {
                 display: none !important;
@@ -471,6 +478,8 @@
             </div>
         </div>
 
+        <button class="print-btn" onclick="window.print()"><img src="{{ config('global.narok-assets') }}printer.svg"
+                alt="Printer Icon"></button>
 
 </body>
 

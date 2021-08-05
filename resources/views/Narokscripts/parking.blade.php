@@ -683,8 +683,8 @@
         $('#seasonal_bill_parking_bill').on('click', function(e) {
             e.preventDefault();
 
-            $(this).find('.btn-text').addClass('d-none');
-            $(this).find('.btn-ellipsis').removeClass('d-none');
+            $('#seasonal_bill_parking_bill').find('.btn-text').addClass('d-none');
+            $('#seasonal_bill_parking_bill').find('.btn-ellipsis').removeClass('d-none');
 
             var phone_number = $("input[name=seasonal-bill-phone-number]").val();
             // console.log(phone_number);
@@ -702,11 +702,11 @@
                 success: function(data) {
                     // console.log(data);
 
-                    $(this).find('.btn-text').removeClass('d-none');
-                    $(this).find('.btn-ellipsis').addClass('d-none');
+                    $('#seasonal_bill_parking_bill').find('.btn-text').removeClass('d-none');
+                    $('#seasonal_bill_parking_bill').find('.btn-ellipsis').addClass('d-none');
 
                     if (data.status_code == 200) {
-                        document.getElementById('seasonal_total').innerHTML = charges;
+                        // document.getElementById('seasonal_total').innerHTML = charges;
                         var bill_number = data.response_data.transaction_reference;
                         var win = window.open("print-bill/" + bill_number, '_blank');
                         if (win) {

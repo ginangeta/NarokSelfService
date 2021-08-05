@@ -42,6 +42,13 @@
                 background: white !important;
             }
 
+            @page {
+                size: auto;
+                /* auto is the initial value */
+                margin: 0;
+                /* this affects the margin in the printer settings */
+            }
+
             /* All your print styles go here */
             .print-btn {
                 display: none !important;
