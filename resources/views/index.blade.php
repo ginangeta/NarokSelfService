@@ -1031,6 +1031,7 @@
                     <h6 class="mb-3 billDetailsNumber">Bill No: PK-2105-140160</h6>
                     <p class="d-none billDetailsHiddenNumber"></p>
                     <p class="d-none billDetailsHiddenbillId"></p>
+                    <p class="d-none billDetailsHiddenbillStatus"></p>
                     <p class="">Below are the transaction details you provided plus the computed prices for your
                         transaction.</p>
                     <div class="mt-3">
@@ -1063,7 +1064,7 @@
 
                 <div class="row bill-buttons mt-2">
                     <div class="col-10">
-                        <button class="btn-process btn-success btn-pay-now w-100">PAY NOW</button>
+                        <button class="btn-process btn-success btn-pay-now w-100" id="bill_details_pay_now_open">PAY NOW</button>
                     </div>
                     <div class="col-2 pl-0">
                         <button class="btn-process-outline btn-outline-info w-100 btn-print-details-bill">
@@ -1073,22 +1074,27 @@
                     </div>
                 </div>
 
+                <div class="mt-4">
+                    <p id="billing_details_success" class="alert alert-success d-none"></p>
+                </div>
+                <div class="col-sm-12 pl-0 d-none" id="print-billing-receipt">
+                    <p><b>You can now proceed to print your receipt</b></p>
+                    <a href="" target="_blank" id="billing-receipt-link"
+                        class="btn btn-secondary text-white font-14 w-100  center mx-0 ">
+                        <div class="btn-txt animated print-receipt">
+                            <span class="btn-text text-uppercase font-12 ">Print receipt</span>
+
+                        </div>
+                    </a>
+                </div>
+
             </div>
             <div class="aside-footer-confirm right-neg-100">
                 <form>
                     <div>
                         <p id="billing_details_errors" class="alert alert-danger d-none"></p>
                     </div>
-                    <div class="col-sm-12 pl-0 d-none" id="print-daily-receipt">
-                        <p><b>You can now proceed to print your receipt</b></p>
-                        <a href="" target="_blank" id="billing-receipt-link"
-                            class="btn btn-secondary text-white font-14 w-100  center mx-0 ">
-                            <div class="btn-txt animated print-receipt">
-                                <span class="btn-text text-uppercase font-12 ">Print receipt</span>
 
-                            </div>
-                        </a>
-                    </div>
                     <div class="form-group mt-2">
                         <label>Mpesa No.</label>
                         @if (Session::has('resource'))
@@ -1887,7 +1893,7 @@
                         </div>
                         <hr class="dashed">
                         <div class="d-flex justify-content-between">
-                            <span class="m-0">Parking Penalties</span>
+                            <span class="m-0">Parking Charges</span>
                         </div>
                         <div class="penalties-parking-container"></div>
                         <hr>

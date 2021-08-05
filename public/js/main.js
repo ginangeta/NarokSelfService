@@ -165,11 +165,14 @@
     $('body').on('click', '.btn-modal-pay', function () {
         closeOnEscape: false;
         // $('#payment-modal .modal-header button').addClass('d-none');
+
         setTimeout(function () {
 
         }, 5000);
 
         $('.timer-loader').removeClass('d-none').siblings().addClass('d-none');
+        $(".timer-loader strong").text("50S");
+
         var timeleft = 49;
         var downloadTimer = setInterval(function () {
             if (timeleft <= 0) {

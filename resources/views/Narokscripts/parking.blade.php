@@ -702,8 +702,10 @@
                 success: function(data) {
                     // console.log(data);
 
-                    $('#seasonal_bill_parking_bill').find('.btn-text').removeClass('d-none');
-                    $('#seasonal_bill_parking_bill').find('.btn-ellipsis').addClass('d-none');
+                    $('#seasonal_bill_parking_bill').find('.btn-text').removeClass(
+                        'd-none');
+                    $('#seasonal_bill_parking_bill').find('.btn-ellipsis').addClass(
+                        'd-none');
 
                     if (data.status_code == 200) {
                         // document.getElementById('seasonal_total').innerHTML = charges;
@@ -952,7 +954,7 @@
             $(this).find('.btn-ellipsis').removeClass('d-none');
 
             var phone_number = $('#penalties-phone-number').val();
-            var charges = $('#penalties_total').text();
+            var charges = $('#penalty-total').text();
 
             // var amount = 1;
             var regex =
@@ -1024,36 +1026,42 @@
                     console.log(data);
                     $('.stickers-parking-confirm .lds-ellipsis').addClass('d-none');
                     $('.btn-stickers-confirm').text('CHECK STATUS');
-                    if (data === "" || data === null) {
-                        document.getElementById('stickers_parking_errors').innerHTML =
-                            "We're having trouble retrieving your seasonal parking stickers. Please try again later.";
-                        $('#stickers_parking_errors').removeClass('d-none');
-                    }
-                    if (data === " ") {
-                        document.getElementById('stickers_parking_errors').innerHTML =
-                            "We're having trouble retrieving your seasonal parking stickers. Please try again later.";
-                        $('#stickers_parking_errors').removeClass('d-none');
-                    }
-                    if (data.status_code == 200) {
+                    if (!!data) {
+                        if (data === "" || data === null) {
+                            document.getElementById('stickers_parking_errors').innerHTML =
+                                "We're having trouble retrieving your seasonal parking stickers. Please try again later.";
+                            $('#stickers_parking_errors').removeClass('d-none');
+                        }
+                        if (data === " ") {
+                            document.getElementById('stickers_parking_errors').innerHTML =
+                                "We're having trouble retrieving your seasonal parking stickers. Please try again later.";
+                            $('#stickers_parking_errors').removeClass('d-none');
+                        }
+                        if (data.status_code == 200) {
 
-                        // var confirmservice = $('.btn-confirm-seasonal-details')
-                        //     .parent()
-                        //     .parent().attr("class");
-                        // $('#' + confirmservice).removeClass('right-neg-100');
-                        // $('.landing-page-container').addClass(
-                        //     'margin-neg-400-left');
-                        // $('.aside-footer').addClass('right-neg-100');
-                        // $('#' + confirmservice + ' .aside-footer-confirm')
-                        //     .removeClass(
-                        //         'right-neg-100');
-                        // $('.aside-footer-to-confirm').addClass(
-                        //     'right-neg-100');
+                            // var confirmservice = $('.btn-confirm-seasonal-details')
+                            //     .parent()
+                            //     .parent().attr("class");
+                            // $('#' + confirmservice).removeClass('right-neg-100');
+                            // $('.landing-page-container').addClass(
+                            //     'margin-neg-400-left');
+                            // $('.aside-footer').addClass('right-neg-100');
+                            // $('#' + confirmservice + ' .aside-footer-confirm')
+                            //     .removeClass(
+                            //         'right-neg-100');
+                            // $('.aside-footer-to-confirm').addClass(
+                            //     'right-neg-100');
+                        } else {
+                            document.getElementById('stickers_parking_errors').innerHTML =
+                                data
+                                .message;
+                            $('#stickers_parking_errors').removeClass('d-none');
+                        }
                     } else {
-                        document.getElementById('stickers_parking_errors').innerHTML = data
-                            .message;
+                        document.getElementById('stickers_parking_errors').innerHTML =
+                            "We're having trouble retrieving your seasonal parking stickers. Please try again later.";
                         $('#stickers_parking_errors').removeClass('d-none');
                     }
-
                 }
             });
         });

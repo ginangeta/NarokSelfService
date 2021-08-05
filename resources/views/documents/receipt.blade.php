@@ -285,7 +285,10 @@
                 </span>
                 <span
                     style="font-style:italic;font-weight:normal;font-size:8pt;font-family:Times;color:#000000; white-space: nowrap;">Printed:
-                    <?php echo date('Y-m-d h:i:sa'); ?>
+                    <?php
+                    date_default_timezone_set("Africa/Nairobi");
+                    echo date('Y-m-d h:i:sa');
+                    ?>
                 </span>
                 <div style="display: flex; flex-direction: column; align-items: flex-end;">
                     <span style="color: #313350 !important; font-size: 10px;">Powered By</span>

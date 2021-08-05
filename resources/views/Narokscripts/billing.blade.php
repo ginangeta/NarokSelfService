@@ -48,11 +48,12 @@
 
                             $('.incomeTypeDescription').html(header.incomeTypeDescription);
                             $('.feeAccountDesc').html(details[0].feeAccountDesc);
-                            $('.briefDescription').html(details[0].briefDescription);
+                            $('.briefDescription').html(details[0].feeAccountDesc);
                             $('.payerName').html(header.payerName);
                             $('.billDetailsNumber').html("Bill No: " + header.billNo);
                             $('.billDetailsHiddenNumber').html(header.billNo);
                             $('.billDetailsHiddenbillId').html(header.billId);
+                            $('.billDetailsHiddenbillStatus').html(header.billStatus);
 
                             $('.bill-details-charges').html("KES " + header.billAmount);
                             $('.bill-details-paid').html("KES " + paidAmount);
@@ -69,7 +70,7 @@
                             confirmservice.removeClass('right-neg-100');
                             $('.landing-page-container').addClass('margin-neg-400-left');
                             $('.aside-footer').addClass('right-neg-100');
-                            $('.aside-footer-confirm').removeClass('right-neg-100');
+                            $('.aside-footer-confirm').addClass('d-none');
                             $('.aside-footer-to-confirm').addClass('right-neg-100');
 
                         } else {
@@ -80,6 +81,29 @@
                     }
                 });
             }
+        });
+
+        $('#bill_details_pay_now_open').on('click', function(e) {
+            e.preventDefault();
+
+            if ($('.billDetailsHiddenbillStatus').html() === "Paid") {
+                // console.log(amount);
+
+                $('.aside-footer-confirm').addClass('d-none');
+                $('#billing_details_success').html('This bill has already been paid.');
+                $('#billing_details_success').removeClass('d-none');
+
+                var a = "print-receipt/" + $('.billDetailsHiddenNumber').html();
+                // console.log(a);
+                $('#billing-receipt-link').attr("href", a)
+                $('#print-billing-receipt').removeClass('d-none');
+
+            } else {
+                $('.aside-footer-confirm').removeClass('right-neg-100');
+                $('.aside-footer-confirm').removeClass('d-none');
+
+            }
+
         });
 
         $('#bill_details_pay_now').on('click', function(e) {
@@ -105,6 +129,9 @@
                 return;
             }
 
+            $('#billing_details_success').addClass('d-none');
+            $('#print-billing-receipt').addClass('d-none');
+
             $('#payment-modal-header').empty();
             $('#payment-modal .modal-title-sub').empty();
             $('#payment-modal .payment-number').empty();
@@ -117,6 +144,7 @@
             $('#payment-modal .payment-amount').text('KES ' + amount);
             $('#payment-modal .payment-number').text(phone_number);
             $('#payment-modal').modal('show');
+
 
             ClickedButton.find('.btn-txt').removeClass('d-none');
             ClickedButton.find('.btn-ellipsis').addClass('d-none');

@@ -131,24 +131,26 @@
             } else if (paymentType === "Penalties Parking Payment") {
 
                 var phone_number = $('#payment-modal .payment-number').text();
+                var number_plate = $('#penalty-plates').html();
                 $('#penalties_parking_pay').find('.btn-txt').removeClass('d-none');
                 $('#penalties_parking_pay').find('.btn-ellipsis').addClass('d-none');
 
                 $.ajax({
-                    url: "<?php echo url('initiate-penalties-payment'); ?>",
+                    url: "<?php echo url('initiate-penalty-payment'); ?>",
                     type: "POST",
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     data: {
-                        phone_number: phone_number
+                        phone_number: phone_number,
+                        number_plate: number_plate
                     },
 
                     success: function(data) {
                         // console.log(data);
 
                         if (data.status_code == 200) {
-                            document.getElementById('penalties_total').innerHTML = charges;
+                            // $('#penalty-total') = charges;
                             var pay_id = data.response_data.transaction_reference;
                             // var pay_id = 'PKX2020041175519';
                             checkagain(pay_id, recheck_count);
@@ -577,9 +579,8 @@
                         type: "GET",
                         dataType: "JSON",
                         success: function(data) {
-                            $('#payment-modal .modal-header .close').removeClass('d-none');
-
                             if (data == "") {
+                                $('#payment-modal .modal-header .close').removeClass('d-none');
                                 document.getElementById('errors').innerHTML =
                                     'We are having trouble retrieving your receipt. Please try again later.';
                                 $('#errors').removeClass('d-none');
@@ -590,6 +591,8 @@
 
                             } else {
                                 console.log(data);
+                                $('#payment-modal .modal-header .close').removeClass('d-none');
+
                                 var ReceiptData = data.data[0];
 
                                 $('.payment-description').text(ReceiptData.receiptDetail[0]
